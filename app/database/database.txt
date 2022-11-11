@@ -1,0 +1,37 @@
+DROP DATABASE IF EXISTS kasir;
+CREATE DATABASE kasir;
+USE kasir;
+
+CREATE TABLE jenis_aset(
+    id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    nama VARCHAR(255),
+    keterangan TEXT
+);
+
+CREATE TABLE sifat_aset(
+    id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    nama VARCHAR(255),
+    keterangan TEXT
+);
+
+CREATE TABLE pengguna(
+    id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(255) UNIQUE,
+    password VARCHAR(255),
+    status VARCHAR(255)
+);
+
+CREATE TABLE pegawai(
+    id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    id_pengguna BIGINT UNSIGNED REFERENCES pengguna(id),
+    nip VARCHAR(255) UNIQUE,
+    nama VARCHAR(255),
+    tanggal_lahir DATE,
+    tempat_lahir VARCHAR(255),
+    jabatan VARCHAR(255),
+    tmt DATE,
+    sk_tmt VARCHAR(255),
+    pendidikan_terakhir VARCHAR(20),
+    ijazah_pendidikan_terakhir VARCHAR(255),
+    foto VARCHAR(255)
+);
