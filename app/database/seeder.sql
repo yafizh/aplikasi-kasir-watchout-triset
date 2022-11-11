@@ -15,16 +15,6 @@ INSERT INTO merk(
 ('Merk 1'),
 ('Merk 2');
 
-INSERT INTO ukuran(
-    nama,
-    keterangan 
-) VALUES 
-('S', ''),
-('M', ''),
-('L', ''),
-('XL', ''),
-('XXL', '');
-
 INSERT INTO jenis_pakaian(
     nama
 ) VALUES 
@@ -33,6 +23,26 @@ INSERT INTO jenis_pakaian(
 ('Kemeja'),
 ('Sepatu'),
 ('Sendal');
+
+INSERT INTO ukuran(
+    id_jenis_pakaian,
+    nama,
+    keterangan 
+) VALUES 
+(1, '32', ''),
+(1, '33', ''),
+(1, '34', ''),
+(4, '32', ''),
+(4, '33', ''),
+(4, '34', ''),
+(5, '32', ''),
+(5, '33', ''),
+(5, '34', ''),
+(2, 'S', ''),
+(2, 'M', ''),
+(2, 'L', ''),
+(2, 'XL', ''),
+(2, 'XXL', '');
 
 INSERT INTO pakaian(
     id_warna,
