@@ -1,9 +1,34 @@
-<?php 
+<?php
 session_start();
 date_default_timezone_set('Asia/Kuala_Lumpur');
 
-if(isset($_GET['halaman'])){
-}else {
+// Database
+require_once('../database/koneksi.php');
+
+
+
+if (isset($_GET['halaman'])) {
+    if ($_GET['halaman'] === 'ukuran') {
+        $title = 'Data Ukuran';
+        $halaman = 'ukuran/index.php';
+        $active = 'ukuran';
+    }
+    if ($_GET['halaman'] === 'tambah_ukuran') {
+        $title = 'Tambah Ukuran';
+        $halaman = 'ukuran/tambah.php';
+        $active = 'ukuran';
+    }
+    if ($_GET['halaman'] === 'edit_ukuran') {
+        $title = 'Edit Ukuran';
+        $halaman = 'ukuran/edit.php';
+        $active = 'ukuran';
+    }
+    if ($_GET['halaman'] === 'hapus_ukuran') {
+        $title = 'Hapus Ukuran';
+        $halaman = 'ukuran/hapus.php';
+        $active = 'ukuran';
+    }
+} else {
     $title = 'Dashboard';
     $halaman = 'dashboard/index.php';
 }
@@ -24,6 +49,17 @@ if(isset($_GET['halaman'])){
 
     <link rel="stylesheet" href="../assets/css/shared/iconly.css">
 
+    <?php if (in_array($_GET['halaman'] ?? '', ['ukuran'])) : ?>
+        <link rel="stylesheet" href="../assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+        <link rel="stylesheet" href="../assets/css/pages/datatables.css">
+    <?php endif; ?>
+
+    <style>
+        .no-td {
+            width: 5%;
+            white-space: nowrap;
+        }
+    </style>
 </head>
 
 <body>
@@ -35,10 +71,11 @@ if(isset($_GET['halaman'])){
     <script src="../assets/js/bootstrap.js"></script>
     <script src="../assets/js/app.js"></script>
 
-    <!-- Need: Apexcharts -->
-    <script src="../assets/extensions/apexcharts/apexcharts.min.js"></script>
-    <script src="../assets/js/pages/dashboard.js"></script>
-
+    <?php if (in_array($_GET['halaman'] ?? '', ['ukuran'])) : ?>
+        <script src="../assets/extensions/jquery/jquery.min.js"></script>
+        <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
+        <script src="../assets/js/pages/datatables.js"></script>
+    <?php endif; ?>
 </body>
 
 </html>
