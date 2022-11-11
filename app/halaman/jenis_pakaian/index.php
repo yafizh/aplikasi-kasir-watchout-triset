@@ -9,10 +9,10 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 mb-3">
-                    <h3>Data Merk Pakaian</h3>
+                    <h3>Data Jenis Pakaian</h3>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 d-flex justify-content-end">
-                    <a href="?halaman=tambah_merk" class="btn btn-primary align-self-start">Tambah</a>
+                    <a href="?halaman=tambah_jenis_pakaian" class="btn btn-primary align-self-start">Tambah</a>
                 </div>
             </div>
         </div>
@@ -23,13 +23,13 @@
                         <thead>
                             <tr>
                                 <th class="no-td">No</th>
-                                <th class="text-center">Merk</th>
+                                <th class="text-center">Jenis Pakaian</th>
                                 <th class="text-center no-td">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            $data = $mysqli->query('SELECT * FROM merk ORDER BY nama');
+                            $data = $mysqli->query('SELECT * FROM jenis_pakaian ORDER BY nama');
                             $no = 1;
                             ?>
                             <?php while ($row = $data->fetch_assoc()) : ?>
@@ -37,8 +37,8 @@
                                     <td class="text-center"><?= $no++; ?></td>
                                     <td class="text-center"><?= $row['nama']; ?></td>
                                     <td class="no-td">
-                                        <a href="?halaman=edit_merk&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white">Edit</a>
-                                        <a href="?halaman=hapus_merk&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin?')">Hapus</a>
+                                        <a href="?halaman=edit_jenis_pakaian&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white">Edit</a>
+                                        <a href="?halaman=hapus_jenis_pakaian&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin?')">Hapus</a>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>
