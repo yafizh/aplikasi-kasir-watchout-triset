@@ -1,0 +1,1 @@
+<?php Header('Location: app/halaman/index.php'); ?>
