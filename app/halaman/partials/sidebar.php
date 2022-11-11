@@ -42,14 +42,14 @@
                 </li>
 
                 <li class="sidebar-title">Master Data</li>
-                <li class="sidebar-item  ">
-                    <a href="form-layout.html" class='sidebar-link'>
+                <li class="sidebar-item <?= $active === 'jenis_pakaian' ? 'active' : ''; ?>">
+                    <a href="?halaman=jenis_pakaian" class='sidebar-link'>
                         <i class="bi bi-file-earmark-medical-fill"></i>
                         <span>Jenis Pakaian</span>
                     </a>
                 </li>
-                <li class="sidebar-item  ">
-                    <a href="form-layout.html" class='sidebar-link'>
+                <li class="sidebar-item <?= $active === 'merk' ? 'active' : ''; ?>">
+                    <a href="?halaman=merk" class='sidebar-link'>
                         <i class="bi bi-file-earmark-medical-fill"></i>
                         <span>Merk</span>
                     </a>

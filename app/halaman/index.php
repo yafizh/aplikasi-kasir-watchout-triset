@@ -8,6 +8,29 @@ require_once('../database/koneksi.php');
 
 
 if (isset($_GET['halaman'])) {
+    // Merk
+    if ($_GET['halaman'] === 'merk') {
+        $title = 'Data Merk';
+        $halaman = 'merk/index.php';
+        $active = 'merk';
+    }
+    if ($_GET['halaman'] === 'tambah_merk') {
+        $title = 'Tambah Merk';
+        $halaman = 'merk/tambah.php';
+        $active = 'merk';
+    }
+    if ($_GET['halaman'] === 'edit_merk') {
+        $title = 'Edit Merk';
+        $halaman = 'merk/edit.php';
+        $active = 'merk';
+    }
+    if ($_GET['halaman'] === 'hapus_merk') {
+        $title = 'Hapus Merk';
+        $halaman = 'merk/hapus.php';
+        $active = 'merk';
+    }
+
+    // Ukuran
     if ($_GET['halaman'] === 'ukuran') {
         $title = 'Data Ukuran';
         $halaman = 'ukuran/index.php';
@@ -49,7 +72,7 @@ if (isset($_GET['halaman'])) {
 
     <link rel="stylesheet" href="../assets/css/shared/iconly.css">
 
-    <?php if (in_array($_GET['halaman'] ?? '', ['ukuran'])) : ?>
+    <?php if (in_array($_GET['halaman'] ?? '', ['ukuran', 'merk', 'jenis_pakaian'])) : ?>
         <link rel="stylesheet" href="../assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
         <link rel="stylesheet" href="../assets/css/pages/datatables.css">
     <?php endif; ?>
@@ -71,7 +94,7 @@ if (isset($_GET['halaman'])) {
     <script src="../assets/js/bootstrap.js"></script>
     <script src="../assets/js/app.js"></script>
 
-    <?php if (in_array($_GET['halaman'] ?? '', ['ukuran'])) : ?>
+    <?php if (in_array($_GET['halaman'] ?? '', ['ukuran', 'merk', 'jenis_pakaian'])) : ?>
         <script src="../assets/extensions/jquery/jquery.min.js"></script>
         <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
         <script src="../assets/js/pages/datatables.js"></script>
