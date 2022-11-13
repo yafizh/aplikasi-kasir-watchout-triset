@@ -1,3 +1,20 @@
+INSERT INTO pengguna(
+    username,
+    password,
+    status
+) VALUES 
+('admin', 'admin', 'ADMIN'),
+('kasir', 'kasir', 'KASIR');
+
+INSERT INTO kasir(
+    id_pengguna,
+    nama,
+    tempat_lahir,
+    tanggal_lahir,
+    foto
+) VALUES 
+(2, 'Kasir', 'Martapura', CURRENT_DATE(), '');
+
 INSERT INTO warna(
     nama
 ) VALUES 
@@ -12,8 +29,8 @@ INSERT INTO warna(
 INSERT INTO merk(
     nama
 ) VALUES 
-('Merk 1'),
-('Merk 2');
+('Executive'),
+('UNIQLO');
 
 INSERT INTO jenis_pakaian(
     nama
@@ -44,20 +61,19 @@ INSERT INTO ukuran(
 (2, 'XL', ''),
 (2, 'XXL', '');
 
-INSERT INTO pakaian(
-    id_warna,
-    id_merk,
-    id_ukuran,
-    id_jenis_pakaian,
-    nama,
-    harga,
-    foto
-) VALUES 
-(1, 1, 1, 1, 'Baju 1', 200000, '');
+-- INSERT INTO pakaian(
+--     id_merk,
+--     id_jenis_pakaian,
+--     nama,
+--     harga 
+-- ) VALUES 
+-- (3, 1, 1, 2, 'Baju 1', 200000, ''),
+-- (2, 1, 1, 2, 'Baju 1', 200000, ''),
+-- (2, 2, 2, 2, 'Baju 2', 300000, '');
 
-INSERT INTO pakaian_disuplai(
-    id_pakaian,
-    tanggal_masuk,
-    harga 
-) VALUES 
-(1, CURRENT_DATE(), 200000);
+-- INSERT INTO pakaian_disuplai(
+--     id_pakaian,
+--     tanggal_masuk,
+--     harga 
+-- ) VALUES 
+-- (1, CURRENT_DATE(), 200000);
