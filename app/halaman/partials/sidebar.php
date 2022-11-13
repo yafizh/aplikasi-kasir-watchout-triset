@@ -1,3 +1,8 @@
+<?php
+$result = $mysqli->query('SELECT * FROM jenis_pakaian ORDER BY nama');
+$data = $result->fetch_all(MYSQLI_ASSOC);
+?>
+
 <div id="sidebar" class="active">
     <div class="sidebar-wrapper active">
         <div class="sidebar-header position-relative">
@@ -40,6 +45,48 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
+                <li class="sidebar-item  has-sub">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-stack"></i>
+                        <span>Pengguna</span>
+                    </a>
+                    <ul class="submenu ">
+                        <li class="submenu-item ">
+                            <a href="?halaman=admin">Admin</a>
+                        </li>
+                        <li class="submenu-item ">
+                            <a href="?halaman=kasir">Kasir</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidebar-item has-sub <?= $active === 'pakaian' ? 'active' : ''; ?>">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-stack"></i>
+                        <span>Data Pakaian</span>
+                    </a>
+                    <ul class="submenu <?= $active === 'pakaian' ? 'active' : ''; ?>">
+                        <?php foreach ($data as $jenis_pakaian) : ?>
+                            <li class="submenu-item <?= $jenis_pakaian['id'] == ($_GET['id_jenis_pakaian'] ?? '') ? 'active' : ''; ?>">
+                                <a href="?halaman=pakaian&id_jenis_pakaian=<?= $jenis_pakaian['id']; ?>"><?= $jenis_pakaian['nama']; ?></a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </li>
+                <li class="sidebar-item  has-sub">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-stack"></i>
+                        <span>Stok Pakaian</span>
+                    </a>
+                    <ul class="submenu ">
+                        <li class="submenu-item ">
+                            <a href="?halaman=admin">Admin</a>
+                        </li>
+                        <li class="submenu-item ">
+                            <a href="?halaman=kasir">Kasir</a>
+                        </li>
+                    </ul>
+                </li>
+
 
                 <li class="sidebar-title">Master Data</li>
                 <li class="sidebar-item <?= $active === 'jenis_pakaian' ? 'active' : ''; ?>">
@@ -60,42 +107,11 @@
                         <span>Ukuran</span>
                     </a>
                     <ul class="submenu <?= $active === 'ukuran' ? 'active' : ''; ?>">
-                        <?php $result = $mysqli->query('SELECT * FROM jenis_pakaian ORDER BY nama'); ?>
-                        <?php while ($row = $result->fetch_assoc()) : ?>
-                            <li class="submenu-item <?= $row['id'] == ($_GET['id_jenis_pakaian'] ?? '') ? 'active' : ''; ?>">
-                                <a href="?halaman=ukuran&id_jenis_pakaian=<?= $row['id']; ?>"><?= $row['nama']; ?></a>
+                        <?php foreach ($data as $jenis_pakaian) : ?>
+                            <li class="submenu-item <?= $jenis_pakaian['id'] == ($_GET['id_jenis_pakaian'] ?? '') ? 'active' : ''; ?>">
+                                <a href="?halaman=ukuran&id_jenis_pakaian=<?= $jenis_pakaian['id']; ?>"><?= $jenis_pakaian['nama']; ?></a>
                             </li>
-                        <?php endwhile; ?>
-                    </ul>
-                </li>
-
-                <li class="sidebar-item  has-sub">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
-                        <span>Data Pengguna</span>
-                    </a>
-                    <ul class="submenu ">
-                        <li class="submenu-item ">
-                            <a href="?halaman=admin">Admin</a>
-                        </li>
-                        <li class="submenu-item ">
-                            <a href="?halaman=kasir">Kasir</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <?php $result = $mysqli->query('SELECT * FROM jenis_pakaian ORDER BY nama'); ?>
-                <li class="sidebar-item  has-sub">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
-                        <span>Data Pakaian</span>
-                    </a>
-                    <ul class="submenu ">
-                        <?php while ($row = $result->fetch_assoc()) : ?>
-                            <li class="submenu-item ">
-                                <a href="component-alert.html"><?= $row['nama']; ?></a>
-                            </li>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                     </ul>
                 </li>
 
