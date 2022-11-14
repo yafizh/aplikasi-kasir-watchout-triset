@@ -61,19 +61,33 @@ INSERT INTO ukuran(
 (2, 'XL', ''),
 (2, 'XXL', '');
 
--- INSERT INTO pakaian(
---     id_merk,
---     id_jenis_pakaian,
---     nama,
---     harga 
--- ) VALUES 
--- (3, 1, 1, 2, 'Baju 1', 200000, ''),
--- (2, 1, 1, 2, 'Baju 1', 200000, ''),
--- (2, 2, 2, 2, 'Baju 2', 300000, '');
+-- Pakaian
+INSERT INTO pakaian(
+    id_merk,
+    id_jenis_pakaian,
+    nama,
+    harga
+) VALUES 
+(1, 2, 'Round Neck Waffle T-shirt', 150000);
 
--- INSERT INTO pakaian_disuplai(
---     id_pakaian,
---     tanggal_masuk,
---     harga 
--- ) VALUES 
--- (1, CURRENT_DATE(), 200000);
+INSERT INTO warna_pakaian(
+    id_pakaian,
+    id_warna,
+    foto
+) VALUES 
+(1, 5, '../../dummy/1-TSIKCT221B931_NAVY_1_460x.webp');
+
+INSERT INTO ukuran_warna_pakaian(
+    id_ukuran,
+    id_warna_pakaian
+) VALUES 
+(11, 1);
+
+INSERT INTO pakaian_disuplai(
+    id_ukuran_warna_pakaian,
+    tanggal_masuk,
+    harga,
+    jumlah 
+) VALUES 
+(1, CURRENT_DATE(), 150000,2),
+(1, CURRENT_DATE(), 150000,5);

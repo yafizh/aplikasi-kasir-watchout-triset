@@ -84,10 +84,11 @@ CREATE TABLE pakaian_disuplai(
     id_ukuran_warna_pakaian BIGINT UNSIGNED,
     tanggal_masuk DATE,
     harga BIGINT UNSIGNED COMMENT 'Harga pakaian saat ia disuplai',
+    jumlah INT UNSIGNED,
     PRIMARY KEY(id),
     FOREIGN KEY (id_ukuran_warna_pakaian) REFERENCES ukuran_warna_pakaian(id) ON DELETE CASCADE
 );
-
+ 
 CREATE TABLE penjualan(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     nama_pembeli VARCHAR(255),
