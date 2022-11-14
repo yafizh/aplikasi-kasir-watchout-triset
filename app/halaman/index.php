@@ -5,9 +5,69 @@ date_default_timezone_set('Asia/Kuala_Lumpur');
 // Database
 require_once('../database/koneksi.php');
 
+// Helper 
+require_once('../helper/date.php');
+
 
 
 if (isset($_GET['halaman'])) {
+    // Stok
+    if ($_GET['halaman'] === 'stok') {
+        $title = 'Data Stok';
+        $halaman = 'stok/index.php';
+        $active = 'stok';
+        $sub_active = 'stok_pakaian';
+    }
+    if ($_GET['halaman'] === 'stok_per_merk') {
+        $title = 'Data Stok';
+        $halaman = 'stok/merk/index.php';
+        $active = 'stok';
+        $sub_active = 'stok_pakaian';
+    }
+    if ($_GET['halaman'] === 'stok_per_pakaian') {
+        $title = 'Data Stok';
+        $halaman = 'stok/pakaian/index.php';
+        $active = 'stok';
+        $sub_active = 'stok_pakaian';
+    }
+    if ($_GET['halaman'] === 'stok_per_warna') {
+        $title = 'Data Stok';
+        $halaman = 'stok/warna/index.php';
+        $active = 'stok';
+        $sub_active = 'stok_pakaian';
+    }
+    if ($_GET['halaman'] === 'tambah_stok_pakaian') {
+        $title = 'Tambah Stok';
+        $halaman = 'stok/pakaian/tambah.php';
+        $active = 'stok';
+        $sub_active = 'stok_pakaian';
+    }
+    if ($_GET['halaman'] === 'tambah_stok_pakaian_per_warna') {
+        $title = 'Tambah Stok';
+        $halaman = 'stok/warna/tambah.php';
+        $active = 'stok';
+        $sub_active = 'stok_pakaian';
+    }
+
+    if ($_GET['halaman'] === 'riwayat_penambahan_stok') {
+        $title = 'Riwayat Penambahan Stok';
+        $halaman = 'stok/riwayat_penambahan/index.php';
+        $active = 'stok';
+        $sub_active = 'riwayat_penambahan_stok';
+    }
+    if ($_GET['halaman'] === 'edit_riwayat_penambahan_stok') {
+        $title = 'Edit Riwayat Penambahan Stok';
+        $halaman = 'stok/riwayat_penambahan/edit.php';
+        $active = 'stok';
+        $sub_active = 'riwayat_penambahan_stok';
+    }
+    if ($_GET['halaman'] === 'hapus_riwayat_penambahan_stok') {
+        $title = 'Hapus Riwayat Penambahan Stok';
+        $halaman = 'stok/riwayat_penambahan/hapus.php';
+        $active = 'stok';
+        $sub_active = 'riwayat_penambahan_stok';
+    }
+
     // Pakaian
     if ($_GET['halaman'] === 'pakaian') {
         $title = 'Data Pakaian';
@@ -136,7 +196,7 @@ if (isset($_GET['halaman'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title; ?></title>
 
-    <?php if (in_array($_GET['halaman'] ?? '', [''])) : ?>
+    <?php if (in_array($_GET['halaman'] ?? '', ['tambah_stok_pakaian'])) : ?>
         <link rel="stylesheet" href="../assets/extensions/choices.js/public/assets/styles/choices.css">
     <?php endif; ?>
 
@@ -146,13 +206,22 @@ if (isset($_GET['halaman'])) {
     <link rel="shortcut icon" href="../assets/images/logo/favicon.png" type="image/png">
 
     <link rel="stylesheet" href="../assets/css/shared/iconly.css">
+    <link rel="stylesheet" href="../assets/extensions/sweetalert2/sweetalert2.min.css">
 
-    <?php if (in_array($_GET['halaman'] ?? '', ['ukuran', 'merk', 'jenis_pakaian', 'pakaian', 'pakaian_per_warna', 'pakaian_per_merk'])) : ?>
+    <?php if (
+        in_array(
+            $_GET['halaman'] ?? '',
+            ['ukuran', 'merk', 'jenis_pakaian', 'pakaian', 'pakaian_per_warna', 'pakaian_per_merk', 'stok', 'stok_per_merk', 'stok_per_pakaian', 'riwayat_penambahan_stok']
+        )
+    ) : ?>
         <link rel="stylesheet" href="../assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
         <link rel="stylesheet" href="../assets/css/pages/datatables.css">
     <?php endif; ?>
 
     <style>
+        table {
+            width: 100%!important;
+        }
         .no-td {
             width: 5%;
             white-space: nowrap;
@@ -174,9 +243,20 @@ if (isset($_GET['halaman'])) {
     </div>
     <script src="../assets/js/bootstrap.js"></script>
     <script src="../assets/js/app.js"></script>
-    <link rel="stylesheet" href="../assets/extensions/@fortawesome/fontawesome-free/css/all.min.css">
 
-    <?php if (in_array($_GET['halaman'] ?? '', ['ukuran', 'merk', 'jenis_pakaian', 'pakaian', 'pakaian_per_warna', 'pakaian_per_merk'])) : ?>
+    <script src="../assets/extensions/sweetalert2/sweetalert2.min.js"></script>>
+
+    <?php if (in_array($_GET['halaman'] ?? '', ['tambah_stok_pakaian'])) : ?>
+        <script src="../assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
+        <script src="../assets/js/pages/form-element-select.js"></script>
+    <?php endif; ?>
+
+    <?php if (
+        in_array(
+            $_GET['halaman'] ?? '',
+            ['ukuran', 'merk', 'jenis_pakaian', 'pakaian', 'pakaian_per_warna', 'pakaian_per_merk', 'stok', 'stok_per_merk', 'stok_per_pakaian', 'riwayat_penambahan_stok']
+        )
+    ) : ?>
         <script src="../assets/extensions/jquery/jquery.min.js"></script>
         <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
         <script src="../assets/js/pages/datatables.js"></script>
@@ -217,6 +297,31 @@ if (isset($_GET['halaman'])) {
             <?php endif; ?>
         </script>
     <?php endif; ?>
+    <script>
+        if (document.querySelector('#tombol-hapus')) {
+            document.querySelector('#tombol-hapus').addEventListener('click', function(e) {
+                Swal.fire({
+                    title: 'Yakin?',
+                    text: this.getAttribute('data-text'),
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'Hapus Jenis Pakaian!'
+                }).then((result) => {
+                    if (result.isConfirmed)
+                        location.href = this.getAttribute('href');
+                });
+                e.preventDefault();
+            });
+        }
+        if (sessionStorage.getItem('hapus')) {
+            Swal.fire('Berhasil!',
+                "Hapus Data Berhasil.",
+                'success'
+            );
+            sessionStorage.removeItem('hapus');
+        }
+    </script>
 </body>
 
 </html>

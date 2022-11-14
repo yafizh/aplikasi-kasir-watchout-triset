@@ -81,7 +81,7 @@ $data = $result->fetch_all(MYSQLI_ASSOC);
                         <li class="submenu-item <?= ($active === 'stok' && ($sub_active ?? '') === 'stok_pakaian') ? 'active' : ''; ?>">
                             <a href="?halaman=stok">Stok</a>
                         </li>
-                        <li class="submenu-item <?= ($active === 'stok' && ($sub_active ?? '') === '') ? 'active' : ''; ?>">
+                        <li class="submenu-item <?= ($active === 'stok' && ($sub_active ?? '') === 'riwayat_penambahan_stok') ? 'active' : ''; ?>">
                             <a href="?halaman=riwayat_penambahan_stok">Riwayat Penambahan Stok</a>
                         </li>
                     </ul>
