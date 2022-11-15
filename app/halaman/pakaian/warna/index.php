@@ -19,7 +19,7 @@
                     <h3><a href="?halaman=pakaian_per_merk&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>" class="text-reset"><i class="bi bi-arrow-bar-left"></i></a>Data Warna <?= $jenis_pakaian['nama']; ?> <?= $pakaian['nama']; ?></h3>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 d-flex justify-content-end">
-                    <a href="?halaman=tambah_warna_pakaian&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>" class="btn btn-primary align-self-start">Tambah Warna</a>
+                    <a href="?halaman=tambah_warna_pakaian&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>" class="btn btn-primary align-self-start text-white">Tambah Warna</a>
                 </div>
             </div>
         </div>
@@ -89,8 +89,8 @@
                                     <td class="text-center"><?= $row['nama']; ?></td>
                                     <td class="text-center"><?= empty($row['ukuran']) ? 'Ukuran Belum Ditambahkan' : $row['ukuran']; ?></td>
                                     <td class="no-td">
-                                        <a href="?halaman=edit_warna_pakaian&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white">Edit</a>
-                                        <a href="?halaman=hapus_warna_pakaian&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm text-white" onclick="return confirm('Yakin');">Hapus</a>
+                                        <a href="?halaman=edit_warna_pakaian&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white"><i class="fas fa-edit"></i></a>
+                                        <a href="?halaman=hapus_warna_pakaian&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm text-white" onclick="return confirm('Yakin');"><i class="fas fa-trash-alt"></i></a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

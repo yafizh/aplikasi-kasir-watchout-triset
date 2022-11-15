@@ -37,9 +37,9 @@
                                     <td class="text-center"><?= $no++; ?></td>
                                     <td class="text-center"><?= $row['nama']; ?></td>
                                     <td class="no-td">
-                                        <a href="?halaman=edit_jenis_pakaian&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white">Edit</a>
+                                        <a href="?halaman=edit_jenis_pakaian&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white"><i class="fas fa-edit"></i></a>
                                         <a id="tombol-hapus" href="?halaman=hapus_jenis_pakaian&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" data-text="Menghapus jenis pakaian '<?= $row['nama']; ?>' akan membuat data pakaian dengan jenis pakaian '<?= $row['nama']; ?>' dan riwayat stoknya ikut terhapus!" data-button-text="Hapus Jenis Pakaian!">
-                                            Hapus</a>
+                                            <i class="fas fa-trash-alt"></i></a>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

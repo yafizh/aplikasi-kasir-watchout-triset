@@ -60,7 +60,7 @@
                                     <td class="text-center"><?= $row['nama']; ?></td>
                                     <td class="text-center"><?= empty($row['jumlah']) ? 'Pakaian Belum Ditambahkan' : $row['jumlah']; ?></td>
                                     <td class="no-td">
-                                        <a href="?halaman=pakaian_per_merk&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $row['id']; ?>" class="btn btn-info btn-sm text-white">Lihat</a>
+                                        <a href="?halaman=pakaian_per_merk&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $row['id']; ?>" class="btn btn-info btn-sm text-white"><i class="fas fa-eye"></i></a>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

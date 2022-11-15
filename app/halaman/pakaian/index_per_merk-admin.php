@@ -21,7 +21,7 @@
                     </h3>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 d-flex justify-content-end">
-                    <a href="?halaman=tambah_pakaian&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>" class="btn btn-primary align-self-start">Tambah Pakaian</a>
+                    <a href="?halaman=tambah_pakaian&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>" class="btn btn-primary align-self-start text-white">Tambah Pakaian</a>
                 </div>
             </div>
         </div>
@@ -68,7 +68,7 @@
                                     <td class="text-center"><?= $row['nama']; ?></td>
                                     <td class="text-center"><?= empty($row['jumlah']) ? 'Warna Pakaian Belum Ditambahkan' : $row['jumlah']; ?></td>
                                     <td class="no-td">
-                                        <a href="?halaman=pakaian_per_warna&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $row['id']; ?>" class="btn btn-info btn-sm text-white">Lihat</a>
+                                        <a href="?halaman=pakaian_per_warna&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $row['id']; ?>" class="btn btn-info btn-sm text-white"><i class="fas fa-eye"></i></a>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

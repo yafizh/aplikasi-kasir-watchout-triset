@@ -129,7 +129,7 @@ if (isset($_POST['submit'])) {
                                             </div>
                                             <div class="col-12 mt-3 d-flex justify-content-between">
                                                 <a href="?halaman=pakaian_per_warna&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>" class="btn btn-light-secondary mb-1">Kembali</a>
-                                                <button type="submit" name="submit" class="btn btn-primary mb-1">Tambah</button>
+                                                <button type="submit" name="submit" class="btn btn-primary mb-1 text-white">Tambah</button>
                                             </div>
                                         </div>
                                     </div>
