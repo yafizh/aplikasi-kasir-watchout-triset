@@ -6,7 +6,25 @@
     </header>
 
     <?php
-    $result = $mysqli->query("SELECT * FROM pakaian WHERE id=" . $_GET['id_pakaian']);
+    $result = $mysqli->query("
+        SELECT 
+            p.id,
+            p.nama,
+            p.id_jenis_pakaian,
+            p.id_merk  
+        FROM 
+            pakaian AS p 
+        INNER JOIN 
+            merk AS m 
+        ON 
+            m.id=p.id_merk
+        INNER JOIN 
+            jenis_pakaian AS jp 
+        ON 
+            jp.id=p.id_jenis_pakaian
+        WHERE 
+            p.id=" . $_GET['id_pakaian']
+    );
     $pakaian = $result->fetch_assoc();
     $result = $mysqli->query("SELECT warna.nama FROM warna_pakaian INNER JOIN warna ON warna.id=warna_pakaian.id_warna WHERE warna_pakaian.id=" . $_GET['id_warna_pakaian']);
     $warna = $result->fetch_assoc();
@@ -16,7 +34,7 @@
             <div class="row">
                 <div class="col-12 col-md order-md-1 mb-3">
                     <h3>
-                        <a href="?halaman=stok_per_pakaian&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>" class="text-reset"><i class="bi bi-arrow-bar-left"></i></a>Data Stok <?= $pakaian['nama']; ?> Warna <?= $warna['nama']; ?>
+                        <a href="?halaman=stok_per_pakaian&id_jenis_pakaian=<?= $pakaian['id_jenis_pakaian']; ?>&id_merk=<?= $pakaian['id_merk']; ?>&id_pakaian=<?= $pakaian['id']; ?>" class="text-reset"><i class="bi bi-arrow-bar-left"></i></a>Data Stok <?= $pakaian['nama']; ?> Warna <?= $warna['nama']; ?>
                     </h3>
                 </div>
                 <div class="col-12 col-md-auto order-md-2 d-flex justify-content-end">

@@ -1,9 +1,26 @@
 <?php
 
-$result = $mysqli->query("SELECT * FROM merk WHERE id=" . $_GET['id_merk']);
-$merk = $result->fetch_assoc();
-
-$result = $mysqli->query("SELECT p.*, jp.nama AS jenis_pakaian, jp.id AS id_jenis_pakaian FROM pakaian AS p INNER JOIN jenis_pakaian AS jp ON jp.id=p.id_jenis_pakaian WHERE p.id=" . $_GET['id_pakaian']);
+$result = $mysqli->query("
+    SELECT 
+        p.id_jenis_pakaian, 
+        p.id_merk, 
+        p.id, 
+        p.nama,
+        jp.nama AS jenis_pakaian,
+        m.nama AS merk 
+    FROM 
+        pakaian AS p 
+    INNER JOIN 
+        jenis_pakaian AS jp 
+    ON 
+        jp.id=p.id_jenis_pakaian
+    INNER JOIN 
+        merk AS m 
+    ON 
+        m.id=p.id_merk 
+    WHERE 
+        p.id=" . $_GET['id_pakaian']
+);
 $pakaian = $result->fetch_assoc();
 
 if (isset($_POST['submit'])) {
@@ -41,8 +58,8 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    echo "<script>alert('Tambah Data Stok Berhasil!')</script>";
-    echo "<script>location.href = '?halaman=stok_per_pakaian&id_merk=" . $_GET['id_merk'] . "&id_pakaian=" . $_GET['id_pakaian'] . "';</script>";
+    echo "<script>sessionStorage.setItem('tambah','Tambah stok berhasil.')</script>";
+    echo "<script>location.href = '?halaman=stok_per_pakaian&id_merk=" . $pakaian['id_merk'] . "&id_jenis_pakaian=" . $pakaian['id_jenis_pakaian'] . "&id_pakaian=" . $pakaian['id'] . "';</script>";
 }
 
 ?>
@@ -74,7 +91,7 @@ if (isset($_POST['submit'])) {
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label>Merk</label>
-                                                    <input type="text" class="form-control" value="<?= $merk['nama']; ?>" disabled>
+                                                    <input type="text" class="form-control" value="<?= $pakaian['merk']; ?>" disabled>
                                                 </div>
                                             </div>
                                             <div class="col-12">
@@ -127,7 +144,7 @@ if (isset($_POST['submit'])) {
                                                 </div>
                                             </div>
                                             <div class="col-12 mt-3 d-flex justify-content-between">
-                                                <a href="?halaman=stok_per_pakaian&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>" class="btn btn-light-secondary mb-1">Kembali</a>
+                                                <a href="?halaman=stok_per_pakaian&id_merk=<?= $pakaian['id_merk']; ?>&id_jenis_pakaian=<?= $pakaian['id_jenis_pakaian']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>" class="btn btn-light-secondary mb-1">Kembali</a>
                                                 <button type="submit" name="submit" class="btn btn-primary mb-1 text-white">Tambah</button>
                                             </div>
                                         </div>

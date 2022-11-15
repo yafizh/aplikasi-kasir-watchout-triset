@@ -36,7 +36,7 @@ if (isset($_POST['submit'])) {
     $query = substr($query, 0, strlen($query) - 1);
     if ($lewat) {
         if ($mysqli->query($query)) {
-            echo "<script>alert('Tambah Data Stok Berhasil!')</script>";
+            echo "<script>sessionStorage.setItem('tambah','Tambah stok berhasil.')</script>";
             echo "<script>location.href = '?halaman=stok_per_warna&id_merk=" . $_GET['id_merk'] . "&id_pakaian=" . $_GET['id_pakaian'] . "&id_warna_pakaian=" . $_GET['id_warna_pakaian'] . "';</script>";
         } else {
             echo "<script>alert('Tambah Data Stok Gagal!')</script>";

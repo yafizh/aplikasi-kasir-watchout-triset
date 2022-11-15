@@ -18,31 +18,39 @@ if (isset($_GET['halaman'])) {
         $active = 'stok';
         $sub_active = 'stok_pakaian';
     }
+
     if ($_GET['halaman'] === 'stok_per_merk') {
         $title = 'Data Stok';
         $halaman = 'stok/merk/index.php';
         $active = 'stok';
         $sub_active = 'stok_pakaian';
     }
+
+    if ($_GET['halaman'] === 'stok_per_jenis') {
+        $title = 'Data Stok';
+        $halaman = 'stok/jenis_pakaian/index.php';
+        $active = 'stok';
+        $sub_active = 'stok_pakaian';
+    }
+
     if ($_GET['halaman'] === 'stok_per_pakaian') {
         $title = 'Data Stok';
         $halaman = 'stok/pakaian/index.php';
         $active = 'stok';
         $sub_active = 'stok_pakaian';
-    }
-    if ($_GET['halaman'] === 'stok_per_warna') {
-        $title = 'Data Stok';
-        $halaman = 'stok/warna/index.php';
-        $active = 'stok';
-        $sub_active = 'stok_pakaian';
-    }
-    if ($_GET['halaman'] === 'tambah_stok_pakaian') {
+    } elseif ($_GET['halaman'] === 'tambah_stok_pakaian') {
         $title = 'Tambah Stok';
         $halaman = 'stok/pakaian/tambah.php';
         $active = 'stok';
         $sub_active = 'stok_pakaian';
     }
-    if ($_GET['halaman'] === 'tambah_stok_pakaian_per_warna') {
+
+    if ($_GET['halaman'] === 'stok_per_warna') {
+        $title = 'Data Stok';
+        $halaman = 'stok/warna/index.php';
+        $active = 'stok';
+        $sub_active = 'stok_pakaian';
+    } elseif ($_GET['halaman'] === 'tambah_stok_pakaian_per_warna') {
         $title = 'Tambah Stok';
         $halaman = 'stok/warna/tambah.php';
         $active = 'stok';
@@ -67,6 +75,8 @@ if (isset($_GET['halaman'])) {
         $active = 'stok';
         $sub_active = 'riwayat_penambahan_stok';
     }
+
+    // -----------------------------------------------------------
 
     // Pakaian
     if ($_GET['halaman'] === 'pakaian') {
@@ -93,7 +103,6 @@ if (isset($_GET['halaman'])) {
         $active = 'pakaian';
     }
 
-
     if ($_GET['halaman'] === 'pakaian_per_warna') {
         $title = 'Data Pakaian';
         $halaman = 'pakaian/warna/index.php';
@@ -102,21 +111,17 @@ if (isset($_GET['halaman'])) {
         $title = 'Tambah Warna Pakaian';
         $halaman = 'pakaian/warna/tambah.php';
         $active = 'pakaian';
-    }
-
-
-    if ($_GET['halaman'] === 'edit_warna_pakaian') {
+    } elseif ($_GET['halaman'] === 'edit_warna_pakaian') {
         $title = 'Edit Warna Pakaian';
         $halaman = 'pakaian/warna/edit.php';
         $active = 'pakaian';
-    }
-
-    if ($_GET['halaman'] === 'hapus_warna_pakaian') {
+    } elseif ($_GET['halaman'] === 'hapus_warna_pakaian') {
         $title = 'Hapus Pakaian';
         $halaman = 'pakaian/warna/hapus.php';
         $active = 'pakaian';
     }
 
+    // -------------------------------------------------
     // Jenis Pakaian
     if ($_GET['halaman'] === 'jenis_pakaian') {
         $title = 'Data Jenis Pakaian';

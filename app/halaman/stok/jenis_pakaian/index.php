@@ -6,19 +6,18 @@
     </header>
 
     <?php
-    $result = $mysqli->query("SELECT * FROM pakaian WHERE id=" . $_GET['id_pakaian']);
-    $pakaian = $result->fetch_assoc();
+    $result = $mysqli->query("SELECT * FROM jenis_pakaian WHERE id=" . $_GET['id_jenis_pakaian']);
+    $jenis_pakaian = $result->fetch_assoc();
+    $result = $mysqli->query("SELECT * FROM merk WHERE id=" . $_GET['id_merk']);
+    $merk = $result->fetch_assoc();
     ?>
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 mb-3">
                     <h3>
-                        <a href="?halaman=stok_per_jenis&id_merk=<?= $_GET['id_merk']; ?>&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>" class="text-reset"><i class="bi bi-arrow-bar-left"></i></a>Data Stok <?= $pakaian['nama']; ?>
+                        <a href="?halaman=stok" class="text-reset"><i class="bi bi-arrow-bar-left"></i></a>Data Stok <?= $jenis_pakaian['nama'] ?> <?= $merk['nama']; ?>
                     </h3>
-                </div>
-                <div class="col-12 col-md-6 order-md-2 d-flex justify-content-end">
-                    <a href="?halaman=tambah_stok_pakaian&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>" class="btn btn-primary align-self-start text-white">Tambah Stok</a>
                 </div>
             </div>
         </div>
@@ -29,7 +28,7 @@
                         <thead>
                             <tr>
                                 <th class="no-td">No</th>
-                                <th class="text-center">Warna</th>
+                                <th class="text-center">Nama</th>
                                 <th class="text-center">Stok</th>
                                 <th class="text-center no-td"></th>
                             </tr>
@@ -38,15 +37,15 @@
                             <?php
                             $query = "
                                 SELECT 
-                                    wp.id,
-                                    w.nama,
+                                    p.id,
+                                    p.nama,
                                     SUM(pd.jumlah) AS jumlah
                                 FROM  
+                                    pakaian AS p 
+                                LEFT JOIN 
                                     warna_pakaian AS wp 
-                                INNER JOIN 
-                                    warna AS w 
                                 ON 
-                                    w.id=wp.id_warna 
+                                    wp.id_pakaian=p.id 
                                 LEFT JOIN 
                                     ukuran_warna_pakaian AS uwp 
                                 ON 
@@ -56,10 +55,12 @@
                                 ON 
                                     pd.id_ukuran_warna_pakaian=uwp.id 
                                 WHERE 
-                                    wp.id_pakaian=" . $_GET['id_pakaian'] . "
+                                    p.id_merk=" . $_GET['id_merk'] . " 
+                                    AND 
+                                    p.id_jenis_pakaian=" . $_GET['id_jenis_pakaian'] . "
                                 GROUP BY 
-                                    wp.id 
-                            ";
+                                    p.id 
+                             ";
                             $data = $mysqli->query($query);
                             $no = 1;
                             ?>
@@ -69,7 +70,7 @@
                                     <td class="text-center"><?= $row['nama']; ?></td>
                                     <td class="text-center"><?= empty($row['jumlah']) ? 'Stok Belum Disuplai' : $row['jumlah']; ?></td>
                                     <td class="no-td">
-                                        <a href="?halaman=stok_per_warna&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>&id_warna_pakaian=<?= $row['id']; ?>" class="btn btn-info btn-sm text-white"><i class="fas fa-eye"></i></a>
+                                        <a href="?halaman=stok_per_pakaian&id_merk=<?= $_GET['id_merk']; ?>&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_pakaian=<?= $row['id']; ?>" class="btn btn-info btn-sm text-white"><i class="fas fa-eye"></i></a>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

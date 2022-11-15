@@ -21,46 +21,18 @@
                             <tr>
                                 <th class="no-td">No</th>
                                 <th class="text-center">Merk</th>
-                                <th class="text-center">Stok</th>
-                                <th class="text-center no-td">Aksi</th>
+                                <th class="text-center no-td"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            $query = "
-                                SELECT 
-                                    m.id,
-                                    m.nama,
-                                    SUM(pd.jumlah) AS jumlah
-                                FROM 
-                                    merk AS m 
-                                LEFT JOIN 
-                                    pakaian AS p 
-                                ON 
-                                    p.id_merk=m.id 
-                                LEFT JOIN 
-                                    warna_pakaian AS wp 
-                                ON 
-                                    wp.id_pakaian=p.id 
-                                LEFT JOIN 
-                                    ukuran_warna_pakaian AS uwp 
-                                ON 
-                                    uwp.id_warna_pakaian=wp.id 
-                                LEFT JOIN 
-                                    pakaian_disuplai AS pd 
-                                ON 
-                                    pd.id_ukuran_warna_pakaian=uwp.id 
-                                GROUP BY 
-                                    m.id
-                            ";
-                            $data = $mysqli->query($query);
+                            $data = $mysqli->query("SELECT * FROM merk ORDER BY nama");
                             $no = 1;
                             ?>
                             <?php while ($row = $data->fetch_assoc()) : ?>
                                 <tr>
                                     <td class="text-center"><?= $no++; ?></td>
                                     <td class="text-center"><?= $row['nama']; ?></td>
-                                    <td class="text-center"><?= empty($row['jumlah']) ? 'Pakaian Belum Ditambahkan' : $row['jumlah']; ?></td>
                                     <td class="no-td">
                                         <a href="?halaman=stok_per_merk&id_merk=<?= $row['id']; ?>" class="btn btn-info btn-sm text-white"><i class="fas fa-eye"></i></a>
                                     </td>
