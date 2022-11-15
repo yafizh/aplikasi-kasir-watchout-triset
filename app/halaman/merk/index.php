@@ -12,7 +12,7 @@
                     <h3>Data Merk Pakaian</h3>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 d-flex justify-content-end">
-                    <a href="?halaman=tambah_merk" class="btn btn-primary align-self-start">Tambah</a>
+                    <a href="?halaman=tambah_merk" class="btn btn-primary align-self-start text-white">Tambah</a>
                 </div>
             </div>
         </div>
@@ -38,7 +38,8 @@
                                     <td class="text-center"><?= $row['nama']; ?></td>
                                     <td class="no-td">
                                         <a href="?halaman=edit_merk&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white">Edit</a>
-                                        <a href="?halaman=hapus_merk&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin?')">Hapus</a>
+                                        <a id="tombol-hapus" href="?halaman=hapus_merk&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" data-text="Menghapus merk '<?= $row['nama']; ?>' akan membuat data pakaian dengan merk '<?= $row['nama']; ?>' dan riwayat stoknya ikut terhapus!" data-button-text="Hapus Merk!">
+                                            Hapus</a>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

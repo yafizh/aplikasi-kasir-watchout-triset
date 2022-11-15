@@ -202,11 +202,27 @@ if (isset($_GET['halaman'])) {
 
     <link rel="stylesheet" href="../assets/css/main/app.css">
     <link rel="stylesheet" href="../assets/css/main/app-dark.css">
-    <link rel="shortcut icon" href="../assets/images/logo/favicon.svg" type="image/x-icon">
     <link rel="shortcut icon" href="../assets/images/logo/favicon.png" type="image/png">
 
     <link rel="stylesheet" href="../assets/css/shared/iconly.css">
     <link rel="stylesheet" href="../assets/extensions/sweetalert2/sweetalert2.min.css">
+
+    <link rel="stylesheet" href="../assets/extensions/@fortawesome/fontawesome-free/css/all.min.css">
+    <style>
+        .fontawesome-icons {
+            text-align: center;
+        }
+
+        article dl {
+            background-color: rgba(0, 0, 0, .02);
+            padding: 20px;
+        }
+
+        .fontawesome-icons .the-icon {
+            font-size: 24px;
+            line-height: 1.2;
+        }
+    </style>
 
     <?php if (
         in_array(
@@ -220,8 +236,9 @@ if (isset($_GET['halaman'])) {
 
     <style>
         table {
-            width: 100%!important;
+            width: 100% !important;
         }
+
         .no-td {
             width: 5%;
             white-space: nowrap;
@@ -306,7 +323,7 @@ if (isset($_GET['halaman'])) {
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
-                    confirmButtonText: 'Hapus Jenis Pakaian!'
+                    confirmButtonText: this.getAttribute('data-button-text')
                 }).then((result) => {
                     if (result.isConfirmed)
                         location.href = this.getAttribute('href');
@@ -314,9 +331,23 @@ if (isset($_GET['halaman'])) {
                 e.preventDefault();
             });
         }
+        if (sessionStorage.getItem('tambah')) {
+            Swal.fire('Berhasil!',
+                sessionStorage.getItem('tambah'),
+                'success'
+            );
+            sessionStorage.removeItem('tambah');
+        }
+        if (sessionStorage.getItem('edit')) {
+            Swal.fire('Berhasil!',
+                sessionStorage.getItem('edit'),
+                'success'
+            );
+            sessionStorage.removeItem('edit');
+        }
         if (sessionStorage.getItem('hapus')) {
             Swal.fire('Berhasil!',
-                "Hapus Data Berhasil.",
+                sessionStorage.getItem('hapus'),
                 'success'
             );
             sessionStorage.removeItem('hapus');

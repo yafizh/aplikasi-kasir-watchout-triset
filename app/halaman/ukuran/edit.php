@@ -16,7 +16,7 @@ if (isset($_POST['submit'])) {
     ";
 
     if ($mysqli->query($q)) {
-        echo "<script>alert('Edit Data Berhasil!')</script>";
+        echo "<script>sessionStorage.setItem('edit','Edit ukuran berhasil.')</script>";
         echo "<script>location.href = '?halaman=ukuran&id_jenis_pakaian=" . $_GET['id_jenis_pakaian'] . "';</script>";
     } else {
         echo "<script>alert('Edit Data Gagal!')</script>";
@@ -68,7 +68,7 @@ if (isset($_POST['submit'])) {
                                             </div>
                                             <div class="col-12 d-flex justify-content-between">
                                                 <a href="?halaman=ukuran&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>" class="btn btn-light-secondary mb-1">Kembali</a>
-                                                <button type="submit" name="submit" class="btn btn-primary mb-1">Simpan</button>
+                                                <button type="submit" name="submit" class="btn btn-primary mb-1 text-white">Simpan</button>
                                             </div>
                                         </div>
                                     </div>
