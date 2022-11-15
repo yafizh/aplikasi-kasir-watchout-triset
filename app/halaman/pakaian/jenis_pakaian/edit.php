@@ -1,33 +1,45 @@
 <?php
 
-$result = $mysqli->query("SELECT * FROM merk WHERE id=" . $_GET['id_merk']);
-$merk = $result->fetch_assoc();
-
-$result = $mysqli->query("SELECT * FROM jenis_pakaian WHERE id=" . $_GET['id_jenis_pakaian']);
-$jenis_pakaian = $result->fetch_assoc();
+$result = $mysqli->query(
+    "
+    SELECT 
+        jp.id AS id_jenis_pakaian,
+        m.id AS id_merk,
+        p.id,
+        p.nama,
+        jp.nama AS jenis_pakaian,
+        m.nama AS merk 
+    FROM 
+        pakaian AS p 
+    INNER JOIN 
+        merk AS m 
+    ON 
+        m.id=p.id_merk 
+    INNER JOIN 
+        jenis_pakaian AS jp 
+    ON 
+        jp.id=p.id_jenis_pakaian 
+    WHERE 
+        p.id=" . $_GET['id']
+);
+$data = $result->fetch_assoc();
 
 if (isset($_POST['submit'])) {
     $nama = $mysqli->real_escape_string($_POST['nama']);
     $harga = $mysqli->real_escape_string($_POST['harga']);
 
     $q = "
-    INSERT INTO pakaian (
-        id_merk, 
-        id_jenis_pakaian, 
-        nama, 
-        harga 
-    ) VALUES (
-        " . $merk['id'] . ",
-        " . $jenis_pakaian['id'] . ",
-        '$nama',
-        '$harga'
-    )";
+    UPDATE pakaian SET 
+        nama='$nama', 
+        harga='$harga' 
+    WHERE 
+        id=" . $data['id'];
 
     if ($mysqli->query($q)) {
-        echo "<script>alert('Tambah Data Berhasil!')</script>";
-        echo "<script>location.href = '?halaman=pakaian_per_merk&id_jenis_pakaian=" . $_GET['id_jenis_pakaian'] . "&id_merk=" . $_GET['id_merk'] . "';</script>";
+        echo "<script>sessionStorage.setItem('edit','Edit pakaian berhasil.')</script>";
+        echo "<script>location.href = '?halaman=pakaian_per_jenis&id_jenis_pakaian=" . $data['id_jenis_pakaian'] . "&id_merk=" . $data['id_merk'] . "';</script>";
     } else {
-        echo "<script>alert('Tambah Data Gagal!')</script>";
+        echo "<script>alert('Edit Data Gagal!')</script>";
         die($mysqli->error);
     }
 }
@@ -44,7 +56,7 @@ if (isset($_POST['submit'])) {
         <div class="page-title">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-6 text-center mb-3">
-                    <h3>Tambah Data Pakaian</h3>
+                    <h3>Edit Data Pakaian</h3>
                 </div>
             </div>
         </div>
@@ -61,30 +73,30 @@ if (isset($_POST['submit'])) {
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label>Merk</label>
-                                                    <input type="text" class="form-control" value="<?= $merk['nama']; ?>" disabled>
+                                                    <input type="text" class="form-control" value="<?= $data['merk']; ?>" disabled>
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label for="nama">Jenis Pakaian</label>
-                                                    <input type="text" class="form-control" value="<?= $jenis_pakaian['nama']; ?>" disabled>
+                                                    <input type="text" class="form-control" value="<?= $data['jenis_pakaian']; ?>" disabled>
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label for="nama">Nama</label>
-                                                    <input type="text" id="nama" class="form-control" name="nama" autofocus autocomplete="off" required>
+                                                    <input type="text" id="nama" class="form-control" name="nama" autocomplete="off" required value="<?= $data['nama']; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label for="harga">Harga</label>
-                                                    <input type="text" id="harga" class="form-control" name="harga" autocomplete="off" required>
+                                                    <input type="text" id="harga" class="form-control" name="harga" autocomplete="off" required value="<?= $data['nama']; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-12 mt-3 d-flex justify-content-between">
-                                                <a href="?halaman=pakaian_per_merk&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>" class="btn btn-light-secondary mb-1">Kembali</a>
-                                                <button type="submit" name="submit" class="btn btn-primary mb-1 text-white">Tambah</button>
+                                                <a href="?halaman=pakaian_per_jenis&id_merk=<?= $data['id_merk']; ?>&id_jenis_pakaian=<?= $data['id_jenis_pakaian']; ?>" class="btn btn-light-secondary mb-1">Kembali</a>
+                                                <button type="submit" name="submit" class="btn btn-primary mb-1 text-white">Simpan</button>
                                             </div>
                                         </div>
                                     </div>

@@ -6,14 +6,14 @@
     </header>
 
     <?php
-    $result = $mysqli->query("SELECT * FROM jenis_pakaian WHERE id=" . $_GET['id_jenis_pakaian']);
-    $jenis_pakaian = $result->fetch_assoc();
+    $result = $mysqli->query("SELECT * FROM merk WHERE id=" . $_GET['id_merk']);
+    $merk = $result->fetch_assoc();
     ?>
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 mb-3">
-                    <h3>Data <?= $jenis_pakaian['nama']; ?></h3>
+                    <h3><?= $merk['nama']; ?></h3>
                 </div>
             </div>
         </div>
@@ -24,8 +24,8 @@
                         <thead>
                             <tr>
                                 <th class="no-td">No</th>
-                                <th class="text-center">Merk</th>
-                                <th class="text-center">Jumlah Pakaian</th>
+                                <th class="text-center">Jenis Pakaian</th>
+                                <th class="text-center">Jumlah</th>
                                 <th class="text-center no-td">Aksi</th>
                             </tr>
                         </thead>
@@ -33,23 +33,13 @@
                             <?php
                             $query = "
                                 SELECT 
-                                    m.id,
-                                    m.nama,
-                                    (
-                                        SELECT 
-                                            COUNT(DISTINCT p.nama) 
-                                        FROM 
-                                            pakaian AS p 
-                                        WHERE 
-                                            p.id_merk=m.id 
-                                            AND 
-                                            p.id_jenis_pakaian=" . $_GET['id_jenis_pakaian'] . "
-                                        GROUP BY 
-                                            p.nama
-                                    ) AS jumlah 
+                                    jp.id, 
+                                    jp.nama,
+                                    (SELECT COUNT(id) FROM pakaian AS p WHERE p.id_jenis_pakaian=jp.id AND p.id_merk=".$_GET['id_merk'].") AS jumlah
                                 FROM 
-                                    merk AS m 
-                                ORDER BY m.nama
+                                    jenis_pakaian AS jp 
+                                ORDER BY 
+                                    jp.nama
                             ";
                             $data = $mysqli->query($query);
                             $no = 1;
@@ -60,7 +50,7 @@
                                     <td class="text-center"><?= $row['nama']; ?></td>
                                     <td class="text-center"><?= empty($row['jumlah']) ? 'Pakaian Belum Ditambahkan' : $row['jumlah']; ?></td>
                                     <td class="no-td">
-                                        <a href="?halaman=pakaian_per_merk&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $row['id']; ?>" class="btn btn-info btn-sm text-white"><i class="fas fa-eye"></i></a>
+                                        <a href="?halaman=pakaian_per_jenis&id_merk=<?= $_GET['id_merk']; ?>&id_jenis_pakaian=<?= $row['id']; ?>" class="btn btn-info btn-sm text-white"><i class="fas fa-eye"></i></a>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

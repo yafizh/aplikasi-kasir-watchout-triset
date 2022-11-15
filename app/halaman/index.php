@@ -71,46 +71,46 @@ if (isset($_GET['halaman'])) {
     // Pakaian
     if ($_GET['halaman'] === 'pakaian') {
         $title = 'Data Pakaian';
-        $halaman = 'pakaian/index-admin.php';
+        $halaman = 'pakaian/index.php';
         $active = 'pakaian';
     }
-    if ($_GET['halaman'] === 'pakaian_per_merk') {
+
+    if ($_GET['halaman'] === 'pakaian_per_jenis') {
         $title = 'Data Pakaian';
-        $halaman = 'pakaian/index_per_merk-admin.php';
+        $halaman = 'pakaian/jenis_pakaian/index.php';
+        $active = 'pakaian';
+    } elseif ($_GET['halaman'] === 'tambah_pakaian') {
+        $title = 'Tambah Pakaian';
+        $halaman = 'pakaian/jenis_pakaian/tambah.php';
+        $active = 'pakaian';
+    } elseif ($_GET['halaman'] === 'edit_pakaian') {
+        $title = 'Edit Pakaian';
+        $halaman = 'pakaian/jenis_pakaian/edit.php';
+        $active = 'pakaian';
+    } elseif ($_GET['halaman'] === 'hapus_pakaian') {
+        $title = 'Hapus Pakaian';
+        $halaman = 'pakaian/jenis_pakaian/hapus.php';
         $active = 'pakaian';
     }
+
+
     if ($_GET['halaman'] === 'pakaian_per_warna') {
         $title = 'Data Pakaian';
         $halaman = 'pakaian/warna/index.php';
         $active = 'pakaian';
-    }
-
-    if ($_GET['halaman'] === 'tambah_pakaian') {
-        $title = 'Tambah Pakaian';
-        $halaman = 'pakaian/tambah.php';
-        $active = 'pakaian';
-    }
-    if ($_GET['halaman'] === 'tambah_warna_pakaian') {
+    } elseif ($_GET['halaman'] === 'tambah_warna_pakaian') {
         $title = 'Tambah Warna Pakaian';
         $halaman = 'pakaian/warna/tambah.php';
         $active = 'pakaian';
     }
 
-    if ($_GET['halaman'] === 'edit_pakaian') {
-        $title = 'Edit Pakaian';
-        $halaman = 'pakaian/edit.php';
-        $active = 'pakaian';
-    }
+
     if ($_GET['halaman'] === 'edit_warna_pakaian') {
         $title = 'Edit Warna Pakaian';
         $halaman = 'pakaian/warna/edit.php';
         $active = 'pakaian';
     }
-    if ($_GET['halaman'] === 'hapus_pakaian') {
-        $title = 'Hapus Pakaian';
-        $halaman = 'pakaian/hapus.php';
-        $active = 'pakaian';
-    }
+
     if ($_GET['halaman'] === 'hapus_warna_pakaian') {
         $title = 'Hapus Pakaian';
         $halaman = 'pakaian/warna/hapus.php';
@@ -224,15 +224,9 @@ if (isset($_GET['halaman'])) {
         }
     </style>
 
-    <?php if (
-        in_array(
-            $_GET['halaman'] ?? '',
-            ['ukuran', 'merk', 'jenis_pakaian', 'pakaian', 'pakaian_per_warna', 'pakaian_per_merk', 'stok', 'stok_per_merk', 'stok_per_pakaian', 'riwayat_penambahan_stok']
-        )
-    ) : ?>
-        <link rel="stylesheet" href="../assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
-        <link rel="stylesheet" href="../assets/css/pages/datatables.css">
-    <?php endif; ?>
+
+    <link rel="stylesheet" href="../assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="../assets/css/pages/datatables.css">
 
     <style>
         table {
@@ -268,16 +262,10 @@ if (isset($_GET['halaman'])) {
         <script src="../assets/js/pages/form-element-select.js"></script>
     <?php endif; ?>
 
-    <?php if (
-        in_array(
-            $_GET['halaman'] ?? '',
-            ['ukuran', 'merk', 'jenis_pakaian', 'pakaian', 'pakaian_per_warna', 'pakaian_per_merk', 'stok', 'stok_per_merk', 'stok_per_pakaian', 'riwayat_penambahan_stok']
-        )
-    ) : ?>
-        <script src="../assets/extensions/jquery/jquery.min.js"></script>
-        <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
-        <script src="../assets/js/pages/datatables.js"></script>
-    <?php endif; ?>
+
+    <script src="../assets/extensions/jquery/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
+    <script src="../assets/js/pages/datatables.js"></script>
 
     <?php if (in_array($_GET['halaman'] ?? '', ['tambah_warna_pakaian', 'edit_warna_pakaian'])) : ?>
         <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>

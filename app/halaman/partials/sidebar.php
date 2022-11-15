@@ -1,6 +1,8 @@
 <?php
 $result = $mysqli->query('SELECT * FROM jenis_pakaian ORDER BY nama');
-$data = $result->fetch_all(MYSQLI_ASSOC);
+$jenis_pakaian = $result->fetch_all(MYSQLI_ASSOC);
+$result = $mysqli->query('SELECT * FROM merk ORDER BY nama');
+$merk = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <div id="sidebar" class="active">
@@ -46,9 +48,9 @@ $data = $result->fetch_all(MYSQLI_ASSOC);
                         <span>Data Pakaian</span>
                     </a>
                     <ul class="submenu <?= $active === 'pakaian' ? 'active' : ''; ?>">
-                        <?php foreach ($data as $jenis_pakaian) : ?>
-                            <li class="submenu-item <?= ($active === 'pakaian' && $jenis_pakaian['id'] == ($_GET['id_jenis_pakaian'] ?? '')) ? 'active' : ''; ?>">
-                                <a href="?halaman=pakaian&id_jenis_pakaian=<?= $jenis_pakaian['id']; ?>"><?= $jenis_pakaian['nama']; ?></a>
+                        <?php foreach ($merk as $value) : ?>
+                            <li class="submenu-item <?= ($active === 'pakaian' && $value['id'] == ($_GET['id_merk'] ?? '')) ? 'active' : ''; ?>">
+                                <a href="?halaman=pakaian&id_merk=<?= $value['id']; ?>"><?= $value['nama']; ?></a>
                             </li>
                         <?php endforeach; ?>
                     </ul>
@@ -88,9 +90,9 @@ $data = $result->fetch_all(MYSQLI_ASSOC);
                         <span>Ukuran</span>
                     </a>
                     <ul class="submenu <?= $active === 'ukuran' ? 'active' : ''; ?>">
-                        <?php foreach ($data as $jenis_pakaian) : ?>
-                            <li class="submenu-item <?= ($active === 'ukuran' && $jenis_pakaian['id'] == ($_GET['id_jenis_pakaian'] ?? '')) ? 'active' : ''; ?>">
-                                <a href="?halaman=ukuran&id_jenis_pakaian=<?= $jenis_pakaian['id']; ?>"><?= $jenis_pakaian['nama']; ?></a>
+                        <?php foreach ($jenis_pakaian as $value) : ?>
+                            <li class="submenu-item <?= ($active === 'ukuran' && $value['id'] == ($_GET['id_jenis_pakaian'] ?? '')) ? 'active' : ''; ?>">
+                                <a href="?halaman=ukuran&id_jenis_pakaian=<?= $value['id']; ?>"><?= $value['nama']; ?></a>
                             </li>
                         <?php endforeach; ?>
                     </ul>
