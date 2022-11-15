@@ -68,7 +68,7 @@ if (isset($_POST['submit'])) {
                 $mysqli->query("DELETE FROM ukuran_warna_pakaian WHERE id_warna_pakaian=" . $warna_pakaian['id'] . " AND id_ukuran=" . $id);
         }
 
-        echo "<script>alert('Edit Data Berhasil!')</script>";
+        echo "<script>sessionStorage.setItem('edit','Edit warna pakaian berhasil.')</script>";
         echo "<script>location.href = '?halaman=pakaian_per_warna&id_jenis_pakaian=" . $_GET['id_jenis_pakaian'] . "&id_merk=" . $_GET['id_merk'] . "&id_pakaian=" . $_GET['id_pakaian'] . "';</script>";
     } else {
         echo "<script>alert('Edit Data Gagal!')</script>";
@@ -194,9 +194,20 @@ if (isset($_POST['submit'])) {
 <script>
     document.querySelectorAll('input[type=checkbox]').forEach((elm) => {
         elm.addEventListener('click', function(e) {
-            if (this.defaultChecked && !this.checked)
-                if (!confirm('Stok yang pernah ditambahkan sebelumnya pada ukuran ini akan ikut terhapus! Yakin ingin menghapus stok ini?'))
-                    e.preventDefault();
+            if (this.defaultChecked && !this.checked) {
+                Swal.fire({
+                    title: 'Yakin?',
+                    text: `Stok yang pernah ditambahkan sebelumnya pada ukuran '${elm.nextElementSibling.textContent}' akan ikut terhapus! Yakin ingin menghapus ukuran '${elm.nextElementSibling.textContent}'?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: `Hapus Ukuran '${elm.nextElementSibling.textContent}'?`
+                }).then((result) => {
+                    if (result.isConfirmed)
+                        elm.checked = false;
+                });
+                e.preventDefault();
+            }
         });
     });
 </script>

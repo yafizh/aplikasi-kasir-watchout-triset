@@ -89,8 +89,8 @@
                                     <td class="text-center"><?= $row['ukuran']; ?></td>
                                     <td class="text-center"><?= $row['jumlah']; ?></td>
                                     <td class="no-td">
-                                        <a href="?halaman=edit_riwayat_penambahan_stok&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white">Edit</a>
-                                        <a href="?halaman=hapus_riwayat_penambahan_stok&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm text-white">Hapus</a>
+                                        <a href="?halaman=edit_riwayat_penambahan_stok&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white"><i class="fas fa-edit"></i></a>
+                                        <a id="tombol-hapus" href="?halaman=hapus_riwayat_penambahan_stok&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm text-white" data-text="Menghapus stok pada '<?= $row['nama_pakaian'] ?>' akan mengurangi jumlah stoknya!" data-button-text="Hapus Stok!"><i class="fas fa-trash-alt"></i></a>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

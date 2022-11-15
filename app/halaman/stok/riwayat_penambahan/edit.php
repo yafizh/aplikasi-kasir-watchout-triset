@@ -51,7 +51,7 @@ if (isset($_POST['submit'])) {
     $query = "UPDATE pakaian_disuplai SET jumlah=$jumlah WHERE id=" . $_GET['id'];
 
     if ($mysqli->query($query)) {
-        echo "<script>alert('Edit Data Stok Berhasil!')</script>";
+        echo "<script>sessionStorage.setItem('edit','Edit stok berhasil.')</script>";
         echo "<script>location.href = '?halaman=riwayat_penambahan_stok';</script>";
     } else {
         echo "<script>alert('Tambah Data Stok Gagal!')</script>";
@@ -123,7 +123,7 @@ if (isset($_POST['submit'])) {
                                             </div>
                                             <div class="col-12 mt-3 d-flex justify-content-between">
                                                 <a href="?halaman=riwayat_penambahan_stok" class="btn btn-light-secondary mb-1">Kembali</a>
-                                                <button type="submit" name="submit" class="btn btn-primary mb-1">Simpan</button>
+                                                <button type="submit" name="submit" class="btn btn-primary mb-1 text-white">Simpan</button>
                                             </div>
                                         </div>
                                     </div>

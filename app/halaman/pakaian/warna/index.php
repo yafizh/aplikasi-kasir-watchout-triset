@@ -90,7 +90,8 @@
                                     <td class="text-center"><?= empty($row['ukuran']) ? 'Ukuran Belum Ditambahkan' : $row['ukuran']; ?></td>
                                     <td class="no-td">
                                         <a href="?halaman=edit_warna_pakaian&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white"><i class="fas fa-edit"></i></a>
-                                        <a href="?halaman=hapus_warna_pakaian&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm text-white" onclick="return confirm('Yakin');"><i class="fas fa-trash-alt"></i></a>
+                                        <a id="tombol-hapus" href="?halaman=hapus_warna_pakaian&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" data-text="Menghapus warna '<?= $row['nama']; ?>' akan membuat data pakaian dengan warna '<?= $row['nama']; ?>' dan riwayat stoknya ikut terhapus!" data-button-text="Hapus Ukuran!">
+                                            <i class="fas fa-trash-alt"></i></a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

@@ -20,7 +20,7 @@
                     </h3>
                 </div>
                 <div class="col-12 col-md-auto order-md-2 d-flex justify-content-end">
-                    <a href="?halaman=tambah_stok_pakaian_per_warna&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>&id_warna_pakaian=<?= $_GET['id_warna_pakaian']; ?>" class="btn btn-primary align-self-start">Tambah Stok</a>
+                    <a href="?halaman=tambah_stok_pakaian_per_warna&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>&id_warna_pakaian=<?= $_GET['id_warna_pakaian']; ?>" class="btn btn-primary align-self-start text-white">Tambah Stok</a>
                 </div>
             </div>
         </div>

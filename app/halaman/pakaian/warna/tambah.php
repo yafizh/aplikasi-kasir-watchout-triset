@@ -36,7 +36,7 @@ if (isset($_POST['submit'])) {
         foreach ($id_ukuran as $id) {
             $mysqli->query("INSERT INTO ukuran_warna_pakaian (id_warna_pakaian, id_ukuran) VALUES (" . $id_warna_pakaian . ", $id)");
         }
-        echo "<script>alert('Tambah Data Berhasil!')</script>";
+        echo "<script>sessionStorage.setItem('tambah','Tambah warna pakaian berhasil.')</script>";
         echo "<script>location.href = '?halaman=pakaian_per_warna&id_jenis_pakaian=" . $_GET['id_jenis_pakaian'] . "&id_merk=" . $_GET['id_merk'] . "&id_pakaian=" . $_GET['id_pakaian'] . "';</script>";
     } else {
         echo "<script>alert('Tambah Data Gagal!')</script>";
