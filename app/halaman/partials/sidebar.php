@@ -22,8 +22,8 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
             <ul class="menu">
                 <li class="sidebar-title">Menu Utama</li>
 
-                <li class="sidebar-item">
-                    <a href="index.html" class='sidebar-link'>
+                <li class="sidebar-item <?= $active === 'dashboard' ? 'active' : ''; ?>">
+                    <a href="?" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>
@@ -42,6 +42,39 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                         </li>
                     </ul>
                 </li>
+                <li class="sidebar-title">Master Data</li>
+                <li class="sidebar-item <?= $active === 'jenis_pakaian' ? 'active' : ''; ?>">
+                    <a href="?halaman=jenis_pakaian" class='sidebar-link'>
+                        <i class="fas fa-th-list"></i>
+                        <span>Jenis Pakaian</span>
+                    </a>
+                </li>
+                <li class="sidebar-item <?= $active === 'warna' ? 'active' : ''; ?>">
+                    <a href="?halaman=warna" class='sidebar-link'>
+                        <i class="fas fa-palette"></i>
+                        <span>Warna Pakaian</span>
+                    </a>
+                </li>
+                <li class="sidebar-item <?= $active === 'merk' ? 'active' : ''; ?>">
+                    <a href="?halaman=merk" class='sidebar-link'>
+                        <i class="fas fa-copyright"></i>
+                        <span>Merk</span>
+                    </a>
+                </li>
+                <li class="sidebar-item has-sub <?= $active === 'ukuran' ? 'active' : ''; ?>">
+                    <a href="#" class='sidebar-link'>
+                        <i class="fas fa-tags"></i>
+                        <span>Ukuran</span>
+                    </a>
+                    <ul class="submenu <?= $active === 'ukuran' ? 'active' : ''; ?>">
+                        <?php foreach ($jenis_pakaian as $value) : ?>
+                            <li class="submenu-item <?= ($active === 'ukuran' && $value['id'] == ($_GET['id_jenis_pakaian'] ?? '')) ? 'active' : ''; ?>">
+                                <a href="?halaman=ukuran&id_jenis_pakaian=<?= $value['id']; ?>"><?= $value['nama']; ?></a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </li>
+                <li class="sidebar-title">Menu Pakaian</li>
                 <li class="sidebar-item has-sub <?= $active === 'pakaian' ? 'active' : ''; ?>">
                     <a href="#" class='sidebar-link'>
                         <i class="fas fa-tshirt"></i>
@@ -67,34 +100,6 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                         <li class="submenu-item <?= ($active === 'stok' && ($sub_active ?? '') === 'riwayat_penambahan_stok') ? 'active' : ''; ?>">
                             <a href="?halaman=riwayat_penambahan_stok">Riwayat Penambahan Stok</a>
                         </li>
-                    </ul>
-                </li>
-
-
-                <li class="sidebar-title">Master Data</li>
-                <li class="sidebar-item <?= $active === 'jenis_pakaian' ? 'active' : ''; ?>">
-                    <a href="?halaman=jenis_pakaian" class='sidebar-link'>
-                        <i class="fas fa-th-list"></i>
-                        <span>Jenis Pakaian</span>
-                    </a>
-                </li>
-                <li class="sidebar-item <?= $active === 'merk' ? 'active' : ''; ?>">
-                    <a href="?halaman=merk" class='sidebar-link'>
-                        <i class="fas fa-copyright"></i>
-                        <span>Merk</span>
-                    </a>
-                </li>
-                <li class="sidebar-item has-sub <?= $active === 'ukuran' ? 'active' : ''; ?>">
-                    <a href="#" class='sidebar-link'>
-                        <i class="fas fa-tags"></i>
-                        <span>Ukuran</span>
-                    </a>
-                    <ul class="submenu <?= $active === 'ukuran' ? 'active' : ''; ?>">
-                        <?php foreach ($jenis_pakaian as $value) : ?>
-                            <li class="submenu-item <?= ($active === 'ukuran' && $value['id'] == ($_GET['id_jenis_pakaian'] ?? '')) ? 'active' : ''; ?>">
-                                <a href="?halaman=ukuran&id_jenis_pakaian=<?= $value['id']; ?>"><?= $value['nama']; ?></a>
-                            </li>
-                        <?php endforeach; ?>
                     </ul>
                 </li>
 

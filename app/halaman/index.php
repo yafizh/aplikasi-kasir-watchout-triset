@@ -12,184 +12,26 @@ require_once('../helper/date.php');
 
 if (isset($_GET['halaman'])) {
     // Stok
-    if ($_GET['halaman'] === 'stok') {
-        $title = 'Data Stok';
-        $halaman = 'stok/index.php';
-        $active = 'stok';
-        $sub_active = 'stok_pakaian';
-    }
-
-    if ($_GET['halaman'] === 'stok_per_merk') {
-        $title = 'Data Stok';
-        $halaman = 'stok/merk/index.php';
-        $active = 'stok';
-        $sub_active = 'stok_pakaian';
-    }
-
-    if ($_GET['halaman'] === 'stok_per_jenis') {
-        $title = 'Data Stok';
-        $halaman = 'stok/jenis_pakaian/index.php';
-        $active = 'stok';
-        $sub_active = 'stok_pakaian';
-    }
-
-    if ($_GET['halaman'] === 'stok_per_pakaian') {
-        $title = 'Data Stok';
-        $halaman = 'stok/pakaian/index.php';
-        $active = 'stok';
-        $sub_active = 'stok_pakaian';
-    } elseif ($_GET['halaman'] === 'tambah_stok_pakaian') {
-        $title = 'Tambah Stok';
-        $halaman = 'stok/pakaian/tambah.php';
-        $active = 'stok';
-        $sub_active = 'stok_pakaian';
-    }
-
-    if ($_GET['halaman'] === 'stok_per_warna') {
-        $title = 'Data Stok';
-        $halaman = 'stok/warna/index.php';
-        $active = 'stok';
-        $sub_active = 'stok_pakaian';
-    } elseif ($_GET['halaman'] === 'tambah_stok_pakaian_per_warna') {
-        $title = 'Tambah Stok';
-        $halaman = 'stok/warna/tambah.php';
-        $active = 'stok';
-        $sub_active = 'stok_pakaian';
-    }
-
-    if ($_GET['halaman'] === 'riwayat_penambahan_stok') {
-        $title = 'Riwayat Penambahan Stok';
-        $halaman = 'stok/riwayat_penambahan/index.php';
-        $active = 'stok';
-        $sub_active = 'riwayat_penambahan_stok';
-    }
-    if ($_GET['halaman'] === 'edit_riwayat_penambahan_stok') {
-        $title = 'Edit Riwayat Penambahan Stok';
-        $halaman = 'stok/riwayat_penambahan/edit.php';
-        $active = 'stok';
-        $sub_active = 'riwayat_penambahan_stok';
-    }
-    if ($_GET['halaman'] === 'hapus_riwayat_penambahan_stok') {
-        $title = 'Hapus Riwayat Penambahan Stok';
-        $halaman = 'stok/riwayat_penambahan/hapus.php';
-        $active = 'stok';
-        $sub_active = 'riwayat_penambahan_stok';
-    }
-
-    // -----------------------------------------------------------
-
+    include_once('../route/stok.php');
+   
     // Pakaian
-    if ($_GET['halaman'] === 'pakaian') {
-        $title = 'Data Pakaian';
-        $halaman = 'pakaian/index.php';
-        $active = 'pakaian';
-    }
-
-    if ($_GET['halaman'] === 'pakaian_per_jenis') {
-        $title = 'Data Pakaian';
-        $halaman = 'pakaian/jenis_pakaian/index.php';
-        $active = 'pakaian';
-    } elseif ($_GET['halaman'] === 'tambah_pakaian') {
-        $title = 'Tambah Pakaian';
-        $halaman = 'pakaian/jenis_pakaian/tambah.php';
-        $active = 'pakaian';
-    } elseif ($_GET['halaman'] === 'edit_pakaian') {
-        $title = 'Edit Pakaian';
-        $halaman = 'pakaian/jenis_pakaian/edit.php';
-        $active = 'pakaian';
-    } elseif ($_GET['halaman'] === 'hapus_pakaian') {
-        $title = 'Hapus Pakaian';
-        $halaman = 'pakaian/jenis_pakaian/hapus.php';
-        $active = 'pakaian';
-    }
-
-    if ($_GET['halaman'] === 'pakaian_per_warna') {
-        $title = 'Data Pakaian';
-        $halaman = 'pakaian/warna/index.php';
-        $active = 'pakaian';
-    } elseif ($_GET['halaman'] === 'tambah_warna_pakaian') {
-        $title = 'Tambah Warna Pakaian';
-        $halaman = 'pakaian/warna/tambah.php';
-        $active = 'pakaian';
-    } elseif ($_GET['halaman'] === 'edit_warna_pakaian') {
-        $title = 'Edit Warna Pakaian';
-        $halaman = 'pakaian/warna/edit.php';
-        $active = 'pakaian';
-    } elseif ($_GET['halaman'] === 'hapus_warna_pakaian') {
-        $title = 'Hapus Pakaian';
-        $halaman = 'pakaian/warna/hapus.php';
-        $active = 'pakaian';
-    }
-
-    // -------------------------------------------------
+    include_once('../route/pakaian.php');
+   
     // Jenis Pakaian
-    if ($_GET['halaman'] === 'jenis_pakaian') {
-        $title = 'Data Jenis Pakaian';
-        $halaman = 'jenis_pakaian/index.php';
-        $active = 'jenis_pakaian';
-    }
-    if ($_GET['halaman'] === 'tambah_jenis_pakaian') {
-        $title = 'Tambah Jenis Pakaian';
-        $halaman = 'jenis_pakaian/tambah.php';
-        $active = 'jenis_pakaian';
-    }
-    if ($_GET['halaman'] === 'edit_jenis_pakaian') {
-        $title = 'Edit Jenis Pakaian';
-        $halaman = 'jenis_pakaian/edit.php';
-        $active = 'jenis_pakaian';
-    }
-    if ($_GET['halaman'] === 'hapus_jenis_pakaian') {
-        $title = 'Hapus Jenis Pakaian';
-        $halaman = 'jenis_pakaian/hapus.php';
-        $active = 'jenis_pakaian';
-    }
+    include_once('../route/jenis_pakaian.php');
+
+    // Warna Pakaian
+    include_once('../route/warna.php');
 
     // Merk
-    if ($_GET['halaman'] === 'merk') {
-        $title = 'Data Merk';
-        $halaman = 'merk/index.php';
-        $active = 'merk';
-    }
-    if ($_GET['halaman'] === 'tambah_merk') {
-        $title = 'Tambah Merk';
-        $halaman = 'merk/tambah.php';
-        $active = 'merk';
-    }
-    if ($_GET['halaman'] === 'edit_merk') {
-        $title = 'Edit Merk';
-        $halaman = 'merk/edit.php';
-        $active = 'merk';
-    }
-    if ($_GET['halaman'] === 'hapus_merk') {
-        $title = 'Hapus Merk';
-        $halaman = 'merk/hapus.php';
-        $active = 'merk';
-    }
+    include_once('../route/merk.php');
 
     // Ukuran
-    if ($_GET['halaman'] === 'ukuran') {
-        $title = 'Data Ukuran';
-        $halaman = 'ukuran/index.php';
-        $active = 'ukuran';
-    }
-    if ($_GET['halaman'] === 'tambah_ukuran') {
-        $title = 'Tambah Ukuran';
-        $halaman = 'ukuran/tambah.php';
-        $active = 'ukuran';
-    }
-    if ($_GET['halaman'] === 'edit_ukuran') {
-        $title = 'Edit Ukuran';
-        $halaman = 'ukuran/edit.php';
-        $active = 'ukuran';
-    }
-    if ($_GET['halaman'] === 'hapus_ukuran') {
-        $title = 'Hapus Ukuran';
-        $halaman = 'ukuran/hapus.php';
-        $active = 'ukuran';
-    }
+    include_once('../route/ukuran.php');
 } else {
     $title = 'Dashboard';
     $halaman = 'dashboard/index.php';
+    $active = 'dashboard';
 }
 
 ?>
