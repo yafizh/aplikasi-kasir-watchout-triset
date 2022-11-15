@@ -12,8 +12,5 @@ let jquery_datatable = $("#table1").DataTable({
         "zeroRecords": "Pencarian Tidak Ditemukan...",
     },
     "order": [],
-    "columnDefs": [{
-        "targets": 'no-sort',
-        "orderable": false,
-    }]
+    "scrollX": true,
 });
