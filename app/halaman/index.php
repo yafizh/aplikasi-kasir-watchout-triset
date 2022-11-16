@@ -10,23 +10,27 @@ require_once('../helper/date.php');
 
 
 
-if(isset($_SESSION['user'])){
+if (isset($_SESSION['user'])) {
     if (isset($_GET['halaman'])) {
+        // Pengguna
+        include_once('../route/admin.php');
+        include_once('../route/kasir.php');
+
         // Stok
         include_once('../route/stok.php');
-    
+
         // Pakaian
         include_once('../route/pakaian.php');
-    
+
         // Jenis Pakaian
         include_once('../route/jenis_pakaian.php');
-    
+
         // Warna Pakaian
         include_once('../route/warna.php');
-    
+
         // Merk
         include_once('../route/merk.php');
-    
+
         // Ukuran
         include_once('../route/ukuran.php');
     } else {
@@ -34,7 +38,7 @@ if(isset($_SESSION['user'])){
         $halaman = 'dashboard/index.php';
         $active = 'dashboard';
     }
-}else{
+} else {
     $title = 'Halaman Login';
 }
 
@@ -55,7 +59,7 @@ if(isset($_SESSION['user'])){
         <?php endif; ?>
 
         <link rel="stylesheet" href="../assets/css/main/app-dark.css">
-     
+
         <link rel="stylesheet" href="../assets/css/shared/iconly.css">
         <link rel="stylesheet" href="../assets/extensions/sweetalert2/sweetalert2.min.css">
 
@@ -91,7 +95,7 @@ if(isset($_SESSION['user'])){
             }
         </style>
 
-        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_warna_pakaian', 'edit_warna_pakaian'])) : ?>
+        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_warna_pakaian', 'edit_warna_pakaian', 'tambah_kasir', 'edit_kasir'])) : ?>
             <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
             <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" />
             <link href="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css" rel="stylesheet">
@@ -138,9 +142,9 @@ if(isset($_SESSION['user'])){
         <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
         <script src="../assets/js/pages/datatables.js"></script>
 
-        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_warna_pakaian', 'edit_warna_pakaian'])) : ?>
+        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_warna_pakaian', 'edit_warna_pakaian', 'tambah_kasir', 'edit_kasir'])) : ?>
             <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
-            <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>+
+            <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
             <script src="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.js"></script>
             <script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
             <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
@@ -168,7 +172,7 @@ if(isset($_SESSION['user'])){
                             resolve(type);
                         }),
                 });
-                <?php if (in_array($_GET['halaman'] ?? '', ['edit_warna_pakaian'])) : ?>
+                <?php if (in_array($_GET['halaman'] ?? '', ['edit_warna_pakaian', 'edit_kasir'])) : ?>
                     pond.addFile(document.querySelector('input[name=foto_pakaian]').value);
                 <?php endif; ?>
             </script>

@@ -28,16 +28,16 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="sidebar-item  has-sub">
+                <li class="sidebar-item has-sub <?= $active === 'pengguna' ? 'active' : ''; ?>">
                     <a href="#" class='sidebar-link'>
                         <i class="fas fa-users"></i>
                         <span>Pengguna</span>
                     </a>
-                    <ul class="submenu ">
-                        <li class="submenu-item ">
+                    <ul class="submenu <?= $active === 'pengguna' ? 'active' : ''; ?>">
+                        <li class="submenu-item <?= ($active === 'pengguna' && ($sub_active ?? '') == 'admin') ? 'active' : '' ?>">
                             <a href="?halaman=admin">Admin</a>
                         </li>
-                        <li class="submenu-item ">
+                        <li class="submenu-item <?= ($active === 'pengguna' && ($sub_active ?? '') == 'kasir') ? 'active' : '' ?>">
                             <a href="?halaman=kasir">Kasir</a>
                         </li>
                     </ul>

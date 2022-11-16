@@ -18,7 +18,7 @@ CREATE TABLE kasir(
     tanggal_lahir DATE NULL,
     foto VARCHAR(255),
     PRIMARY KEY(id),
-    FOREIGN KEY (id_pengguna) REFERENCES pengguna(id)
+    FOREIGN KEY (id_pengguna) REFERENCES pengguna(id) ON DELETE CASCADE
 );
 
 CREATE TABLE warna(
