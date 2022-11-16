@@ -38,11 +38,14 @@ if (isset($_POST['submit'])) {
     $id_ukuran = $_POST['id_ukuran'] ?? [];
 
     $target_dir = "../uploads/foto_pakaian/";
-    $foto = $target_dir . Date("YmdHis") . '.' . strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
-
-    if (!is_dir($target_dir)) mkdir($target_dir, 0700, true);
-    if (!move_uploaded_file($_FILES['foto']["tmp_name"], $foto))
-        echo "<script>alert('Gagal meng-upload gambar!')</script>";
+    if (($target_dir . $_FILES['foto']['name']) != $warna_pakaian['foto']) {
+        $foto = $target_dir . Date("YmdHis") . '.' . strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+        if (!is_dir($target_dir)) mkdir($target_dir, 0700, true);
+        if (!move_uploaded_file($_FILES['foto']["tmp_name"], $foto))
+            echo "<script>alert('Gagal meng-upload gambar!')</script>";
+    } else {
+        $foto = $warna_pakaian['foto'];
+    }
 
     $q = "
     UPDATE warna_pakaian SET 
