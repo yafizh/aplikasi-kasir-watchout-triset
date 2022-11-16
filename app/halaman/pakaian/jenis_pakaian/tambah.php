@@ -25,7 +25,7 @@ if (isset($_POST['submit'])) {
 
     if ($mysqli->query($q)) {
         echo "<script>sessionStorage.setItem('tambah','Tambah pakaian berhasil.')</script>";
-        echo "<script>location.href = '?halaman=pakaian_per_jenis_pakaian&id_jenis_pakaian=" . $_GET['id_jenis_pakaian'] . "&id_merk=" . $_GET['id_merk'] . "';</script>";
+        echo "<script>location.href = '?halaman=pakaian_per_jenis&id_jenis_pakaian=" . $_GET['id_jenis_pakaian'] . "&id_merk=" . $_GET['id_merk'] . "';</script>";
     } else {
         echo "<script>alert('Tambah Data Gagal!')</script>";
         die($mysqli->error);
