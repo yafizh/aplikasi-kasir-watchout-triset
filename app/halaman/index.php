@@ -34,9 +34,15 @@ if (isset($_SESSION['user'])) {
         // Ukuran
         include_once('../route/ukuran.php');
     } else {
-        $title = 'Dashboard';
-        $halaman = 'dashboard/index.php';
-        $active = 'dashboard';
+        if ($_SESSION['user']['status'] === 'ADMIN') {
+            $title = 'Dashboard';
+            $halaman = 'dashboard/index.php';
+            $active = 'dashboard';
+        } elseif ($_SESSION['user']['status'] === 'KASIR') {
+            $title = 'Kasir';
+            $halaman = 'kasir/index.php';
+            $active = 'kasir';
+        }
     }
 } else {
     $title = 'Halaman Login';
@@ -109,7 +115,11 @@ if (isset($_SESSION['user'])) {
     <script src="../assets/js/initTheme.js"></script>
     <?php if (isset($_SESSION['user'])) : ?>
         <div id="app">
-            <?php include_once('partials/sidebar.php'); ?>
+            <?php if ($_SESSION['user']['status'] === 'ADMIN') : ?>
+                <?php include_once('partials/sidebar.php'); ?>
+            <?php elseif ($_SESSION['user']['status'] === 'KASIR') : ?>
+                <?php include_once('partials/sidebar_kasir.php'); ?>
+            <?php endif; ?>
             <?php include_once($halaman); ?>
         </div>
     <?php else : ?>
