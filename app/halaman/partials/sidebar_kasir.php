@@ -1,6 +1,4 @@
 <?php
-$result = $mysqli->query('SELECT * FROM jenis_pakaian ORDER BY nama');
-$jenis_pakaian = $result->fetch_all(MYSQLI_ASSOC);
 $result = $mysqli->query('SELECT * FROM merk ORDER BY nama');
 $merk = $result->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -27,11 +25,18 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                         <span>Kasir</span>
                     </a>
                 </li>
-                <li class="sidebar-item <?= $active === '' ? 'active' : ''; ?>">
-                    <a href="?" class='sidebar-link'>
+                <li class="sidebar-item has-sub <?= $active === 'cek_stok' ? 'active' : ''; ?>">
+                    <a href="#" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Stok Pakaian</span>
                     </a>
+                    <ul class="submenu <?= $active === 'cek_stok' ? 'active' : ''; ?>">
+                        <?php foreach ($merk as $value) : ?>
+                            <li class="submenu-item <?= ($active === 'cek_stok' && $value['id'] == ($_GET['id_merk'] ?? '')) ? 'active' : '' ?>">
+                                <a href="?halaman=cek_stok&id_merk=<?= $value['id']; ?>"><?= $value['nama']; ?></a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
                 </li>
                 <li class="sidebar-item <?= $active === '' ? 'active' : ''; ?>">
                     <a href="?" class='sidebar-link'>

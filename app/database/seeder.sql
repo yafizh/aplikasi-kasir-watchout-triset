@@ -73,29 +73,30 @@ INSERT INTO pakaian(
 (2, 1, 'FRANKLIN REGULER FIT', 700000),
 (2, 2, 'NEWPORT TEE', 400000);
 
--- INSERT INTO warna_pakaian(
---     id_pakaian,
---     id_warna,
---     foto
--- ) VALUES 
--- (1, 1, '../../dummy/4.jpg'),
--- (2, 4, '../../dummy/5.jpg'),
--- (3, 5, '../../dummy/6.jpg'),
--- (4, 1, '../../dummy/1.jpg'),
--- (5, 2, '../../dummy/2.jpg'),
--- (6, 3, '../../dummy/3.jpg');
+INSERT INTO warna_pakaian(
+    id_pakaian,
+    id_warna,
+    foto
+) VALUES 
+(1, 1, '../../dummy/4.jpg'),
+(2, 4, '../../dummy/5.jpg'),
+(3, 5, '../../dummy/6.jpg'),
+(4, 1, '../../dummy/1.jpg'),
+(5, 2, '../../dummy/2.jpg'),
+(6, 3, '../../dummy/3.jpg');
 
--- INSERT INTO ukuran_warna_pakaian(
---     id_ukuran,
---     id_warna_pakaian
--- ) VALUES 
--- (11, 1);
+INSERT INTO ukuran_warna_pakaian(
+    id_ukuran,
+    id_warna_pakaian
+) VALUES 
+(11, 1);
 
--- INSERT INTO pakaian_disuplai(
---     id_ukuran_warna_pakaian,
---     tanggal_masuk,
---     harga,
---     jumlah 
--- ) VALUES 
--- (1, CURRENT_DATE(), 150000,2),
--- (1, CURRENT_DATE(), 150000,5);
+INSERT INTO pakaian_disuplai(
+    id_ukuran_warna_pakaian,
+    tanggal_masuk,
+    harga,
+    jumlah 
+) VALUES 
+(1, CURRENT_DATE(), 150000,2),
+(1, CURRENT_DATE(), 150000,5),
+(2, CURRENT_DATE(), 150000,5);
