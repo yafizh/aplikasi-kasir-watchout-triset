@@ -52,23 +52,21 @@
                 foreach ($warna_pakaian as $key_warna_pakaian => $value_warna_pakaian) {
                     $query = "
                         SELECT 
-                            ukuran.nama,
-                            ukuran_warna_pakaian.*,
-                            IFNULL(SUM(pakaian_disuplai.jumlah), 0) AS jumlah 
+                            u.nama,
+                            uwp.*,
+                            (
+                                IFNULL((SELECT SUM(pd.jumlah) FROM pakaian_disuplai AS pd WHERE pd.id_ukuran_warna_pakaian=uwp.id), 0)
+                                - 
+                                IFNULL((SELECT SUM(pt.jumlah) FROM pakaian_terjual AS pt WHERE pt.id_ukuran_warna_pakaian=uwp.id), 0)
+                            ) AS jumlah 
                         FROM 
-                            ukuran_warna_pakaian 
-                        LEFT JOIN 
-                            pakaian_disuplai 
-                        ON 
-                            pakaian_disuplai.id_ukuran_warna_pakaian=ukuran_warna_pakaian.id 
+                            ukuran_warna_pakaian AS uwp 
                         INNER JOIN 
-                            ukuran 
+                            ukuran AS u
                         ON 
-                            ukuran.id=ukuran_warna_pakaian.id_ukuran  
+                            u.id=uwp.id_ukuran  
                         WHERE 
-                            ukuran_warna_pakaian.id_warna_pakaian=" . $value_warna_pakaian['id'] . "
-                        GROUP BY 
-                            ukuran_warna_pakaian.id
+                            uwp.id_warna_pakaian=" . $value_warna_pakaian['id'] . "
                     ";
                     $warna_pakaian[$key_warna_pakaian]['ukuran'] = $mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
                 }

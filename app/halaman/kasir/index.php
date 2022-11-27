@@ -83,13 +83,13 @@ if (isset($_POST['submit'])) {
                             SELECT 
                                 ukuran.nama,
                                 uwp.*,
-                                IFNULL(SUM(pakaian_disuplai.jumlah), 0) AS jumlah 
+                                (
+                                    IFNULL((SELECT SUM(pd.jumlah) FROM pakaian_disuplai AS pd WHERE pd.id_ukuran_warna_pakaian=uwp.id), 0)
+                                    - 
+                                    IFNULL((SELECT SUM(pt.jumlah) FROM pakaian_terjual AS pt WHERE pt.id_ukuran_warna_pakaian=uwp.id), 0)
+                                ) AS jumlah 
                             FROM 
                                 ukuran_warna_pakaian AS uwp
-                            INNER JOIN 
-                                pakaian_disuplai 
-                            ON 
-                                pakaian_disuplai.id_ukuran_warna_pakaian=uwp.id 
                             INNER JOIN 
                                 ukuran 
                             ON 
@@ -351,7 +351,7 @@ if (isset($_POST['submit'])) {
             document.getElementById('detail-in-basket').insertAdjacentHTML('beforeend', `
                 <div class="border border-2 rounded p-3 mb-1">
                     <div class="d-flex gap-3 justify-content-between flex-wrap">
-                        <img src="../../dummy/1.jpg" style="height: 6rem; aspect-ratio: 1; object-fit: cover;">
+                        <img src="${window.location.origin}/app/halaman/${basket[i].foto}" style="height: 6rem; aspect-ratio: 1; object-fit: cover;">
                         <div class="flex-grow-1">
                             <h5 class="mb-1">${basket[i].nama}</h5>
                             <h6 class="mb-1">Warna ${basket[i].warna}</h6>
@@ -459,7 +459,8 @@ if (isset($_POST['submit'])) {
                                     harga: Number(pakaian[index]['harga']),
                                     nama: pakaian[index]['nama'],
                                     warna: warna_pakaian['nama'],
-                                    ukuran: ukuran['nama']
+                                    ukuran: ukuran['nama'],
+                                    foto: warna_pakaian['foto'],
                                 };
                                 basket.total += Number(pakaian[index]['harga']);
                                 totalInBasket.innerText = formatter.format(basket.total);
