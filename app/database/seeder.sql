@@ -40,24 +40,27 @@ INSERT INTO jenis_pakaian(
 ('Sendal');
 
 INSERT INTO ukuran(
+    id,
     id_jenis_pakaian,
     nama,
     keterangan 
 ) VALUES 
-(1, '32', ''),
-(1, '33', ''),
-(1, '34', ''),
-(4, '32', ''),
-(4, '33', ''),
-(4, '34', ''),
-(5, '32', ''),
-(5, '33', ''),
-(5, '34', ''),
-(2, 'S', ''),
-(2, 'M', ''),
-(2, 'L', ''),
-(2, 'XL', ''),
-(2, 'XXL', '');
+(1, 1, '32', ''),
+(2, 1, '33', ''),
+(3, 1, '34', ''),
+(4, 4, '32', ''),
+(5, 4, '33', ''),
+(6, 4, '34', ''),
+(7, 5, '32', ''),
+(8, 5, '33', ''),
+(9, 5, '34', ''),
+(10, 2, 'XXS', ''),
+(11, 2, 'XS', ''),
+(12, 2, 'S', ''),
+(13, 2, 'M', ''),
+(14, 2, 'L', ''),
+(15, 2, 'XL', ''),
+(16, 2, 'XXL', '');
 
 -- Pakaian
 INSERT INTO pakaian(
@@ -89,7 +92,8 @@ INSERT INTO ukuran_warna_pakaian(
     id_ukuran,
     id_warna_pakaian
 ) VALUES 
-(11, 1);
+(11, 1),
+(12, 1);
 
 INSERT INTO pakaian_disuplai(
     id_ukuran_warna_pakaian,

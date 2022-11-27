@@ -91,8 +91,8 @@ CREATE TABLE pakaian_disuplai(
  
 CREATE TABLE penjualan(
     id BIGINT UNSIGNED AUTO_INCREMENT,
-    nama_pembeli VARCHAR(255),
-    tanggal_waktu_pembelian TIMESTAMP NULL DEFAULT NULL,
+    tunai BIGINT UNSIGNED,
+    tanggal_waktu_penjualan TIMESTAMP NULL DEFAULT NULL,
     PRIMARY KEY(id) 
 );
 
@@ -101,6 +101,7 @@ CREATE TABLE pakaian_terjual(
     id_penjualan BIGINT UNSIGNED,
     id_ukuran_warna_pakaian BIGINT UNSIGNED,
     harga BIGINT UNSIGNED COMMENT 'Harga pakaian saat ia dijual',
+    jumlah INT UNSIGNED,
     PRIMARY KEY(id),
     FOREIGN KEY (id_penjualan) REFERENCES penjualan(id) ON DELETE CASCADE,
     FOREIGN KEY (id_ukuran_warna_pakaian) REFERENCES ukuran_warna_pakaian(id) ON DELETE CASCADE

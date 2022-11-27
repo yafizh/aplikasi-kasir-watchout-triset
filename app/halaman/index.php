@@ -112,6 +112,15 @@ if (isset($_SESSION['user'])) {
     <?php else : ?>
         <link rel="stylesheet" href="../assets/css/pages/auth.css">
     <?php endif; ?>
+
+    <script src="../helper/currency.js"></script>
+    <style>
+        html,
+        body {
+            min-height: 100% !important;
+            height: 100%;
+        }
+    </style>
 </head>
 
 <body>

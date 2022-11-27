@@ -1,3 +1,44 @@
+<?php
+if (isset($_POST['submit'])) {
+    $tunai = $_POST['tunai'];
+    $id_ukuran_warna_pakaian = $_POST['id_ukuran_warna_pakaian'];
+    $jumlah = $_POST['jumlah'];
+    $harga = $_POST['harga'];
+
+
+    $q = "
+    INSERT INTO penjualan (
+        tunai, 
+        tanggal_waktu_penjualan 
+    ) VALUES (
+        '$tunai',
+        '" . Date('Y-m-d H:i:s') . "'
+    )";
+
+    if ($mysqli->query($q)) {
+        for ($i = 0; $i < count($id_ukuran_warna_pakaian); $i++) {
+            $q = "
+            INSERT INTO pakaian_terjual (
+                id_penjualan, 
+                id_ukuran_warna_pakaian, 
+                harga, 
+                jumlah 
+            ) VALUES (
+                '" .  $mysqli->insert_id . "',
+                '" .  $id_ukuran_warna_pakaian[$i] . "',
+                '" .  $harga[$i] . "',
+                '" .  $jumlah[$i] . "'
+            )";
+            $mysqli->query($q);
+        }
+        echo "<script>sessionStorage.setItem('tambah','Penjualan Berhasil!.')</script>";
+        echo "<script>location.href = '?';</script>";
+    } else {
+        echo "<script>alert('Gagal!')</script>";
+        die($mysqli->error);
+    }
+}
+?>
 <div id="main">
     <header class="mb-3">
         <a href="#" class="burger-btn d-block d-xl-none">
@@ -41,22 +82,22 @@
                     $query = "
                             SELECT 
                                 ukuran.nama,
-                                ukuran_warna_pakaian.*,
+                                uwp.*,
                                 IFNULL(SUM(pakaian_disuplai.jumlah), 0) AS jumlah 
                             FROM 
-                                ukuran_warna_pakaian 
-                            LEFT JOIN 
+                                ukuran_warna_pakaian AS uwp
+                            INNER JOIN 
                                 pakaian_disuplai 
                             ON 
-                                pakaian_disuplai.id_ukuran_warna_pakaian=ukuran_warna_pakaian.id 
+                                pakaian_disuplai.id_ukuran_warna_pakaian=uwp.id 
                             INNER JOIN 
                                 ukuran 
                             ON 
-                                ukuran.id=ukuran_warna_pakaian.id_ukuran  
+                                ukuran.id=uwp.id_ukuran  
                             WHERE 
-                                ukuran_warna_pakaian.id_warna_pakaian=" . $value_warna_pakaian['id'] . "
+                                uwp.id_warna_pakaian=" . $value_warna_pakaian['id'] . "
                             GROUP BY 
-                                ukuran_warna_pakaian.id
+                                uwp.id
                         ";
                     $warna_pakaian[$key_warna_pakaian]['ukuran'] = $mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
                 }
@@ -76,282 +117,110 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-8">
+            <div class="col-7">
                 <div class="card">
                     <div class="card-content">
                         <div class="card-body">
                             <div class="list-group list-group-horizontal-sm mb-1 text-center" role="tablist">
-                                <?php foreach ($merk as $key => $value) : ?>
-                                    <?php if (!$key) : ?>
-                                        <a class="list-group-item list-group-item-action active" id="list-<?= $value['id']; ?>-list" data-bs-toggle="list" href="#list-<?= $value['id']; ?>" role="tab"><?= $value['nama']; ?></a>
-                                    <?php else : ?>
-                                        <a class="list-group-item list-group-item-action" id="list-<?= $value['id']; ?>-list" data-bs-toggle="list" href="#list-<?= $value['id']; ?>" role="tab"><?= $value['nama']; ?></a>
-                                    <?php endif; ?>
+                                <?php foreach ($merk as $m_index => $m_value) : ?>
+                                    <a class="list-group-item list-group-item-action <?= !$m_index ? 'active' : ''; ?>" id="list-<?= $m_value['id']; ?>-list" data-bs-toggle="list" href="#list-<?= $m_value['id']; ?>" role="tab"><?= $m_value['nama']; ?></a>
                                 <?php endforeach; ?>
                             </div>
                             <div class="tab-content text-justify">
-                                <?php foreach ($merk as $key => $value) : ?>
-                                    <?php if (!$key) : ?>
-                                        <div class="tab-pane fade show active" id="list-<?= $value['id']; ?>" role="tabpanel" aria-labelledby="list-<?= $value['id']; ?>-list">
-                                            <div class="row py-3">
-                                                <div class="col-12 col-sm-12 col-md-2">
-                                                    <div class="list-group" role="tablist">
-                                                        <?php foreach ($value['jenis_pakaian'] as $key_jenis_pakaian => $value_jenis_pakaian) : ?>
-                                                            <?php if (!$key_jenis_pakaian) : ?>
-                                                                <a class="list-group-item list-group-item-action active" id="list-jenis_pakaian-<?= $value_jenis_pakaian['id']; ?>-list" data-bs-toggle="list" href="#list-jenis_pakaian-<?= $value_jenis_pakaian['id']; ?>" role="tab"><?= $value_jenis_pakaian['nama']; ?></a>
-                                                            <?php else : ?>
-                                                                <a class="list-group-item list-group-item-action" id="list-jenis_pakaian-<?= $value_jenis_pakaian['id']; ?>-list" data-bs-toggle="list" href="#list-jenis_pakaian-<?= $value_jenis_pakaian['id']; ?>" role="tab"><?= $value_jenis_pakaian['nama']; ?></a>
-                                                            <?php endif; ?>
-                                                        <?php endforeach; ?>
-                                                    </div>
+                                <?php foreach ($merk as $m_index => $m_value) : ?>
+                                    <div class="tab-pane fade <?= !$m_index ? 'show active' : ''; ?>" id="list-<?= $m_value['id']; ?>" role="tabpanel" aria-labelledby="list-<?= $m_value['id']; ?>-list">
+                                        <div class="row py-3">
+                                            <div class="col-3 mb-3">
+                                                <div class="list-group" role="tablist">
+                                                    <?php foreach ($m_value['jenis_pakaian'] as $jp_index => $jp_value) : ?>
+                                                        <a class="list-group-item list-group-item-action <?= !$jp_index ? 'active' : ''; ?>" id="list-merk-<?= $m_index; ?>-jenis_pakaian-<?= $jp_index; ?>-list" data-bs-toggle="list" href="#list-merk-<?= $m_index; ?>-jenis_pakaian-<?= $jp_index; ?>" role="tab"><?= $jp_value['nama']; ?></a>
+                                                    <?php endforeach; ?>
                                                 </div>
-                                                <div class="col-12 col-sm-12 col-md-10 mt-1">
-                                                    <div class="tab-content text-justify" id="nav-tabContent">
-                                                        <?php foreach ($value['jenis_pakaian'] as $key_jenis_pakaian => $value_jenis_pakaian) : ?>
-                                                            <?php if (!$key_jenis_pakaian) : ?>
-                                                                <div class="tab-pane show active" id="list-jenis_pakaian-<?= $value_jenis_pakaian['id']; ?>" role="tabpanel" aria-labelledby="list-jenis_pakaian-<?= $value_jenis_pakaian['id']; ?>-list">
-                                                                    <div class="d-flex gap-3 text-center">
-                                                                        <?php foreach ($value_jenis_pakaian['pakaian'] as $key_value_pakaian =>  $value_pakaian) : ?>
-                                                                            <div class="card border" style="width: 12rem;">
-                                                                                <div class="card-image" style="height: 12rem;">
-                                                                                    <?php if (count($value_pakaian['warna_pakaian'])) : ?>
-                                                                                        <div class="carousel slide h-100" data-bs-ride="carousel">
-                                                                                            <div class="carousel-inner h-100 rounded">
-                                                                                                <?php foreach ($value_pakaian['warna_pakaian'] as $index => $value_warna_pakaian) : ?>
-                                                                                                    <?php if (!$index) : ?>
-                                                                                                        <div class="carousel-item h-100 active">
-                                                                                                            <img src="<?= $value_warna_pakaian['foto']; ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                                                                                                        </div>
-                                                                                                    <?php else : ?>
-                                                                                                        <div class="carousel-item h-100">
-                                                                                                            <img src="<?= $value_warna_pakaian['foto']; ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                                                                                                        </div>
-                                                                                                    <?php endif; ?>
-                                                                                                <?php endforeach; ?>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    <?php else : ?>
-                                                                                        <div class="w-100 h-100 rounded d-flex justify-content-center align-items-center p-3" style="background-color: #CCCCCC;">
-                                                                                            <h6 class="text-white">Gambar Tidak Tersedia</h6>
-                                                                                        </div>
-                                                                                    <?php endif; ?>
-                                                                                </div>
-                                                                                <div class="card-body px-3 py-0 text-center">
-                                                                                    <div style="height: 3.5rem;" class="mt-2 d-flex align-items-center justify-content-center">
-                                                                                        <h5><?= $value_pakaian['nama']; ?></h5>
-                                                                                    </div>
-                                                                                    <button class="btn btn-primary text-white btn-sm w-100 mb-3" data-bs-toggle="modal" data-bs-target="#border-less">Masukkan Keranjang</button>
-                                                                                </div>
+                                            </div>
+                                            <div class="col-9">
+                                                <div class="tab-content text-justify">
+                                                    <?php foreach ($m_value['jenis_pakaian'] as $jp_index => $jp_value) : ?>
+                                                        <div class="tab-pane <?= !$jp_index ? 'show active' : ''; ?>" id="list-merk-<?= $m_index; ?>-jenis_pakaian-<?= $jp_index; ?>" role="tabpanel" aria-labelledby="list-merk-<?= $m_index; ?>-jenis_pakaian-<?= $jp_index; ?>-list">
+                                                            <div class="d-flex flex-wrap gap-3 text-center">
+                                                                <?php foreach ($jp_value['pakaian'] as $p_value) : ?>
+                                                                    <div class="card border m-0" style="width: 12rem;">
+                                                                        <div class="card-body px-3 py-0 text-center">
+                                                                            <div style="height: 3.5rem;" class="mt-2 d-flex align-items-center justify-content-center">
+                                                                                <h5><?= $p_value['nama']; ?></h5>
                                                                             </div>
-                                                                        <?php endforeach; ?>
+                                                                            <button class="btn btn-primary text-white btn-sm w-100 mb-3" data-bs-toggle="modal" data-bs-target="#detail-pakaian">Masukkan Keranjang</button>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            <?php else : ?>
-                                                                <div class="tab-pane" id="list-jenis_pakaian-<?= $value_jenis_pakaian['id']; ?>" role="tabpanel" aria-labelledby="list-jenis_pakaian-<?= $value_jenis_pakaian['id']; ?>-list">
-                                                                    <div class="d-flex gap-3 text-center">
-                                                                        <?php foreach ($value_jenis_pakaian['pakaian'] as $key_value_pakaian =>  $value_pakaian) : ?>
-                                                                            <div class="card border" style="width: 12rem;">
-                                                                                <div class="card-image" style="height: 12rem;">
-                                                                                    <?php if (count($value_pakaian['warna_pakaian'])) : ?>
-                                                                                        <div class="carousel slide h-100" data-bs-ride="carousel">
-                                                                                            <div class="carousel-inner h-100 rounded">
-                                                                                                <?php foreach ($value_pakaian['warna_pakaian'] as $index => $value_warna_pakaian) : ?>
-                                                                                                    <?php if (!$index) : ?>
-                                                                                                        <div class="carousel-item h-100 active">
-                                                                                                            <img src="<?= $value_warna_pakaian['foto']; ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                                                                                                        </div>
-                                                                                                    <?php else : ?>
-                                                                                                        <div class="carousel-item h-100">
-                                                                                                            <img src="<?= $value_warna_pakaian['foto']; ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                                                                                                        </div>
-                                                                                                    <?php endif; ?>
-                                                                                                <?php endforeach; ?>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    <?php else : ?>
-                                                                                        <div class="w-100 h-100 rounded d-flex justify-content-center align-items-center p-3" style="background-color: #CCCCCC;">
-                                                                                            <h6 class="text-white">Gambar Tidak Tersedia</h6>
-                                                                                        </div>
-                                                                                    <?php endif; ?>
-                                                                                </div>
-                                                                                <div class="card-body px-3 py-0 text-center">
-                                                                                    <div style="height: 3.5rem;" class="mt-2 d-flex align-items-center justify-content-center">
-                                                                                        <h5><?= $value_pakaian['nama']; ?></h5>
-                                                                                    </div>
-                                                                                    <button class="btn btn-primary text-white btn-sm w-100 mb-3" data-bs-toggle="modal" data-bs-target="#border-less">Masukkan Keranjang</button>
-                                                                                </div>
-                                                                            </div>
-                                                                        <?php endforeach; ?>
-                                                                    </div>
-                                                                </div>
-                                                            <?php endif; ?>
-                                                        <?php endforeach; ?>
-                                                    </div>
+                                                                <?php endforeach; ?>
+                                                            </div>
+                                                        </div>
+                                                    <?php endforeach; ?>
                                                 </div>
                                             </div>
                                         </div>
-                                    <?php else : ?>
-                                        <div class="tab-pane fade" id="list-<?= $value['id']; ?>" role="tabpanel" aria-labelledby="list-<?= $value['id']; ?>-list">
-                                            <div class="row py-3">
-                                                <div class="col-12 col-sm-12 col-md-2">
-                                                    <div class="list-group" role="tablist">
-                                                        <?php foreach ($value['jenis_pakaian'] as $key_jenis_pakaian => $value_jenis_pakaian) : ?>
-                                                            <?php if (!$key_jenis_pakaian) : ?>
-                                                                <a class="list-group-item list-group-item-action active" id="list-jenis_pakaian_merk_<?= $value['id']; ?>-<?= $value_jenis_pakaian['id']; ?>-list" data-bs-toggle="list" href="#list-jenis_pakaian_merk_<?= $value['id']; ?>-<?= $value_jenis_pakaian['id']; ?>" role="tab"><?= $value_jenis_pakaian['nama']; ?></a>
-                                                            <?php else : ?>
-                                                                <a class="list-group-item list-group-item-action" id="list-jenis_pakaian_merk_<?= $value['id']; ?>-<?= $value_jenis_pakaian['id']; ?>-list" data-bs-toggle="list" href="#list-jenis_pakaian_merk_<?= $value['id']; ?>-<?= $value_jenis_pakaian['id']; ?>" role="tab"><?= $value_jenis_pakaian['nama']; ?></a>
-                                                            <?php endif; ?>
-                                                        <?php endforeach; ?>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 col-sm-12 col-md-10 mt-1">
-                                                    <div class="tab-content text-justify" id="nav-tabContent">
-                                                        <?php foreach ($value['jenis_pakaian'] as $key_jenis_pakaian => $value_jenis_pakaian) : ?>
-                                                            <?php if (!$key_jenis_pakaian) : ?>
-                                                                <div class="tab-pane show active" id="list-jenis_pakaian_merk_<?= $value['id']; ?>-<?= $value_jenis_pakaian['id']; ?>" role="tabpanel" aria-labelledby="list-jenis_pakaian_merk_<?= $value['id']; ?>-<?= $value_jenis_pakaian['id']; ?>-list">
-                                                                    <div class="d-flex gap-3 text-center">
-                                                                        <?php foreach ($value_jenis_pakaian['pakaian'] as $key_value_pakaian =>  $value_pakaian) : ?>
-                                                                            <div class="card border" style="width: 12rem;">
-                                                                                <div class="card-image" style="height: 12rem;">
-                                                                                    <?php if (count($value_pakaian['warna_pakaian'])) : ?>
-                                                                                        <div class="carousel slide h-100" data-bs-ride="carousel">
-                                                                                            <div class="carousel-inner h-100 rounded">
-                                                                                                <?php foreach ($value_pakaian['warna_pakaian'] as $index => $value_warna_pakaian) : ?>
-                                                                                                    <?php if (!$index) : ?>
-                                                                                                        <div class="carousel-item h-100 active">
-                                                                                                            <img src="<?= $value_warna_pakaian['foto']; ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                                                                                                        </div>
-                                                                                                    <?php else : ?>
-                                                                                                        <div class="carousel-item h-100">
-                                                                                                            <img src="<?= $value_warna_pakaian['foto']; ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                                                                                                        </div>
-                                                                                                    <?php endif; ?>
-                                                                                                <?php endforeach; ?>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    <?php else : ?>
-                                                                                        <div class="w-100 h-100 rounded d-flex justify-content-center align-items-center p-3" style="background-color: #CCCCCC;">
-                                                                                            <h6 class="text-white">Gambar Tidak Tersedia</h6>
-                                                                                        </div>
-                                                                                    <?php endif; ?>
-                                                                                </div>
-                                                                                <div class="card-body px-3 py-0 text-center">
-                                                                                    <div style="height: 3.5rem;" class="mt-2 d-flex align-items-center justify-content-center">
-                                                                                        <h5><?= $value_pakaian['nama']; ?></h5>
-                                                                                    </div>
-                                                                                    <button class="btn btn-primary text-white btn-sm w-100 mb-3" data-bs-toggle="modal" data-bs-target="#border-less">Masukkan Keranjang</button>
-                                                                                </div>
-                                                                            </div>
-                                                                        <?php endforeach; ?>
-                                                                    </div>
-                                                                </div>
-                                                            <?php else : ?>
-                                                                <div class="tab-pane" id="list-jenis_pakaian_merk_<?= $value['id']; ?>-<?= $value_jenis_pakaian['id']; ?>" role="tabpanel" aria-labelledby="list-jenis_pakaian_merk_<?= $value['id']; ?>-<?= $value_jenis_pakaian['id']; ?>-list">
-                                                                    <div class="d-flex gap-3 text-center">
-                                                                        <?php foreach ($value_jenis_pakaian['pakaian'] as $key_value_pakaian =>  $value_pakaian) : ?>
-                                                                            <div class="card border" style="width: 12rem;">
-                                                                                <div class="card-image" style="height: 12rem;">
-                                                                                    <?php if (count($value_pakaian['warna_pakaian'])) : ?>
-                                                                                        <div class="carousel slide h-100" data-bs-ride="carousel">
-                                                                                            <div class="carousel-inner h-100 rounded">
-                                                                                                <?php foreach ($value_pakaian['warna_pakaian'] as $index => $value_warna_pakaian) : ?>
-                                                                                                    <?php if (!$index) : ?>
-                                                                                                        <div class="carousel-item h-100 active">
-                                                                                                            <img src="<?= $value_warna_pakaian['foto']; ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                                                                                                        </div>
-                                                                                                    <?php else : ?>
-                                                                                                        <div class="carousel-item h-100">
-                                                                                                            <img src="<?= $value_warna_pakaian['foto']; ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                                                                                                        </div>
-                                                                                                    <?php endif; ?>
-                                                                                                <?php endforeach; ?>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    <?php else : ?>
-                                                                                        <div class="w-100 h-100 rounded d-flex justify-content-center align-items-center p-3" style="background-color: #CCCCCC;">
-                                                                                            <h6 class="text-white">Gambar Tidak Tersedia</h6>
-                                                                                        </div>
-                                                                                    <?php endif; ?>
-                                                                                </div>
-                                                                                <div class="card-body px-3 py-0 text-center">
-                                                                                    <div style="height: 3.5rem;" class="mt-2 d-flex align-items-center justify-content-center">
-                                                                                        <h5><?= $value_pakaian['nama']; ?></h5>
-                                                                                    </div>
-                                                                                    <button class="btn btn-primary text-white btn-sm w-100 mb-3" data-bs-toggle="modal" data-bs-target="#border-less">Masukkan Keranjang</button>
-                                                                                </div>
-                                                                            </div>
-                                                                        <?php endforeach; ?>
-                                                                    </div>
-                                                                </div>
-                                                            <?php endif; ?>
-                                                        <?php endforeach; ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endif; ?>
+                                    </div>
                                 <?php endforeach; ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-4">
-                <section class="section">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="list-group list-group-horizontal-sm mb-1 text-center" role="tablist">
-                                <a class="list-group-item list-group-item-action active" id="list-keranjang-list" data-bs-toggle="list" href="#list-keranjang" role="tab">Keranjang</a>
-                            </div>
-                            <div class="tab-content text-justify">
-                                <div class="tab-pane fade show active" id="list-keranjang" role="tabpanel" aria-labelledby="list-keranjang-list">
-                                    <div id="keranjang">
-                                        <!-- <div class="border border-2 rounded p-3 mb-1">
-                                            <div class="d-flex gap-3 justify-content-between flex-wrap">
-                                                <img src="../../dummy/1.jpg" style="height: 6rem; aspect-ratio: 1; object-fit: cover;">
-                                                <div class="flex-grow-1">
-                                                    <h5 class="mb-1">KYNA BLOUSE</h5>
-                                                    <h6 class="mb-1">Warna Merah</h6>
-                                                    <h6 class="text-muted">Ukuran L</h6>
-                                                    <h6>Rp 50.000</h6>
-                                                </div>
-                                                <div class="d-flex align-self-center border">
-                                                    <div class="d-flex justify-content-center align-items-center " style="aspect-ratio: 1; width: 2rem;">
-                                                        <a href="#"><i class="fas fa-minus"></i></a>
-                                                    </div>
-                                                    <div class="d-flex justify-content-center align-items-center border-start border-end" contenteditable="" style="width: 2.5rem;">1</div>
-                                                    <div class="d-flex justify-content-center align-items-center " style="aspect-ratio: 1; width: 2rem;">
-                                                        <a href="#"><i class="fas fa-plus"></i></a>
-                                                    </div>
-                                                </div>
+            <div class="col-5">
+                <div class="card" style="min-height: 90.5%;">
+                    <div class="card-header">
+                        <h5>Keranjang</h5>
+                    </div>
+                    <div class="card-body d-flex justify-content-center">
+                        <div id="empty-basket" class="text-center align-self-center">
+                            <h5 class="text-muted">Keranjang Kosong</h5>
+                        </div>
+                        <div id="basket" class="w-100 d-none">
+                            <div id="in-basket">
+                                <!-- <div class="border border-2 rounded p-3 mb-1">
+                                    <div class="d-flex gap-3 justify-content-between flex-wrap">
+                                        <img src="../../dummy/1.jpg" style="height: 6rem; aspect-ratio: 1; object-fit: cover;">
+                                        <div class="flex-grow-1">
+                                            <h5 class="mb-1">KYNA BLOUSE</h5>
+                                            <h6 class="mb-1">Warna Merah</h6>
+                                            <h6 class="text-muted">Ukuran L</h6>
+                                            <h6>Rp 50.000</h6>
+                                        </div>
+                                        <div class="d-flex align-self-center border">
+                                            <div class="d-flex justify-content-center align-items-center " style="aspect-ratio: 1; width: 2rem;">
+                                                <a href="#"><i class="fas fa-minus"></i></a>
                                             </div>
-                                            <hr>
-                                            <div class="d-flex">
-                                                <h6 class="mb-0">Total Pembelian</h6>
-                                                <h6 class="text-end flex-grow-1 mb-0">Rp 50.000</h6>
+                                            <div class="d-flex justify-content-center align-items-center border-start border-end" contenteditable="" style="width: 2.5rem;">1</div>
+                                            <div class="d-flex justify-content-center align-items-center " style="aspect-ratio: 1; width: 2rem;">
+                                                <a href="#"><i class="fas fa-plus"></i></a>
                                             </div>
-                                        </div> -->
+                                        </div>
                                     </div>
                                     <hr>
                                     <div class="d-flex">
-                                        <h6 class="mb-0">Total</h6>
+                                        <h6 class="mb-0">Total Pembelian</h6>
                                         <h6 class="text-end flex-grow-1 mb-0">Rp 50.000</h6>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
+                            <hr>
+                            <div class="d-flex mb-3">
+                                <h6 class="mb-0">Total Pembelian</h6>
+                                <h6 class="text-end flex-grow-1 mb-0" id="total-in-basket">Rp 0</h6>
+                            </div>
+                            <button class="btn btn-primary text-white w-100" data-bs-toggle="modal" data-bs-target="#detail-basket">Checkout</button>
                         </div>
                     </div>
-                </section>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade text-left modal-borderless" id="border-less" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+<div class="modal fade text-left modal-borderless" id="detail-pakaian" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Border-Less</h5>
+                <h5 class="modal-title"></h5>
                 <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
                     <i data-feather="x"></i>
                 </button>
@@ -376,8 +245,87 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade text-left modal-borderless" id="basket" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade text-left" id="detail-basket" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Keranjang</h5>
+                <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <form action="" method="POST">
+                <div class="modal-body">
+                    <div id="detail-in-basket">
+                        <!-- <div class="border border-2 rounded p-3 mb-1">
+                            <div class="d-flex gap-3 justify-content-between flex-wrap">
+                                <img src="../../dummy/1.jpg" style="height: 6rem; aspect-ratio: 1; object-fit: cover;">
+                                <div class="flex-grow-1">
+                                    <h5 class="mb-1">KYNA BLOUSE</h5>
+                                    <h6 class="mb-1">Warna Merah</h6>
+                                    <h6 class="text-muted">Ukuran L</h6>
+                                    <h6>Rp 50.000</h6>
+                                </div>
+                                <div class="d-flex align-self-center border">
+                                    <div class="d-flex justify-content-center align-items-center" style="aspect-ratio: 1;width: 2rem;">1</div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="d-flex">
+                                <h6 class="mb-0">Total</h6>
+                                <h6 class="text-end flex-grow-1 mb-0">Rp 50.000</h6>
+                            </div>
+                        </div> -->
+                    </div>
+                    <hr>
+                    <div class="d-flex flex-column">
+                        <div class="d-flex mb-3">
+                            <h6 class="mb-0">Total Pembelian</h6>
+                            <h6 class="text-end flex-grow-1 mb-0 total-pembelian">Rp 0</h6>
+                        </div>
+                        <div class="row mb-3">
+                            <h6 class="col col-form-label">Tunai</h6>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" name="tunai" style="text-align: right;" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <h6 class="mb-0">Kembalian</h6>
+                            <h6 class="text-end flex-grow-1 mb-0 kembalian">Rp 0</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Batal</span>
+                    </button>
+                    <button disabled type="submit" name="submit" class="btn btn-primary ml-1 text-white">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Lakukan Penjualan</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
-    const obj = {};
     const merk = JSON.parse('<?= json_encode($merk); ?>');
     let pakaian = [];
     merk.forEach(element1 => {
@@ -387,146 +335,297 @@
             });
         });
     });
-    console.log(pakaian)
-    document.querySelectorAll("button[data-bs-target='#border-less']").forEach((button, index) => {
+</script>
+<script>
+    const modalDetailPakaian = document.getElementById('detail-pakaian');
+    const modalDetailPakaianModalTitle = modalDetailPakaian.querySelector('.modal-title');
+    const modalDetailPakaianTbody = modalDetailPakaian.querySelector('tbody');
+    const basket = {
+        total: 0
+    };
+    const totalInBasket = document.getElementById('total-in-basket');
+
+    document.querySelector("button[data-bs-target='#detail-basket']").addEventListener('click', () => {
+        document.getElementById('detail-in-basket').innerText = "";
+        for (let i = 1; i < Object.keys(basket).length; i++) {
+            document.getElementById('detail-in-basket').insertAdjacentHTML('beforeend', `
+                <div class="border border-2 rounded p-3 mb-1">
+                    <div class="d-flex gap-3 justify-content-between flex-wrap">
+                        <img src="../../dummy/1.jpg" style="height: 6rem; aspect-ratio: 1; object-fit: cover;">
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1">${basket[i].nama}</h5>
+                            <h6 class="mb-1">Warna ${basket[i].warna}</h6>
+                            <h6 class="text-muted">Ukuran ${basket[i].ukuran}</h6>
+                            <h6>${formatter.format(basket[i].harga)}</h6>
+                        </div>
+                        <div class="d-flex align-self-center border">
+                            <div class="d-flex justify-content-center align-items-center" style="aspect-ratio: 1;width: 2rem;">1</div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex">
+                        <h6 class="mb-0">Total</h6>
+                        <h6 class="text-end flex-grow-1 mb-0">${formatter.format(basket[i].harga * basket[i].jumlah)}</h6>
+                    </div>
+                </div>
+            `);
+        }
+
+        document.querySelector('input[name=tunai]').addEventListener("keypress", (evt) => {
+            if (evt.which < 48 || evt.which > 57) {
+                evt.preventDefault();
+                return;
+            }
+            document.querySelector('input[name=tunai]').addEventListener('input', function() {
+                const tunai = Number(((this.value).split('.')).join(''));
+                document.querySelector('input[name=tunai]').value = formatNumberWithDot.format(tunai);
+                if (tunai - basket.total >= 0) {
+                    document.querySelector('button[name=submit]').removeAttribute('disabled');
+                    document.querySelector('.kembalian').innerText = formatter.format(tunai - basket.total);
+                    return;
+                }
+                document.querySelector('.kembalian').innerText = formatter.format(0);
+                document.querySelector('button[name=submit]').setAttribute('disabled', '');
+            });
+        });
+
+        document.querySelector('.total-pembelian').innerText = formatter.format(basket.total);
+
+    });
+
+    document.querySelectorAll("button[data-bs-target='#detail-pakaian']").forEach((button, index) => {
         button.addEventListener('click', () => {
-            document.querySelector('#border-less tbody').innerText = '';
-            document.querySelector('#border-less .modal-title').innerText = pakaian[index]['nama'];
+            modalDetailPakaianModalTitle.innerText = pakaian[index]['nama'];
+            modalDetailPakaianTbody.innerText = '';
+
             if (pakaian[index]['warna_pakaian'].length) {
                 const tr = document.createElement('tr');
                 tr.classList.add('text-center');
+
                 pakaian[index]['warna_pakaian'].forEach(warna_pakaian => {
-                    const td_gambar = document.createElement('td');
+                    const tdGambar = document.createElement('td');
+                    const tdWarna = document.createElement('td');
                     const gambar = document.createElement('img');
+
+                    tdGambar.setAttribute('rowspan', warna_pakaian['ukuran'].length);
+                    tdWarna.setAttribute('rowspan', warna_pakaian['ukuran'].length);
+
                     gambar.setAttribute('width', '100px');
                     gambar.setAttribute('src', `${window.location.origin}/app/halaman/${warna_pakaian.foto}`);
-                    td_gambar.append(gambar);
 
+                    tdGambar.append(gambar);
+                    tdWarna.innerText = warna_pakaian['nama'];
 
-                    const td_warna = document.createElement('td');
-                    td_warna.innerText = warna_pakaian['nama'];
+                    tr.append(tdGambar);
+                    tr.append(tdWarna);
 
-                    td_gambar.setAttribute('rowspan', warna_pakaian['ukuran'].length);
-                    td_warna.setAttribute('rowspan', warna_pakaian['ukuran'].length);
-                    tr.append(td_gambar);
-                    tr.append(td_warna);
+                    if (!warna_pakaian['ukuran'].length) {
+                        const tdUkuran = document.createElement('td');
+                        tdUkuran.setAttribute('colspan', 2);
+                        tdUkuran.innerText = "Ukuran Belum Ditambahkan";
+                        tr.append(tdUkuran);
+                        modalDetailPakaianTbody.append(tr);
+                        return;
+                    }
 
-                    if (warna_pakaian['ukuran'].length) {
-                        warna_pakaian['ukuran'].forEach((ukuran, index_ukuran) => {
-                            const td_ukuran = document.createElement('td');
-                            const td_jumlah_ukuran = document.createElement('td');
-                            const td_button = document.createElement('td');
-                            const button = document.createElement('button');
-                            button.classList.add('btn', 'btn-primary', 'text-white', 'd-flex', 'justify-content-center', 'align-items-center');
-                            button.style.aspectRatio = 1;
-                            button.innerHTML = '<i class="fas fa-cart-plus me-1"></i>';
-                            button.addEventListener('click', function() {
-                                obj[ukuran['id']] = {
-                                    nama: '',
-                                    warna: '',
-                                    ukuran: '',
-                                    harga: '',
-                                    jumlah: ''
+                    warna_pakaian['ukuran'].forEach((ukuran, index_ukuran) => {
+                        const tdUkuran = document.createElement('td');
+                        const tdJumlahUkuran = document.createElement('td');
+                        const tdButtonMoveToBasket = document.createElement('td');
+                        const buttonMoveToBasket = document.createElement('button');
+
+                        buttonMoveToBasket.classList.add('btn', 'btn-primary', 'text-white', 'd-flex', 'justify-content-center', 'align-items-center');
+                        buttonMoveToBasket.style.aspectRatio = 1;
+                        buttonMoveToBasket.innerHTML = '<i class="fas fa-cart-plus me-1"></i>';
+                        buttonMoveToBasket.addEventListener('click', function() {
+                            const inputIdUkuranPakaian = document.createElement('input');
+                            const inputJumlah = document.createElement('input');
+                            const inputHarga = document.createElement('input');
+                            inputIdUkuranPakaian.setAttribute('name', 'id_ukuran_warna_pakaian[]');
+                            inputJumlah.setAttribute('name', 'jumlah[]');
+                            inputHarga.setAttribute('name', 'harga[]');
+                            inputIdUkuranPakaian.classList.add('d-none');
+                            inputJumlah.classList.add('d-none');
+                            inputHarga.classList.add('d-none');
+
+                            if (ukuran['id'] in basket) {
+                                basket[ukuran['id']].jumlah += 1;
+                                basket.total += Number(pakaian[index]['harga']);
+                                document.getElementById(`jumlah-ukuran-${ukuran['id']}`).innerText = basket[ukuran['id']].jumlah;
+                                totalInBasket.innerText = formatter.format(basket.total);
+                            } else {
+                                basket[ukuran['id']] = {
+                                    jumlah: 1,
+                                    harga: Number(pakaian[index]['harga']),
+                                    nama: pakaian[index]['nama'],
+                                    warna: warna_pakaian['nama'],
+                                    ukuran: ukuran['nama']
                                 };
-                                const container_outer = document.createElement('div');
-                                container_outer.classList.add('border', 'border-2', 'rounded', 'p-3', 'mb-1');
+                                basket.total += Number(pakaian[index]['harga']);
+                                totalInBasket.innerText = formatter.format(basket.total);
+
+                                // Generate Item In Basket
                                 const container = document.createElement('div');
-                                container.classList.add('d-flex', 'gap-3', 'justify-content-between');
+                                container.classList.add('border', 'border-2', 'rounded', 'p-3', 'mb-1');
+
+                                const containerItem = document.createElement('div');
                                 const image = document.createElement('img');
+
+                                const item = document.createElement('div');
+                                const itemNama = document.createElement('h5');
+                                const itemWarna = document.createElement('h6');
+                                const itemUkuran = document.createElement('h6');
+                                const itemHarga = document.createElement('h6');
+
+                                const itemMinusJumlahPlus = document.createElement('div');
+                                const buttonMinus = document.createElement('div');
+                                const jumlah = document.createElement('div');
+                                const buttonPlus = document.createElement('div');
+
+                                const containerTotalPembelianPakaian = document.createElement('div');
+                                const totalPembelianText = document.createElement('h6');
+                                const totalPembelianTotal = document.createElement('h6');
+
+                                containerTotalPembelianPakaian.classList.add('d-flex');
+                                totalPembelianText.classList.add('mb-0');
+                                totalPembelianTotal.classList.add('text-end', 'flex-grow-1', 'mb-0');
+                                totalPembelianText.innerText = 'Total';
+                                totalPembelianTotal.innerText = formatter.format(pakaian[index]['harga']);
+
+                                containerItem.classList.add('d-flex', 'gap-3', 'justify-content-between');
+
+                                item.classList.add('flex-grow-1');
+
                                 image.setAttribute('src', `${window.location.origin}/app/halaman/${warna_pakaian.foto}`);
                                 image.style.height = '6rem';
                                 image.style.aspectRatio = 1;
-                                image.style.objectFit = 'cover';
+                                image.style.keranjangectFit = 'cover';
 
-                                const formatter = new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR',
-                                    maximumFractionDigits: 0,
+                                itemNama.classList.add('mb-1');
+                                itemWarna.classList.add('mb-1');
+                                itemUkuran.classList.add('text-muted');
+                                itemMinusJumlahPlus.classList.add('d-flex', 'align-self-center', 'border', 'count');
+                                buttonMinus.classList.add('d-flex', 'justify-content-center', 'align-items-center');
+                                jumlah.classList.add('d-flex', 'justify-content-center', 'align-items-center', 'border-start', 'border-end');
+                                buttonPlus.classList.add('d-flex', 'justify-content-center', 'align-items-center');
+
+                                itemNama.innerText = pakaian[index]['nama'];
+                                itemWarna.innerText = `Warna ${warna_pakaian['nama']}`;
+                                itemUkuran.innerText = `Ukuran ${ukuran.nama}`;
+                                itemHarga.innerText = formatter.format(pakaian[index]['harga']);
+
+                                jumlah.setAttribute('contenteditable', '');
+                                jumlah.setAttribute('id', `jumlah-ukuran-${ukuran['id']}`);
+                                jumlah.innerText = 1;
+                                jumlah.style.width = '2.5rem';
+
+                                item.append(itemNama);
+                                item.append(itemWarna);
+                                item.append(itemUkuran);
+                                item.append(itemHarga);
+
+                                buttonMinus.style.aspectRatio = 1;
+                                buttonMinus.style.width = '2rem';
+                                buttonMinus.innerHTML = `<a href="#"><i class="fas fa-minus"></i></a>`;
+                                buttonMinus.addEventListener('click', () => {
+                                    basket[ukuran['id']].jumlah -= 1;
+                                    basket.total -= Number(pakaian[index]['harga']);
+                                    inputJumlah.value = basket[ukuran['id']].jumlah;
+                                    jumlah.innerText = basket[ukuran['id']].jumlah;
+                                    totalInBasket.innerText = formatter.format(basket.total);
+                                    totalPembelianTotal.innerText = formatter.format(pakaian[index]['harga'] * basket[ukuran['id']].jumlah);
+
+                                    if (basket[ukuran['id']].jumlah == 0) {
+                                        container.remove();
+                                        delete basket[ukuran['id']];
+                                        inputIdUkuranPakaian.remove();
+                                        inputJumlah.remove();
+                                    }
+
+                                    if (!basket.total) {
+                                        document.getElementById('basket').classList.add('d-none');
+                                        document.getElementById('empty-basket').classList.remove('d-none');
+                                    }
                                 });
 
-                                const content = document.createElement('div');
-                                content.classList.add('flex-grow-1');
-
-                                const content_nama = document.createElement('h5');
-                                content_nama.classList.add('mb-1');
-                                content_nama.innerText = pakaian[index]['nama'];
-                                const content_warna = document.createElement('h6');
-                                content_warna.classList.add('mb-1');
-                                content_warna.innerText = `Warna ${warna_pakaian['nama']}`;
-                                const content_ukuran = document.createElement('h6');
-                                content_ukuran.classList.add('text-muted');
-                                content_ukuran.innerText = `Ukuran ${ukuran.nama}`;
-                                const content_harga = document.createElement('h6');
-                                content_harga.innerText = formatter.format(pakaian[index]['harga']);
-
-                                content.append(content_nama);
-                                content.append(content_warna);
-                                content.append(content_ukuran);
-                                content.append(content_harga);
-
-                                const jumlah_beli = document.createElement('div');
-                                jumlah_beli.classList.add('d-flex', 'align-self-center', 'border');
-
-                                const minus = document.createElement('div');
-                                minus.classList.add('d-flex', 'justify-content-center', 'align-items-center');
-                                minus.style.aspectRatio = 1;
-                                minus.style.width = '2rem';
-                                minus.innerHTML = `<a href="#"><i class="fas fa-minus"></i></a>`;
-                                minus.addEventListener('click', function() {
-                                    beli.innerText = Number(beli.innerText) - 1;
+                                jumlah.addEventListener("keypress", (evt) => {
+                                    if (evt.which < 48 || evt.which > 57) {
+                                        evt.preventDefault();
+                                        return;
+                                    }
+                                    jumlah.addEventListener('input', function() {
+                                        basket.total = basket.total + ((Number(this.innerText) * Number(pakaian[index]['harga'])) - (basket[ukuran['id']].jumlah * Number(pakaian[index]['harga'])));
+                                        basket[ukuran['id']].jumlah = Number(this.innerText);
+                                        totalInBasket.innerText = formatter.format(basket.total);
+                                        totalPembelianTotal.innerText = formatter.format(pakaian[index]['harga'] * basket[ukuran['id']].jumlah);
+                                        if (basket[ukuran['id']].jumlah == 0) {
+                                            container.remove();
+                                            delete basket[ukuran['id']];
+                                            inputIdUkuranPakaian.remove();
+                                            inputJumlah.remove();
+                                        }
+                                    });
                                 });
 
-                                const beli = document.createElement('div');
-                                beli.classList.add('d-flex', 'justify-content-center', 'align-items-center', 'border-start', 'border-end');
-                                beli.setAttribute('contenteditable', '');
-                                beli.innerText = 1;
-                                beli.style.width = '2.5rem';
-
-                                const plus = document.createElement('div');
-                                plus.classList.add('d-flex', 'justify-content-center', 'align-items-center');
-                                plus.style.aspectRatio = 1;
-                                plus.style.width = '2rem';
-                                plus.innerHTML = `<a href="#"><i class="fas fa-plus"></i></a>`;
-                                plus.addEventListener('click', function() {
-                                    beli.innerText = Number(beli.innerText) + 1;
+                                buttonPlus.style.aspectRatio = 1;
+                                buttonPlus.style.width = '2rem';
+                                buttonPlus.innerHTML = `<a href="#"><i class="fas fa-plus"></i></a>`;
+                                buttonPlus.addEventListener('click', function() {
+                                    basket[ukuran['id']].jumlah += 1;
+                                    basket.total += Number(pakaian[index]['harga'])
+                                    jumlah.innerText = basket[ukuran['id']].jumlah;
+                                    totalInBasket.innerText = formatter.format(basket.total);
+                                    inputJumlah.value = basket[ukuran['id']].jumlah;
+                                    totalPembelianTotal.innerText = formatter.format(pakaian[index]['harga'] * basket[ukuran['id']].jumlah);
                                 });
 
-                                jumlah_beli.append(minus);
-                                jumlah_beli.append(beli);
-                                jumlah_beli.append(plus);
+                                itemMinusJumlahPlus.append(buttonMinus);
+                                itemMinusJumlahPlus.append(jumlah);
+                                itemMinusJumlahPlus.append(buttonPlus);
 
-                                container.append(image);
-                                container.append(content);
-                                container.append(jumlah_beli);
-                                container_outer.append(container);
+                                containerItem.append(image);
+                                containerItem.append(item);
+                                containerItem.append(itemMinusJumlahPlus);
 
-                                document.getElementById('keranjang').append(container_outer);
-                            });
+                                containerTotalPembelianPakaian.append(totalPembelianText);
+                                containerTotalPembelianPakaian.append(totalPembelianTotal);
 
-                            td_button.append(button);
-                            td_ukuran.innerText = ukuran['nama'];
-                            td_jumlah_ukuran.innerText = ukuran['jumlah'];
-                            if (index_ukuran) {
-                                const tr_ukuran = document.createElement('tr');
-                                tr_ukuran.classList.add('text-center')
-                                tr_ukuran.append(td_ukuran);
-                                tr_ukuran.append(td_jumlah_ukuran);
-                                tr_ukuran.append(td_button);
-                                document.querySelector('#border-less tbody').append(tr_ukuran);
-                            } else {
-                                tr.append(td_ukuran);
-                                tr.append(td_jumlah_ukuran);
-                                tr.append(td_button);
-                                document.querySelector('#border-less tbody').append(tr);
+                                container.append(containerItem);
+                                container.append(document.createElement('hr'));
+                                container.append(containerTotalPembelianPakaian);
+
+                                document.getElementById('in-basket').append(container);
+
+                                document.querySelector('form').append(inputIdUkuranPakaian);
+                                document.querySelector('form').append(inputJumlah);
+                                document.querySelector('form').append(inputHarga);
                             }
+                            inputHarga.value = Number(pakaian[index]['harga']);
+                            inputIdUkuranPakaian.value = ukuran['id'];
+                            inputJumlah.value = basket[ukuran['id']].jumlah;
+
+                            document.getElementById('empty-basket').classList.add('d-none');
+                            document.getElementById('basket').classList.remove('d-none');
                         });
-                    } else {
-                        const td_ukuran = document.createElement('td');
-                        td_ukuran.setAttribute('colspan', 2);
-                        td_ukuran.innerText = "Ukuran Belum Ditambahkan";
-                        tr.append(td_ukuran);
-                        document.querySelector('#border-less tbody').append(tr);
-                    }
+
+                        tdUkuran.innerText = ukuran['nama'];
+                        tdJumlahUkuran.innerText = ukuran['jumlah'];
+                        tdButtonMoveToBasket.append(buttonMoveToBasket);
+                        if (!index_ukuran) {
+                            tr.append(tdUkuran);
+                            tr.append(tdJumlahUkuran);
+                            tr.append(tdButtonMoveToBasket);
+                            modalDetailPakaianTbody.append(tr);
+                            return;
+                        }
+
+                        const newTr = document.createElement('tr');
+                        newTr.classList.add('text-center')
+                        newTr.append(tdUkuran);
+                        newTr.append(tdJumlahUkuran);
+                        newTr.append(tdButtonMoveToBasket);
+                        modalDetailPakaianTbody.append(newTr);
+                    });
                 });
             }
         });
