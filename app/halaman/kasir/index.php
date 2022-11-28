@@ -39,6 +39,11 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
+<style>
+    a[class='text-muted'] {
+        cursor: not-allowed;
+    }
+</style>
 <div id="main">
     <header class="mb-3">
         <a href="#" class="burger-btn d-block d-xl-none">
@@ -449,9 +454,14 @@ if (isset($_POST['submit'])) {
                             inputHarga.classList.add('d-none');
 
                             if (ukuran['id'] in basket) {
+                                if (Number(ukuran['jumlah']) - Number(basket[ukuran['id']].jumlah) <= 0) {
+                                    alert('Stok Habis!');
+                                    return;
+                                }
                                 basket[ukuran['id']].jumlah += 1;
                                 basket.total += Number(pakaian[index]['harga']);
                                 document.getElementById(`jumlah-ukuran-${ukuran['id']}`).innerText = basket[ukuran['id']].jumlah;
+                                document.getElementById(`jumlah-ukuran-${ukuran['id']}-total`).innerText = formatter.format(pakaian[index]['harga'] * basket[ukuran['id']].jumlah);
                                 totalInBasket.innerText = formatter.format(basket.total);
                             } else {
                                 basket[ukuran['id']] = {
@@ -492,6 +502,7 @@ if (isset($_POST['submit'])) {
                                 totalPembelianTotal.classList.add('text-end', 'flex-grow-1', 'mb-0');
                                 totalPembelianText.innerText = 'Total';
                                 totalPembelianTotal.innerText = formatter.format(pakaian[index]['harga']);
+                                totalPembelianTotal.setAttribute('id', `jumlah-ukuran-${ukuran['id']}-total`);
 
                                 containerItem.classList.add('d-flex', 'gap-3', 'justify-content-between');
 
@@ -536,6 +547,13 @@ if (isset($_POST['submit'])) {
                                     totalInBasket.innerText = formatter.format(basket.total);
                                     totalPembelianTotal.innerText = formatter.format(pakaian[index]['harga'] * basket[ukuran['id']].jumlah);
 
+                                    if (Number(ukuran['jumlah']) - Number(jumlah.innerText) >= 0) {
+                                        jumlah.classList.remove('bg-danger');
+                                        jumlah.classList.remove('text-white');
+                                    }
+                                    if (Number(ukuran['jumlah']) - Number(jumlah.innerText) > 0)
+                                        buttonPlus.children[0].classList.remove('text-muted');
+
                                     if (basket[ukuran['id']].jumlah == 0) {
                                         container.remove();
                                         delete basket[ukuran['id']];
@@ -554,7 +572,17 @@ if (isset($_POST['submit'])) {
                                         evt.preventDefault();
                                         return;
                                     }
+
                                     jumlah.addEventListener('input', function() {
+                                        if (Number(ukuran['jumlah']) - Number(jumlah.innerText) < 0) {
+                                            jumlah.classList.add('bg-danger');
+                                            jumlah.classList.add('text-white');
+                                            buttonPlus.children[0].classList.add('text-muted');
+                                        } else {
+                                            jumlah.classList.remove('bg-danger');
+                                            jumlah.classList.remove('text-white');
+                                            buttonPlus.children[0].classList.remove('text-muted');
+                                        }
                                         basket.total = basket.total + ((Number(this.innerText) * Number(pakaian[index]['harga'])) - (basket[ukuran['id']].jumlah * Number(pakaian[index]['harga'])));
                                         basket[ukuran['id']].jumlah = Number(this.innerText);
                                         totalInBasket.innerText = formatter.format(basket.total);
@@ -570,14 +598,24 @@ if (isset($_POST['submit'])) {
 
                                 buttonPlus.style.aspectRatio = 1;
                                 buttonPlus.style.width = '2rem';
-                                buttonPlus.innerHTML = `<a href="#"><i class="fas fa-plus"></i></a>`;
+                                if (Number(ukuran['jumlah']) - Number(jumlah.innerText) <= 0)
+                                    buttonPlus.innerHTML = `<a href="#" class="text-muted"><i class="fas fa-plus"></i></a>`;
+                                else
+                                    buttonPlus.innerHTML = `<a href="#"><i class="fas fa-plus"></i></a>`;
+
                                 buttonPlus.addEventListener('click', function() {
-                                    basket[ukuran['id']].jumlah += 1;
-                                    basket.total += Number(pakaian[index]['harga'])
-                                    jumlah.innerText = basket[ukuran['id']].jumlah;
-                                    totalInBasket.innerText = formatter.format(basket.total);
-                                    inputJumlah.value = basket[ukuran['id']].jumlah;
-                                    totalPembelianTotal.innerText = formatter.format(pakaian[index]['harga'] * basket[ukuran['id']].jumlah);
+                                    if (Number(ukuran['jumlah']) - Number(jumlah.innerText) > 0) {
+                                        basket[ukuran['id']].jumlah += 1;
+                                        basket.total += Number(pakaian[index]['harga'])
+                                        jumlah.innerText = basket[ukuran['id']].jumlah;
+                                        totalInBasket.innerText = formatter.format(basket.total);
+                                        inputJumlah.value = basket[ukuran['id']].jumlah;
+                                        totalPembelianTotal.innerText = formatter.format(pakaian[index]['harga'] * basket[ukuran['id']].jumlah);
+                                    }
+                                    if (Number(ukuran['jumlah']) - Number(jumlah.innerText) <= 0) {
+                                        buttonPlus.children[0].classList.add('text-muted');
+                                        return;
+                                    }
                                 });
 
                                 itemMinusJumlahPlus.append(buttonMinus);
@@ -611,7 +649,9 @@ if (isset($_POST['submit'])) {
 
                         tdUkuran.innerText = ukuran['nama'];
                         tdJumlahUkuran.innerText = ukuran['jumlah'];
-                        tdButtonMoveToBasket.append(buttonMoveToBasket);
+                        if (Number(ukuran['jumlah']))
+                            tdButtonMoveToBasket.append(buttonMoveToBasket);
+
                         if (!index_ukuran) {
                             tr.append(tdUkuran);
                             tr.append(tdJumlahUkuran);
