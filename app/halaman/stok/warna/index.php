@@ -59,17 +59,17 @@
                                 SELECT 
                                     uwp.id,
                                     u.nama,
-                                    SUM(pd.jumlah) AS jumlah
+                                    (
+                                        IFNULL((SELECT SUM(pd.jumlah) FROM pakaian_disuplai AS pd WHERE pd.id_ukuran_warna_pakaian=uwp.id), 0)
+                                        - 
+                                        IFNULL((SELECT SUM(pt.jumlah) FROM pakaian_terjual AS pt WHERE pt.id_ukuran_warna_pakaian=uwp.id), 0)
+                                    ) AS jumlah 
                                 FROM  
                                     ukuran_warna_pakaian AS uwp 
                                 INNER JOIN 
                                     ukuran AS u 
                                 ON 
                                     u.id=uwp.id_ukuran 
-                                LEFT JOIN 
-                                    pakaian_disuplai AS pd 
-                                ON 
-                                    pd.id_ukuran_warna_pakaian=uwp.id 
                                 WHERE 
                                     uwp.id_warna_pakaian=" . $_GET['id_warna_pakaian'] . "
                                 GROUP BY 
@@ -83,7 +83,7 @@
                                 <tr>
                                     <td class="text-center"><?= $no++; ?></td>
                                     <td class="text-center"><?= $row['nama']; ?></td>
-                                    <td class="text-center"><?= empty($row['jumlah']) ? 'Stok Belum Ditambahkan' : $row['jumlah']; ?></td>
+                                    <td class="text-center"><?= is_null($row['jumlah']) ? 'Stok Belum Ditambahkan' : $row['jumlah']; ?></td>
                                 </tr>
                             <?php endwhile; ?>
                         </tbody>

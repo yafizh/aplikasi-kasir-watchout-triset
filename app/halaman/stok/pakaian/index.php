@@ -40,7 +40,11 @@
                                 SELECT 
                                     wp.id,
                                     w.nama,
-                                    SUM(pd.jumlah) AS jumlah
+                                    SUM(
+                                        IFNULL((SELECT SUM(pd.jumlah) FROM pakaian_disuplai AS pd WHERE pd.id_ukuran_warna_pakaian=uwp.id), 0)
+                                        - 
+                                        IFNULL((SELECT SUM(pt.jumlah) FROM pakaian_terjual AS pt WHERE pt.id_ukuran_warna_pakaian=uwp.id), 0)
+                                    ) AS jumlah 
                                 FROM  
                                     warna_pakaian AS wp 
                                 INNER JOIN 
@@ -51,14 +55,10 @@
                                     ukuran_warna_pakaian AS uwp 
                                 ON 
                                     uwp.id_warna_pakaian=wp.id 
-                                LEFT JOIN 
-                                    pakaian_disuplai AS pd 
-                                ON 
-                                    pd.id_ukuran_warna_pakaian=uwp.id 
                                 WHERE 
-                                    wp.id_pakaian=" . $_GET['id_pakaian'] . "
-                                GROUP BY 
-                                    wp.id 
+                                    wp.id_pakaian=" . $_GET['id_pakaian'] . " 
+                                GROUP BY
+                                    wp.id
                             ";
                             $data = $mysqli->query($query);
                             $no = 1;
@@ -67,7 +67,7 @@
                                 <tr>
                                     <td class="text-center"><?= $no++; ?></td>
                                     <td class="text-center"><?= $row['nama']; ?></td>
-                                    <td class="text-center"><?= empty($row['jumlah']) ? 'Stok Belum Disuplai' : $row['jumlah']; ?></td>
+                                    <td class="text-center"><?= $row['jumlah']; ?></td>
                                     <td class="no-td">
                                         <a href="?halaman=stok_per_warna&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>&id_warna_pakaian=<?= $row['id']; ?>" class="btn btn-info btn-sm text-white"><i class="fas fa-eye"></i></a>
                                     </td>
