@@ -1,10 +1,9 @@
 <?php
 if (isset($_POST['submit'])) {
-    $tunai = $_POST['tunai'];
+    $tunai = implode('', explode('.', $_POST['tunai']));
     $id_ukuran_warna_pakaian = $_POST['id_ukuran_warna_pakaian'];
     $jumlah = $_POST['jumlah'];
     $harga = $_POST['harga'];
-
 
     $q = "
     INSERT INTO penjualan (
@@ -16,6 +15,7 @@ if (isset($_POST['submit'])) {
     )";
 
     if ($mysqli->query($q)) {
+        $id = $mysqli->insert_id;
         for ($i = 0; $i < count($id_ukuran_warna_pakaian); $i++) {
             $q = "
             INSERT INTO pakaian_terjual (
@@ -24,14 +24,20 @@ if (isset($_POST['submit'])) {
                 harga, 
                 jumlah 
             ) VALUES (
-                '" .  $mysqli->insert_id . "',
-                '" .  $id_ukuran_warna_pakaian[$i] . "',
-                '" .  $harga[$i] . "',
-                '" .  $jumlah[$i] . "'
+                '" . $id . "',
+                '" . $id_ukuran_warna_pakaian[$i] . "',
+                '" . $harga[$i] . "',
+                '" . $jumlah[$i] . "'
             )";
             $mysqli->query($q);
         }
-        echo "<script>sessionStorage.setItem('tambah','Penjualan Berhasil!.')</script>";
+        echo "<script>sessionStorage.setItem('tambah','Penjualan Berhasil!.');</script>";
+        echo "<script>
+        let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
+        width=0,height=0,left=-1000,top=-1000`;
+        
+        open('kasir/struk.php?id=$id', 'Struk', params);
+        </script>";
         echo "<script>location.href = '?';</script>";
     } else {
         echo "<script>alert('Gagal!')</script>";
@@ -352,29 +358,31 @@ if (isset($_POST['submit'])) {
 
     document.querySelector("button[data-bs-target='#detail-basket']").addEventListener('click', () => {
         document.getElementById('detail-in-basket').innerText = "";
-        for (let i = 1; i < Object.keys(basket).length; i++) {
-            document.getElementById('detail-in-basket').insertAdjacentHTML('beforeend', `
+        Object.keys(basket).forEach(key => {
+            if (key != 'total') {
+                document.getElementById('detail-in-basket').insertAdjacentHTML('beforeend', `
                 <div class="border border-2 rounded p-3 mb-1">
                     <div class="d-flex gap-3 justify-content-between flex-wrap">
-                        <img src="${window.location.origin}/app/halaman/${basket[i].foto}" style="height: 6rem; aspect-ratio: 1; object-fit: cover;">
+                        <img src="${window.location.origin}/app/halaman/${basket[key].foto}" style="height: 6rem; aspect-ratio: 1; object-fit: cover;">
                         <div class="flex-grow-1">
-                            <h5 class="mb-1">${basket[i].nama}</h5>
-                            <h6 class="mb-1">Warna ${basket[i].warna}</h6>
-                            <h6 class="text-muted">Ukuran ${basket[i].ukuran}</h6>
-                            <h6>${formatter.format(basket[i].harga)}</h6>
+                            <h5 class="mb-1">${basket[key].nama}</h5>
+                            <h6 class="mb-1">Warna ${basket[key].warna}</h6>
+                            <h6 class="text-muted">Ukuran ${basket[key].ukuran}</h6>
+                            <h6>${formatter.format(basket[key].harga)}</h6>
                         </div>
                         <div class="d-flex align-self-center border">
-                            <div class="d-flex justify-content-center align-items-center" style="aspect-ratio: 1;width: 2rem;">1</div>
+                            <div class="d-flex justify-content-center align-items-center" style="aspect-ratio: 1;width: 2rem;">${basket[key].jumlah}</div>
                         </div>
                     </div>
                     <hr>
                     <div class="d-flex">
                         <h6 class="mb-0">Total</h6>
-                        <h6 class="text-end flex-grow-1 mb-0">${formatter.format(basket[i].harga * basket[i].jumlah)}</h6>
+                        <h6 class="text-end flex-grow-1 mb-0">${formatter.format(basket[key].harga * basket[key].jumlah)}</h6>
                     </div>
                 </div>
             `);
-        }
+            }
+        });
 
         document.querySelector('input[name=tunai]').addEventListener("keypress", (evt) => {
             if (evt.which < 48 || evt.which > 57) {
@@ -448,6 +456,7 @@ if (isset($_POST['submit'])) {
                             const inputHarga = document.createElement('input');
                             inputIdUkuranPakaian.setAttribute('name', 'id_ukuran_warna_pakaian[]');
                             inputJumlah.setAttribute('name', 'jumlah[]');
+                            inputJumlah.setAttribute('id', `input-jumlah-${ukuran['id']}`);
                             inputHarga.setAttribute('name', 'harga[]');
                             inputIdUkuranPakaian.classList.add('d-none');
                             inputJumlah.classList.add('d-none');
@@ -463,6 +472,7 @@ if (isset($_POST['submit'])) {
                                 document.getElementById(`jumlah-ukuran-${ukuran['id']}`).innerText = basket[ukuran['id']].jumlah;
                                 document.getElementById(`jumlah-ukuran-${ukuran['id']}-total`).innerText = formatter.format(pakaian[index]['harga'] * basket[ukuran['id']].jumlah);
                                 totalInBasket.innerText = formatter.format(basket.total);
+                                document.getElementById(`input-jumlah-${ukuran['id']}`).value = basket[ukuran['id']].jumlah;
                             } else {
                                 basket[ukuran['id']] = {
                                     jumlah: 1,
@@ -578,6 +588,7 @@ if (isset($_POST['submit'])) {
                                             jumlah.classList.add('bg-danger');
                                             jumlah.classList.add('text-white');
                                             buttonPlus.children[0].classList.add('text-muted');
+                                            return;
                                         } else {
                                             jumlah.classList.remove('bg-danger');
                                             jumlah.classList.remove('text-white');
@@ -587,6 +598,7 @@ if (isset($_POST['submit'])) {
                                         basket[ukuran['id']].jumlah = Number(this.innerText);
                                         totalInBasket.innerText = formatter.format(basket.total);
                                         totalPembelianTotal.innerText = formatter.format(pakaian[index]['harga'] * basket[ukuran['id']].jumlah);
+                                        inputJumlah.value = basket[ukuran['id']].jumlah;
                                         if (basket[ukuran['id']].jumlah == 0) {
                                             container.remove();
                                             delete basket[ukuran['id']];
