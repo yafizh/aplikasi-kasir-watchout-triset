@@ -363,7 +363,7 @@ if (isset($_POST['submit'])) {
                 document.getElementById('detail-in-basket').insertAdjacentHTML('beforeend', `
                 <div class="border border-2 rounded p-3 mb-1">
                     <div class="d-flex gap-3 justify-content-between flex-wrap">
-                        <img src="${window.location.origin}/app/halaman/${basket[key].foto}" style="height: 6rem; aspect-ratio: 1; object-fit: cover;">
+                        <img src="${((location.host == 'localhost') ? (location.origin + '/' + pathparts[1].trim('/') + '/') : location.origin)}/app/halaman/${basket[key].foto}" style="height: 6rem; aspect-ratio: 1; object-fit: cover;">
                         <div class="flex-grow-1">
                             <h5 class="mb-1">${basket[key].nama}</h5>
                             <h6 class="mb-1">Warna ${basket[key].warna}</h6>
@@ -424,7 +424,7 @@ if (isset($_POST['submit'])) {
                     tdWarna.setAttribute('rowspan', warna_pakaian['ukuran'].length);
 
                     gambar.setAttribute('width', '100px');
-                    gambar.setAttribute('src', `${window.location.origin}/app/halaman/${warna_pakaian.foto}`);
+                    gambar.setAttribute('src', `${((location.host == 'localhost') ? (location.origin + '/' + pathparts[1].trim('/') + '/') : location.origin)}/app/halaman/${warna_pakaian.foto}`);
 
                     tdGambar.append(gambar);
                     tdWarna.innerText = warna_pakaian['nama'];
@@ -518,7 +518,7 @@ if (isset($_POST['submit'])) {
 
                                 item.classList.add('flex-grow-1');
 
-                                image.setAttribute('src', `${window.location.origin}/app/halaman/${warna_pakaian.foto}`);
+                                image.setAttribute('src', `${((location.host == 'localhost') ? (location.origin + '/' + pathparts[1].trim('/') + '/') : location.origin)}/app/halaman/${warna_pakaian.foto}`);
                                 image.style.height = '6rem';
                                 image.style.aspectRatio = 1;
                                 image.style.keranjangectFit = 'cover';
