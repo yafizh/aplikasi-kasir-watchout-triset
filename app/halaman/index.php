@@ -12,6 +12,9 @@ require_once('../helper/date.php');
 
 if (isset($_SESSION['user'])) {
     if (isset($_GET['halaman'])) {
+        // Riwayat Penjualan
+        include_once('../route/riwayat_penjualan.php');
+
         // Cek Stok
         include_once('../route/cek_stok.php');
 

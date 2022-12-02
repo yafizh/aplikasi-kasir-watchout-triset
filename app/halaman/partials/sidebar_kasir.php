@@ -38,8 +38,8 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                         <?php endforeach; ?>
                     </ul>
                 </li>
-                <li class="sidebar-item <?= $active === '' ? 'active' : ''; ?>">
-                    <a href="?" class='sidebar-link'>
+                <li class="sidebar-item <?= $active === 'riwayat_penjualan' ? 'active' : ''; ?>">
+                    <a href="?halaman=riwayat_penjualan" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Riwayat Penjualan</span>
                     </a>
