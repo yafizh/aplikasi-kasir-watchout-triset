@@ -6,15 +6,19 @@ $query = "
         p.nama AS nama_pakaian,
         w.nama AS warna,
         u.nama AS ukuran,
-        pd.jumlah,
-        pd.tanggal_masuk,
-        pd.id  
+        pt.jumlah,
+        DATE(pe.tanggal_waktu_penjualan) AS tanggal,
+        pt.id  
     FROM 
-        pakaian_disuplai AS pd 
+        pakaian_terjual AS pt 
+    INNER JOIN 
+        penjualan AS pe 
+    ON 
+        pe.id=pt.id_penjualan
     INNER JOIN 
         ukuran_warna_pakaian AS uwp 
     ON 
-        uwp.id=pd.id_ukuran_warna_pakaian 
+        uwp.id=pt.id_ukuran_warna_pakaian 
     INNER JOIN 
         ukuran AS u 
     ON 
@@ -40,21 +44,20 @@ $query = "
     ON 
         m.id=p.id_merk 
     WHERE 
-        pd.id=" . $_GET['id'] . "
+        pt.id=" . $_GET['id'] . "
     ";
 $result = $mysqli->query($query);
 $data = $result->fetch_assoc();
 if (isset($_POST['submit'])) {
     $jumlah = $_POST['jumlah'];
-    $tanggal_masuk = Date("Y-m-d");
 
-    $query = "UPDATE pakaian_disuplai SET jumlah=$jumlah WHERE id=" . $_GET['id'];
+    $query = "UPDATE pakaian_terjual SET jumlah=$jumlah WHERE id=" . $_GET['id'];
 
     if ($mysqli->query($query)) {
-        echo "<script>sessionStorage.setItem('edit','Edit stok berhasil.')</script>";
-        echo "<script>location.href = '?halaman=riwayat_penambahan_stok';</script>";
+        echo "<script>sessionStorage.setItem('edit','Edit riwayat barang keluar berhasil.')</script>";
+        echo "<script>location.href = '?halaman=riwayat_barang_keluar';</script>";
     } else {
-        echo "<script>alert('Tambah Data Stok Gagal!')</script>";
+        echo "<script>alert('Gagal!')</script>";
         die($mysqli->error);
     }
 }
@@ -71,7 +74,7 @@ if (isset($_POST['submit'])) {
         <div class="page-title">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-6 text-center mb-3">
-                    <h3>Edit Riwayat Barang Masuk</h3>
+                    <h3>Edit Riwayat Barang Keluar</h3>
                 </div>
             </div>
         </div>
@@ -122,7 +125,7 @@ if (isset($_POST['submit'])) {
                                                 </div>
                                             </div>
                                             <div class="col-12 mt-3 d-flex justify-content-between">
-                                                <a href="?halaman=riwayat_penambahan_stok" class="btn btn-light-secondary mb-1">Kembali</a>
+                                                <a href="?halaman=riwayat_barang_keluar" class="btn btn-light-secondary mb-1">Kembali</a>
                                                 <button type="submit" name="submit" class="btn btn-primary mb-1 text-white">Simpan</button>
                                             </div>
                                         </div>

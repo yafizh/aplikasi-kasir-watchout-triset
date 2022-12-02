@@ -98,7 +98,10 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                             <a href="?halaman=stok">Stok</a>
                         </li>
                         <li class="submenu-item <?= ($active === 'stok' && ($sub_active ?? '') === 'riwayat_penambahan_stok') ? 'active' : ''; ?>">
-                            <a href="?halaman=riwayat_penambahan_stok">Riwayat Penambahan Stok</a>
+                            <a href="?halaman=riwayat_penambahan_stok">Riwayat Barang Masuk</a>
+                        </li>
+                        <li class="submenu-item <?= ($active === 'stok' && ($sub_active ?? '') === 'riwayat_barang_keluar') ? 'active' : ''; ?>">
+                            <a href="?halaman=riwayat_barang_keluar">Riwayat Barang Keluar</a>
                         </li>
                     </ul>
                 </li>

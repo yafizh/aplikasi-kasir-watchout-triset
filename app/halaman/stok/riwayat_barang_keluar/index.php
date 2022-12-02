@@ -9,7 +9,7 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 mb-3">
-                    <h3>Riwayat Barang Masuk</h3>
+                    <h3>Riwayat Barang Keluar</h3>
                 </div>
             </div>
         </div>
@@ -39,41 +39,45 @@
                                     p.nama AS nama_pakaian,
                                     w.nama AS warna,
                                     u.nama AS ukuran,
-                                    pd.jumlah,
-                                    pd.tanggal_masuk,
-                                    pd.id  
+                                    pt.jumlah,
+                                    DATE(pe.tanggal_waktu_penjualan) AS tanggal,
+                                    pt.id  
                                 FROM 
-                                    pakaian_disuplai AS pd 
-                                LEFT JOIN 
+                                    pakaian_terjual AS pt 
+                                INNER JOIN 
+                                    penjualan AS pe 
+                                ON 
+                                    pe.id=pt.id_penjualan 
+                                INNER JOIN 
                                     ukuran_warna_pakaian AS uwp 
                                 ON 
-                                    uwp.id=pd.id_ukuran_warna_pakaian 
-                                LEFT JOIN 
+                                    uwp.id=pt.id_ukuran_warna_pakaian 
+                                INNER JOIN 
                                     ukuran AS u 
                                 ON 
                                     u.id=uwp.id_ukuran
-                                LEFT JOIN 
+                                INNER JOIN 
                                     warna_pakaian AS wp 
                                 ON 
                                     wp.id=uwp.id_warna_pakaian  
-                                LEFT JOIN 
+                                INNER JOIN 
                                     warna AS w 
                                 ON 
                                     w.id=wp.id_warna 
-                                LEFT JOIN 
+                                INNER JOIN 
                                     pakaian AS p 
                                 ON 
                                     p.id=wp.id_pakaian 
-                                LEFT JOIN
+                                INNER JOIN
                                 jenis_pakaian AS jp 
                                 ON 
                                     jp.id=p.id_jenis_pakaian 
-                                LEFT JOIN 
+                                INNER JOIN 
                                     merk AS m 
                                 ON 
                                     m.id=p.id_merk 
                                 ORDER BY 
-                                    pd.id DESC
+                                    pt.id DESC
                             ";
                             $data = $mysqli->query($query);
                             $no = 1;
@@ -81,7 +85,7 @@
                             <?php while ($row = $data->fetch_assoc()) : ?>
                                 <tr>
                                     <td class="text-center"><?= $no++; ?></td>
-                                    <td class="text-center"><?= indonesiaDate($row['tanggal_masuk']); ?></td>
+                                    <td class="text-center"><?= indonesiaDate($row['tanggal']); ?></td>
                                     <td class="text-center"><?= $row['merk']; ?></td>
                                     <td class="text-center"><?= $row['jenis_pakaian']; ?></td>
                                     <td class="text-center"><?= $row['nama_pakaian']; ?></td>
@@ -89,8 +93,8 @@
                                     <td class="text-center"><?= $row['ukuran']; ?></td>
                                     <td class="text-center"><?= $row['jumlah']; ?></td>
                                     <td class="no-td">
-                                        <a href="?halaman=edit_riwayat_penambahan_stok&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white"><i class="fas fa-edit"></i></a>
-                                        <a id="tombol-hapus" href="?halaman=hapus_riwayat_penambahan_stok&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm text-white" data-text="Menghapus stok pada '<?= $row['nama_pakaian'] ?>' akan mengurangi jumlah stoknya!" data-button-text="Hapus Stok!"><i class="fas fa-trash-alt"></i></a>
+                                        <a href="?halaman=edit_riwayat_barang_keluar&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white"><i class="fas fa-edit"></i></a>
+                                        <a id="tombol-hapus" href="?halaman=hapus_riwayat_barang_keluar&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm text-white" data-text="Menghapus riwayat barang keluar pada '<?= $row['nama_pakaian'] ?>' akan menambah jumlah stoknya!" data-button-text="Hapus!"><i class="fas fa-trash-alt"></i></a>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

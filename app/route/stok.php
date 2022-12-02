@@ -62,3 +62,22 @@ if ($_GET['halaman'] === 'hapus_riwayat_penambahan_stok') {
     $active = 'stok';
     $sub_active = 'riwayat_penambahan_stok';
 }
+
+if ($_GET['halaman'] === 'riwayat_barang_keluar') {
+    $title = 'Riwayat Barang Keluar';
+    $halaman = 'stok/riwayat_barang_keluar/index.php';
+    $active = 'stok';
+    $sub_active = 'riwayat_barang_keluar';
+}
+if ($_GET['halaman'] === 'edit_riwayat_barang_keluar') {
+    $title = 'Edit Riwayat Barang Keluar';
+    $halaman = 'stok/riwayat_barang_keluar/edit.php';
+    $active = 'stok';
+    $sub_active = 'riwayat_barang_keluar';
+}
+if ($_GET['halaman'] === 'hapus_riwayat_barang_keluar') {
+    $title = 'Hapus Riwayat Barang Keluar';
+    $halaman = 'stok/riwayat_barang_keluar/hapus.php';
+    $active = 'stok';
+    $sub_active = 'riwayat_barang_keluar';
+}

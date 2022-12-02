@@ -11,9 +11,6 @@
                 <div class="col-12 col-md-6 order-md-1 mb-3">
                     <h3>Riwayat Penjualan</h3>
                 </div>
-                <div class="col-12 col-md-6 order-md-2 d-flex justify-content-end">
-                    <a href="?halaman=tambah_merk" class="btn btn-primary align-self-start text-white">Tambah</a>
-                </div>
             </div>
         </div>
         <section class="section">
