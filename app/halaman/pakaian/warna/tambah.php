@@ -110,7 +110,7 @@ if (isset($_POST['submit'])) {
                                                 </div>
                                             </div>
                                             <div class="col-12">
-                                                <?php $result = $mysqli->query("SELECT * FROM ukuran WHERE id_jenis_pakaian=" . $_GET['id_jenis_pakaian']); ?>
+                                                <?php $result = $mysqli->query("SELECT * FROM ukuran WHERE id_jenis_pakaian=" . $_GET['id_jenis_pakaian'] . " ORDER BY FIELD(nama, 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL'), nama"); ?>
                                                 <div class="form-group">
                                                     <label>Ukuran</label>
                                                     <ul class="list-unstyled mb-0">
