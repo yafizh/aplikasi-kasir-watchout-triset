@@ -131,7 +131,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="" target="_blank" class="btn btn-primary ml-1 text-white">
+                <a id="tombol-hapus" href="?halaman=hapus_riwayat_penjualan&id=<?= $row['id']; ?>" class="btn btn-danger" data-text="Menghapus riwayat penjualan akan berdampak pada jumlah stok pakaian!" data-button-text="Hapus Riwayat Penjualan!">Hapus</a>
+                <a id="edit-btn" href="" class="btn btn-warning text-white">Edit</a>
+                <a id="cetak-struk-btn" href="" target="_blank" class="btn btn-primary ml-1 text-white">
                     <i class="bx bx-check d-block d-sm-none"></i>
                     <span class="d-none d-sm-block">Cetak Struk</span>
                 </a>
@@ -173,7 +175,8 @@
             document.querySelector('.total-pembelian').innerText = formatter.format(riwayat_penjualan[index_button].total);
             document.querySelector('.tunai').innerText = formatter.format(riwayat_penjualan[index_button].tunai);
             document.querySelector('.kembalian').innerText = formatter.format(riwayat_penjualan[index_button].tunai - riwayat_penjualan[index_button].total);
-            document.querySelector('#detail .modal-footer a').setAttribute('href', `kasir/struk.php?id=${riwayat_penjualan[index_button]['id']}`)
+            document.querySelector('#detail .modal-footer #cetak-struk-btn').setAttribute('href', `kasir/struk.php?id=${riwayat_penjualan[index_button]['id']}`)
+            document.querySelector('#detail .modal-footer #edit-btn').setAttribute('href', `?halaman=edit_riwayat_penjualan&id=${riwayat_penjualan[index_button]['id']}`)
         });
     });
 </script>
