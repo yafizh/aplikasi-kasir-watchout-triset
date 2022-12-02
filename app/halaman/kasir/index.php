@@ -412,10 +412,10 @@ if (isset($_POST['submit'])) {
             modalDetailPakaianTbody.innerText = '';
 
             if (pakaian[index]['warna_pakaian'].length) {
-                const tr = document.createElement('tr');
-                tr.classList.add('text-center');
-
                 pakaian[index]['warna_pakaian'].forEach(warna_pakaian => {
+                    const tr = document.createElement('tr');
+                    tr.classList.add('text-center');
+
                     const tdGambar = document.createElement('td');
                     const tdWarna = document.createElement('td');
                     const gambar = document.createElement('img');

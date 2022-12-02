@@ -174,15 +174,15 @@
             document.querySelector('#border-less tbody').innerText = '';
             document.querySelector('#border-less .modal-title').innerText = pakaian[index]['nama'];
             if (pakaian[index]['warna_pakaian'].length) {
-                const tr = document.createElement('tr');
-                tr.classList.add('text-center');
-                pakaian[index]['warna_pakaian'].forEach(warna_pakaian => {
+                pakaian[index]['warna_pakaian'].forEach((warna_pakaian, a) => {
+                    const tr = document.createElement('tr');
+                    tr.classList.add('text-center');
+
                     const td_gambar = document.createElement('td');
                     const gambar = document.createElement('img');
                     gambar.setAttribute('width', '100px');
-                    gambar.setAttribute('src', `${window.location.origin}/app/halaman/${warna_pakaian.foto}`);
+                    gambar.setAttribute('src', `${((location.host == 'localhost') ? (location.origin + '/' + pathparts[1].trim('/') + '/') : location.origin)}/app/halaman/${warna_pakaian.foto}`);
                     td_gambar.append(gambar);
-
 
                     const td_warna = document.createElement('td');
                     td_warna.innerText = warna_pakaian['nama'];
