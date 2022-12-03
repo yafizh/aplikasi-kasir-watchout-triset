@@ -337,12 +337,11 @@ if (isset($_POST['submit'])) {
 </div>
 
 <script>
-    const merk = JSON.parse('<?= json_encode($merk); ?>');
-    let pakaian = [];
-    merk.forEach(element1 => {
-        element1['jenis_pakaian'].forEach(element2 => {
-            element2['pakaian'].forEach(element3 => {
-                pakaian.push(element3);
+    const pakaian = [];
+    JSON.parse('<?= json_encode($merk); ?>').forEach(merk => {
+        merk['jenis_pakaian'].forEach(jenis_pakaian => {
+            jenis_pakaian['pakaian'].forEach(value => {
+                pakaian.push(value);
             });
         });
     });
@@ -384,26 +383,27 @@ if (isset($_POST['submit'])) {
             }
         });
 
-        document.querySelector('input[name=tunai]').addEventListener("keypress", (evt) => {
+        document.querySelector('input[name=tunai]').addEventListener("keypress", function(evt) {
             if (evt.which < 48 || evt.which > 57) {
                 evt.preventDefault();
                 return;
             }
-            document.querySelector('input[name=tunai]').addEventListener('input', function() {
+
+            this.addEventListener('input', function() {
                 const tunai = Number(((this.value).split('.')).join(''));
-                document.querySelector('input[name=tunai]').value = formatNumberWithDot.format(tunai);
-                if (tunai - basket.total >= 0) {
-                    document.querySelector('button[name=submit]').removeAttribute('disabled');
-                    document.querySelector('.kembalian').innerText = formatter.format(tunai - basket.total);
+                this.value = formatNumberWithDot.format(tunai);
+                if (basket.total > tunai) {
+                    document.querySelector('.kembalian').innerText = formatter.format(0);
+                    document.querySelector('button[name=submit]').setAttribute('disabled', '');
                     return;
                 }
-                document.querySelector('.kembalian').innerText = formatter.format(0);
-                document.querySelector('button[name=submit]').setAttribute('disabled', '');
+
+                document.querySelector('button[name=submit]').removeAttribute('disabled');
+                document.querySelector('.kembalian').innerText = formatter.format(tunai - basket.total);
             });
         });
 
         document.querySelector('.total-pembelian').innerText = formatter.format(basket.total);
-
     });
 
     document.querySelectorAll("button[data-bs-target='#detail-pakaian']").forEach((button, index) => {
@@ -414,15 +414,14 @@ if (isset($_POST['submit'])) {
             if (pakaian[index]['warna_pakaian'].length) {
                 pakaian[index]['warna_pakaian'].forEach(warna_pakaian => {
                     const tr = document.createElement('tr');
-                    tr.classList.add('text-center');
-
                     const tdGambar = document.createElement('td');
                     const tdWarna = document.createElement('td');
                     const gambar = document.createElement('img');
 
+                    tr.classList.add('text-center');
+
                     tdGambar.setAttribute('rowspan', warna_pakaian['ukuran'].length);
                     tdWarna.setAttribute('rowspan', warna_pakaian['ukuran'].length);
-
                     gambar.setAttribute('width', '100px');
                     gambar.setAttribute('src', `${((location.host == 'localhost') ? (location.origin + '/' + pathparts[1].trim('/') + '/') : location.origin)}/app/halaman/${warna_pakaian.foto}`);
 
@@ -451,17 +450,6 @@ if (isset($_POST['submit'])) {
                         buttonMoveToBasket.style.aspectRatio = 1;
                         buttonMoveToBasket.innerHTML = '<i class="fas fa-cart-plus me-1"></i>';
                         buttonMoveToBasket.addEventListener('click', function() {
-                            const inputIdUkuranPakaian = document.createElement('input');
-                            const inputJumlah = document.createElement('input');
-                            const inputHarga = document.createElement('input');
-                            inputIdUkuranPakaian.setAttribute('name', 'id_ukuran_warna_pakaian[]');
-                            inputJumlah.setAttribute('name', 'jumlah[]');
-                            inputJumlah.setAttribute('id', `input-jumlah-${ukuran['id']}`);
-                            inputHarga.setAttribute('name', 'harga[]');
-                            inputIdUkuranPakaian.classList.add('d-none');
-                            inputJumlah.classList.add('d-none');
-                            inputHarga.classList.add('d-none');
-
                             if (ukuran['id'] in basket) {
                                 if (Number(ukuran['jumlah']) - Number(basket[ukuran['id']].jumlah) <= 0) {
                                     alert('Stok Habis!');
@@ -474,6 +462,17 @@ if (isset($_POST['submit'])) {
                                 totalInBasket.innerText = formatter.format(basket.total);
                                 document.getElementById(`input-jumlah-${ukuran['id']}`).value = basket[ukuran['id']].jumlah;
                             } else {
+                                const inputIdUkuranPakaian = document.createElement('input');
+                                const inputJumlah = document.createElement('input');
+                                const inputHarga = document.createElement('input');
+                                inputIdUkuranPakaian.setAttribute('name', 'id_ukuran_warna_pakaian[]');
+                                inputJumlah.setAttribute('name', 'jumlah[]');
+                                inputJumlah.setAttribute('id', `input-jumlah-${ukuran['id']}`);
+                                inputHarga.setAttribute('name', 'harga[]');
+                                inputIdUkuranPakaian.classList.add('d-none');
+                                inputJumlah.classList.add('d-none');
+                                inputHarga.classList.add('d-none');
+
                                 basket[ukuran['id']] = {
                                     jumlah: 1,
                                     harga: Number(pakaian[index]['harga']),
@@ -650,10 +649,11 @@ if (isset($_POST['submit'])) {
                                 document.querySelector('form').append(inputIdUkuranPakaian);
                                 document.querySelector('form').append(inputJumlah);
                                 document.querySelector('form').append(inputHarga);
+
+                                inputHarga.value = Number(pakaian[index]['harga']);
+                                inputIdUkuranPakaian.value = ukuran['id'];
+                                inputJumlah.value = basket[ukuran['id']].jumlah;
                             }
-                            inputHarga.value = Number(pakaian[index]['harga']);
-                            inputIdUkuranPakaian.value = ukuran['id'];
-                            inputJumlah.value = basket[ukuran['id']].jumlah;
 
                             document.getElementById('empty-basket').classList.add('d-none');
                             document.getElementById('basket').classList.remove('d-none');
