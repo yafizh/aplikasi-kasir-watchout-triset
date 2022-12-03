@@ -54,8 +54,9 @@
                                     <td class="text-center"><?= $row['nama']; ?></td>
                                     <td class="text-center"><?= $row['username']; ?></td>
                                     <td class="no-td">
-                                        <a href="?halaman=edit_kasir&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white"><i class="fas fa-edit"></i></a>
-                                        <a id="tombol-hapus" href="?halaman=hapus_kasir&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" data-text="Akun kasir hanya dapat ditambahkan oleh admin lainnya!" data-button-text="Hapus Admin!">
+                                        <a href="?halaman=ganti_password&id=<?= $row['id']; ?>" class="btn btn-secondary btn-sm text-white" title="Ganti Password"><i class="fas fa-lock"></i></a>
+                                        <a href="?halaman=edit_kasir&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white" title="Edit"><i class="fas fa-edit"></i></a>
+                                        <a id="tombol-hapus" href="?halaman=hapus_kasir&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" title="Hapus" data-text="Akun kasir hanya dapat ditambahkan oleh admin lainnya!" data-button-text="Hapus Admin!">
                                             <i class="fas fa-trash-alt"></i></a>
                                     </td>
                                 </tr>

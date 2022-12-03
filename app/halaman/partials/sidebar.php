@@ -28,7 +28,7 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="sidebar-item has-sub <?= $active === 'pengguna' ? 'active' : ''; ?>">
+                <li class="sidebar-item has-sub <?= ($active === 'pengguna' || $active === 'ganti_password') ? 'active' : ''; ?>">
                     <a href="#" class='sidebar-link'>
                         <i class="fas fa-users"></i>
                         <span>Pengguna</span>
@@ -37,7 +37,7 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                         <li class="submenu-item <?= ($active === 'pengguna' && ($sub_active ?? '') == 'admin') ? 'active' : '' ?>">
                             <a href="?halaman=admin">Admin</a>
                         </li>
-                        <li class="submenu-item <?= ($active === 'pengguna' && ($sub_active ?? '') == 'kasir') ? 'active' : '' ?>">
+                        <li class="submenu-item <?= (($active === 'pengguna' || $active === 'ganti_password') && ($sub_active ?? '') == 'kasir') ? 'active' : '' ?>">
                             <a href="?halaman=kasir">Kasir</a>
                         </li>
                     </ul>
@@ -108,8 +108,8 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
 
                 <li class="sidebar-title">Pengaturan</li>
 
-                <li class="sidebar-item  ">
-                    <a href="form-layout.html" class='sidebar-link'>
+                <li class="sidebar-item <?= $active === 'ganti_password_sendiri' ? 'active' : ''; ?>">
+                    <a href="?halaman=ganti_password" class='sidebar-link'>
                         <i class="fas fa-lock"></i>
                         <span>Ganti Password</span>
                     </a>
