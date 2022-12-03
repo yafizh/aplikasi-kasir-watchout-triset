@@ -1,4 +1,3 @@
-<?php include_once('../../../helper/date.php'); ?>
 <footer class="d-flex justify-content-end p-3">
     <div class="text-center">
         <h6>Banjarbaru, <?= indonesiaDate(Date('Y-m-d')); ?></h6>

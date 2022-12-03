@@ -61,14 +61,20 @@
                 $data = $mysqli->query($query);
                 $no = 1;
                 ?>
-                <?php while ($row = $data->fetch_assoc()) : ?>
+                <?php if ($data->num_rows) : ?>
+                    <?php while ($row = $data->fetch_assoc()) : ?>
+                        <tr>
+                            <td class="text-center"><?= $no++; ?></td>
+                            <td class="text-center"><?= $row['merk']; ?></td>
+                            <td class="text-center"><?= $row['jenis_pakaian']; ?></td>
+                            <td class=""><?= $row['nama']; ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                <?php else : ?>
                     <tr>
-                        <td class="text-center"><?= $no++; ?></td>
-                        <td class="text-center"><?= $row['merk']; ?></td>
-                        <td class="text-center"><?= $row['jenis_pakaian']; ?></td>
-                        <td class=""><?= $row['nama']; ?></td>
+                        <td class="text-center" colspan="4">Tidak Ada Data</td>
                     </tr>
-                <?php endwhile; ?>
+                <?php endif; ?>
             </tbody>
         </table>
     </main>

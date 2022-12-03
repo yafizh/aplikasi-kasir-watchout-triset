@@ -9,7 +9,7 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 mb-3">
-                    <h3>Laporan Pakaian</h3>
+                    <h3>Laporan Penjualan</h3>
                 </div>
             </div>
         </div>
@@ -22,29 +22,28 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form-group">
-                                            <label for="merk">Merk</label>
-                                            <select name="merk" id="merk" class="form-control">
-                                                <option value="">Semua Merk</option>
-                                                <?php $result = $mysqli->query("SELECT * FROM merk"); ?>
+                                            <label for="kasir">Kasir</label>
+                                            <select name="kasir" id="kasir" class="form-control">
+                                                <option value="">Semua Kasir</option>
+                                                <?php $result = $mysqli->query("SELECT * FROM kasir"); ?>
                                                 <?php while ($row = $result->fetch_assoc()) : ?>
-                                                    <option <?= (($_POST['merk'] ?? '') == $row['id']) ? 'selected' : ''; ?> value="<?= $row['id']; ?>"><?= $row['nama']; ?></option>
+                                                    <option <?= (($_POST['kasir'] ?? '') == $row['id']) ? 'selected' : ''; ?> value="<?= $row['id']; ?>"><?= $row['nama']; ?></option>
                                                 <?php endwhile; ?>
                                             </select>
                                         </div>
+                                        <hr>
                                         <div class="form-group">
-                                            <label for="jenis_pakaian">Jenis Pakaian</label>
-                                            <select name="jenis_pakaian" id="jenis_pakaian" class="form-control">
-                                                <option value="">Semua Jenis Pakaian</option>
-                                                <?php $result = $mysqli->query("SELECT * FROM jenis_pakaian"); ?>
-                                                <?php while ($row = $result->fetch_assoc()) : ?>
-                                                    <option <?= (($_POST['jenis_pakaian'] ?? '') == $row['id']) ? 'selected' : ''; ?> value="<?= $row['id']; ?>"><?= $row['nama']; ?></option>
-                                                <?php endwhile; ?>
-                                            </select>
+                                            <label for="dari_tanggal">Dari Tanggal</label>
+                                            <input type="date" class="form-control" name="dari_tanggal" id="dari_tanggal" value="<?= $_POST['dari_tanggal'] ?? ''; ?>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="sampai_tanggal">Sampai Tanggal</label>
+                                            <input type="date" class="form-control" name="sampai_tanggal" id="sampai_tanggal" value="<?= $_POST['sampai_tanggal'] ?? ''; ?>">
                                         </div>
                                         <div class="d-flex gap-3 flex-wrap">
                                             <a href="" class="btn btn-secondary flex-grow-1">Reset</a>
                                             <button type="submit" class="btn flex-grow-1 btn-info text-white">Filter</button>
-                                            <a href="laporan/cetak/laporan_pakaian.php?id_merk=<?= $_POST['merk'] ?? ''; ?>&id_jenis_pakaian=<?= $_POST['jenis_pakaian'] ?? ''; ?>" target="_blank" class="btn btn-success flex-grow-1">Cetak</a>
+                                            <a href="laporan/cetak/laporan_penjualan.php?id_kasir=<?= $_POST['kasir'] ?? ''; ?>&dari_tanggal=<?= $_POST['dari_tanggal'] ?? ''; ?>&sampai_tanggal=<?= $_POST['sampai_tanggal'] ?? ''; ?>" target="_blank" class="btn btn-success flex-grow-1">Cetak</a>
                                         </div>
                                     </div>
                                 </div>
@@ -61,37 +60,44 @@
                                 <thead>
                                     <tr>
                                         <th class="no-td">No</th>
-                                        <th class="text-center">Merk</th>
-                                        <th class="text-center">Jenis Pakaian</th>
-                                        <th class="text-center">Nama Pakaian</th>
+                                        <th class="text-center">Tanggal</th>
+                                        <th class="text-center">Nama Kasir</th>
+                                        <th class="text-center">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
 
-                                    $merk = $_POST['merk'] ?? '';
-                                    $jenis_pakaian = $_POST['jenis_pakaian'] ?? '';
+                                    $kasir = $_POST['kasir'] ?? '';
+                                    $dari_tanggal = $_POST['dari_tanggal'] ?? '';
+                                    $sampai_tanggal = $_POST['sampai_tanggal'] ?? '';
 
                                     $query = "
                                         SELECT 
-                                            m.nama AS merk,
-                                            jp.nama AS jenis_pakaian,
-                                            p.nama 
+                                            DATE(tanggal_waktu_penjualan) AS tanggal,
+                                            k.nama AS nama_kasir,
+                                            SUM(pt.harga * pt.jumlah) AS total 
                                         FROM 
-                                            pakaian AS p 
+                                            penjualan AS p 
                                         INNER JOIN 
-                                            merk AS m 
+                                            pakaian_terjual AS pt 
                                         ON 
-                                            m.id=p.id_merk 
+                                            p.id=pt.id_penjualan 
                                         INNER JOIN 
-                                            jenis_pakaian AS jp 
+                                            kasir AS k 
                                         ON 
-                                            jp.id=p.id_jenis_pakaian 
-                                        WHERE 
-                                            m.id LIKE '%$merk%' AND jp.id LIKE '%$jenis_pakaian%' 
-                                        ORDER BY 
-                                            p.nama ASC
+                                            k.id=p.id_kasir 
                                     ";
+
+                                    $where = " WHERE k.id LIKE '%$kasir%'";
+                                    if (!empty($_POST['dari_tanggal'] ?? ''))
+                                        $where .= " AND DATE(tanggal_waktu_penjualan) >= '" . $_POST['dari_tanggal'] . "'";
+
+                                    if (!empty($_POST['sampai_tanggal'] ?? ''))
+                                        $where .= " AND DATE(tanggal_waktu_penjualan) <= '" . $_POST['sampai_tanggal'] . "'";
+
+                                    $query .= $where . "GROUP BY p.id ORDER BY tanggal_waktu_penjualan DESC";
+
                                     $data = $mysqli->query($query);
                                     $no = 1;
                                     ?>
@@ -99,9 +105,9 @@
                                         <?php while ($row = $data->fetch_assoc()) : ?>
                                             <tr>
                                                 <td class="text-center"><?= $no++; ?></td>
-                                                <td class="text-center"><?= $row['merk']; ?></td>
-                                                <td class="text-center"><?= $row['jenis_pakaian']; ?></td>
-                                                <td class=""><?= $row['nama']; ?></td>
+                                                <td class="text-center"><?= indonesiaDate($row['tanggal']); ?></td>
+                                                <td class="text-center"><?= $row['nama_kasir']; ?></td>
+                                                <td class="text-center">Rp <?= number_format($row['total'], 0, ",", "."); ?></td>
                                             </tr>
                                         <?php endwhile; ?>
                                     <?php else : ?>
