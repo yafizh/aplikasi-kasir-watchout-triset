@@ -91,9 +91,11 @@ CREATE TABLE pakaian_disuplai(
  
 CREATE TABLE penjualan(
     id BIGINT UNSIGNED AUTO_INCREMENT,
+    id_kasir BIGINT UNSIGNED,
     tunai BIGINT UNSIGNED,
     tanggal_waktu_penjualan TIMESTAMP NULL DEFAULT NULL,
-    PRIMARY KEY(id) 
+    PRIMARY KEY(id),
+    FOREIGN KEY (id_kasir) REFERENCES kasir(id) ON DELETE CASCADE
 );
 
 CREATE TABLE pakaian_terjual(
@@ -106,114 +108,3 @@ CREATE TABLE pakaian_terjual(
     FOREIGN KEY (id_penjualan) REFERENCES penjualan(id) ON DELETE CASCADE,
     FOREIGN KEY (id_ukuran_warna_pakaian) REFERENCES ukuran_warna_pakaian(id) ON DELETE CASCADE
 );
-
-DELIMITER //
-
-DROP PROCEDURE IF EXISTS getPakaian//
-DROP PROCEDURE IF EXISTS getPakaianByDate//
-
-CREATE PROCEDURE 
-    getPakaian() 
-BEGIN
-    SELECT 
-        w.nama AS warna,
-        m.nama AS merk,
-        u.nama AS ukuran,
-        jp.nama AS jenis_pakaian, 
-        p.nama, 
-        p.harga, 
-        p.foto, 
-        (
-            (SELECT 
-                COUNT(pd.id) 
-            FROM 
-                pakaian_disuplai AS pd 
-            WHERE 
-                pd.id_pakaian=p.id)
-            - 
-            (SELECT 
-                COUNT(pt.id) 
-            FROM 
-                pakaian_terjual AS pt 
-            WHERE 
-                pt.id_pakaian=p.id)
-        ) AS stok 
-    FROM 
-        pakaian AS p
-    INNER JOIN 
-        warna AS w 
-    ON 
-        w.id=p.id_warna 
-    INNER JOIN 
-        merk AS m 
-    ON 
-        m.id=p.id_merk 
-    INNER JOIN 
-        ukuran AS u 
-    ON 
-        u.id=p.id_ukuran
-    INNER JOIN 
-        jenis_pakaian AS jp 
-    ON 
-        jp.id=p.id_jenis_pakaian;
-END //
-
-CREATE PROCEDURE 
-    getPakaianByDate(tanggal_mulai DATE, tanggal_akhir DATE)
-BEGIN
-    SELECT 
-        w.nama AS warna,
-        m.nama AS merk,
-        u.nama AS ukuran,
-        jp.nama AS jenis_pakaian, 
-        p.nama, 
-        p.harga, 
-        p.foto, 
-        (
-            (
-            SELECT 
-                COUNT(pt.id) 
-            FROM 
-                pakaian_disuplai AS pd 
-            WHERE 
-                pd.id_pakaian=p.id 
-                AND 
-                pd.tanggal_masuk BETWEEN tanggal_mulai AND tanggal_akhir
-            )
-            - 
-            (
-            SELECT 
-                COUNT(pt.id) 
-            FROM 
-                pakaian_terjual AS pt 
-            INNER JOIN 
-                penjualan 
-            ON 
-                penjualan.id=pt.id_penjualan 
-            WHERE 
-                pt.id_pakaian=p.id 
-                AND 
-                DATE(penjualan.tanggal_waktu_pembelian) BETWEEN tanggal_mulai AND tanggal_akhir 
-            )
-        ) AS stok 
-    FROM 
-        pakaian AS p
-    INNER JOIN 
-        warna AS w 
-    ON 
-        w.id=p.id_warna 
-    INNER JOIN 
-        merk AS m 
-    ON 
-        m.id=p.id_merk 
-    INNER JOIN 
-        ukuran AS u 
-    ON 
-        u.id=p.id_ukuran
-    INNER JOIN 
-        jenis_pakaian AS jp 
-    ON 
-        jp.id=p.id_jenis_pakaian;
-END //
-
-DELIMITER ;

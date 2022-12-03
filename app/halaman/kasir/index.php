@@ -7,9 +7,11 @@ if (isset($_POST['submit'])) {
 
     $q = "
     INSERT INTO penjualan (
+        id_kasir,
         tunai, 
         tanggal_waktu_penjualan 
     ) VALUES (
+        '" . $_SESSION['user']['id_kasir'] . "',
         '$tunai',
         '" . Date('Y-m-d H:i:s') . "'
     )";

@@ -3,7 +3,7 @@ if (isset($_POST['submit'])) {
     $username = $mysqli->real_escape_string($_POST['username']);
     $password = $mysqli->real_escape_string($_POST['password']);
 
-    $result = $mysqli->query("SELECT * FROM pengguna WHERE username='$username' AND password='$password'");
+    $result = $mysqli->query("SELECT p.*, k.id AS id_kasir FROM pengguna AS p LEFT JOIN kasir AS k ON p.id=k.id_pengguna WHERE p.username='$username' AND p.password='$password'");
     if($result->num_rows){
         $_SESSION['user'] = $result->fetch_assoc();
         echo "<script>location.href = '?';</script>";
