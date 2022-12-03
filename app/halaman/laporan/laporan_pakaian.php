@@ -13,12 +13,12 @@
                 </div>
             </div>
         </div>
-        <section class="section">
-            <div class="card">
-                <div class="card-header pb-0">
-                    <form action="" method="POST">
-                        <div class="row">
-                            <div class="col-12 col-md-6 mb-3">
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <div class="section">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="" method="POST">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form-group">
@@ -31,9 +31,7 @@
                                                 <?php endwhile; ?>
                                             </select>
                                         </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group mb-0">
+                                        <div class="form-group">
                                             <label for="jenis_pakaian">Jenis Pakaian</label>
                                             <select name="jenis_pakaian" id="jenis_pakaian" class="form-control">
                                                 <option value="">Semua Jenis Pakaian</option>
@@ -43,35 +41,38 @@
                                                 <?php endwhile; ?>
                                             </select>
                                         </div>
+                                        <div class="d-flex gap-3 flex-wrap">
+                                            <a href="" class="btn btn-secondary flex-grow-1">Reset</a>
+                                            <button type="submit" class="btn flex-grow-1 btn-info text-white">Filter</button>
+                                            <a href="laporan/cetak/laporan_pakaian.php?id_merk=<?= $_POST['merk'] ?? ''; ?>&id_jenis_pakaian=<?= $_POST['jenis_pakaian'] ?? ''; ?>" target="_blank" class="btn btn-success flex-grow-1">Cetak</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-12 col-md-6 d-flex align-items-end gap-2 justify-content-end mb-3">
-                                <a href="" class="btn btn-secondary">Reset</a>
-                                <button type="submit" class="btn btn-info text-white">Filter</button>
-                                <a href="laporan/cetak/laporan_pakaian.php?id_merk=<?= $_POST['merk'] ?? ''; ?>&id_jenis_pakaian=<?= $_POST['jenis_pakaian'] ?? ''; ?>" target="_blank" class="btn btn-success">Cetak</a>
-                            </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
-                <hr>
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th class="no-td">No</th>
-                                <th class="text-center">Merk</th>
-                                <th class="text-center">Jenis Pakaian</th>
-                                <th class="text-center">Nama Pakaian</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
+            </div>
+            <div class="col-12 col-md-8">
+                <section class="section">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="no-td">No</th>
+                                        <th class="text-center">Merk</th>
+                                        <th class="text-center">Jenis Pakaian</th>
+                                        <th class="text-center">Nama Pakaian</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
 
-                            $merk = $_POST['merk'] ?? '';
-                            $jenis_pakaian = $_POST['jenis_pakaian'] ?? '';
+                                    $merk = $_POST['merk'] ?? '';
+                                    $jenis_pakaian = $_POST['jenis_pakaian'] ?? '';
 
-                            $query = "
+                                    $query = "
                                 SELECT 
                                     m.nama AS merk,
                                     jp.nama AS jenis_pakaian,
@@ -91,21 +92,23 @@
                                 ORDER BY 
                                     p.nama ASC
                             ";
-                            $data = $mysqli->query($query);
-                            $no = 1;
-                            ?>
-                            <?php while ($row = $data->fetch_assoc()) : ?>
-                                <tr>
-                                    <td class="text-center"><?= $no++; ?></td>
-                                    <td class="text-center"><?= $row['merk']; ?></td>
-                                    <td class="text-center"><?= $row['jenis_pakaian']; ?></td>
-                                    <td class=""><?= $row['nama']; ?></td>
-                                </tr>
-                            <?php endwhile; ?>
-                        </tbody>
-                    </table>
-                </div>
+                                    $data = $mysqli->query($query);
+                                    $no = 1;
+                                    ?>
+                                    <?php while ($row = $data->fetch_assoc()) : ?>
+                                        <tr>
+                                            <td class="text-center"><?= $no++; ?></td>
+                                            <td class="text-center"><?= $row['merk']; ?></td>
+                                            <td class="text-center"><?= $row['jenis_pakaian']; ?></td>
+                                            <td class=""><?= $row['nama']; ?></td>
+                                        </tr>
+                                    <?php endwhile; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
             </div>
-        </section>
+        </div>
     </div>
 </div>
