@@ -106,6 +106,31 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                     </ul>
                 </li>
 
+                <li class="sidebar-title">Laporan</li>
+                <li class="sidebar-item has-sub <?= ($active === 'laporan') ? 'active' : ''; ?>">
+                    <a href="#" class='sidebar-link'>
+                        <i class="fas fa-file"></i>
+                        <span>laporan</span>
+                    </a>
+                    <ul class="submenu <?= $active === 'laporan' ? 'active' : ''; ?>">
+                        <li class="submenu-item <?= (($active === 'laporan') && ($sub_active ?? '') == 'laporan_pakaian') ? 'active' : '' ?>">
+                            <a href="?halaman=laporan_pakaian">Laporan Pakaian</a>
+                        </li>
+                        <li class="submenu-item <?= ($active === 'laporan' && ($sub_active ?? '') == 'laporan_penjualan') ? 'active' : '' ?>">
+                            <a href="?halaman=laporan_penjualan">Laporan Penjualan</a>
+                        </li>
+                        <li class="submenu-item <?= (($active === 'laporan') && ($sub_active ?? '') == 'laporan_barang_masuk') ? 'active' : '' ?>">
+                            <a href="?halaman=laporan_barang_masuk">Laporan Barang Masuk</a>
+                        </li>
+                        <li class="submenu-item <?= (($active === 'laporan') && ($sub_active ?? '') == 'laporan_barang_keluar') ? 'active' : '' ?>">
+                            <a href="?halaman=laporan_barang_keluar">Laporan Barang Keluar</a>
+                        </li>
+                        <li class="submenu-item <?= (($active === 'laporan') && ($sub_active ?? '') == 'laporan_grafik_penjualan') ? 'active' : '' ?>">
+                            <a href="?halaman=laporan_grafik_penjualan">Laporan Grafik Penjualan</a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="sidebar-title">Pengaturan</li>
 
                 <li class="sidebar-item <?= $active === 'ganti_password_sendiri' ? 'active' : ''; ?>">

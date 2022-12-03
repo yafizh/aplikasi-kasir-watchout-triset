@@ -12,6 +12,9 @@ require_once('../helper/date.php');
 
 if (isset($_SESSION['user'])) {
     if (isset($_GET['halaman'])) {
+        // Laporan
+        include_once('../route/laporan.php');
+
         // Ganti Password
         include_once('../route/ganti_password.php');
 
