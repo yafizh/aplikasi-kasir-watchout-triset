@@ -64,9 +64,9 @@
                 <?php if ($data->num_rows) : ?>
                     <?php while ($row = $data->fetch_assoc()) : ?>
                         <tr>
-                            <td class="text-center"><?= $no++; ?></td>
-                            <td class="text-center"><?= $row['merk']; ?></td>
-                            <td class="text-center"><?= $row['jenis_pakaian']; ?></td>
+                            <td class="text-center align-middle"><?= $no++; ?></td>
+                            <td class="text-center align-middle"><?= $row['merk']; ?></td>
+                            <td class="text-center align-middle"><?= $row['jenis_pakaian']; ?></td>
                             <td class=""><?= $row['nama']; ?></td>
                         </tr>
                     <?php endwhile; ?>

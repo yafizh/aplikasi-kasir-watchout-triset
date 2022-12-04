@@ -72,10 +72,10 @@
                 <?php if ($data->num_rows) : ?>
                     <?php while ($row = $data->fetch_assoc()) : ?>
                         <tr>
-                            <td class="text-center"><?= $no++; ?></td>
-                            <td class="text-center"><?= indonesiaDate($row['tanggal']); ?></td>
-                            <td class="text-center"><?= $row['nama_kasir']; ?></td>
-                            <td class="text-center">Rp <?= number_format($row['total'], 0, ",", "."); ?></td>
+                            <td class="text-center align-middle"><?= $no++; ?></td>
+                            <td class="text-center align-middle"><?= indonesiaDate($row['tanggal']); ?></td>
+                            <td class="text-center align-middle"><?= $row['nama_kasir']; ?></td>
+                            <td class="text-center align-middle">Rp <?= number_format($row['total'], 0, ",", "."); ?></td>
                         </tr>
                     <?php endwhile; ?>
                 <?php else : ?>
