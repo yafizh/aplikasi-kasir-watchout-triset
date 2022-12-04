@@ -53,11 +53,18 @@
                         jenis_pakaian AS jp 
                     ON 
                         jp.id=p.id_jenis_pakaian 
-                    WHERE 
-                        m.id LIKE '%" . $_GET['id_merk'] . "%' AND jp.id LIKE '%" . $_GET['id_jenis_pakaian'] . "%' 
-                    ORDER BY 
-                        p.nama ASC
                 ";
+
+                $where = "WHERE 1=1";
+
+                if (!empty($_GET['id_merk'] ?? ''))
+                    $where .= " AND p.id_merk=" . $_GET['id_merk'];
+
+                if (!empty($_GET['id_jenis_pakaian'] ?? ''))
+                    $where .= " AND p.id_jenis_pakaian=" . $_GET['id_jenis_pakaian'];
+
+                $query .= $where . " ORDER BY p.nama ASC";
+
                 $data = $mysqli->query($query);
                 $no = 1;
                 ?>

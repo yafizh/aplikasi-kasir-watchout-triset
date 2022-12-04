@@ -68,10 +68,6 @@
                                 <tbody>
                                     <?php
 
-                                    $kasir = $_POST['kasir'] ?? '';
-                                    $dari_tanggal = $_POST['dari_tanggal'] ?? '';
-                                    $sampai_tanggal = $_POST['sampai_tanggal'] ?? '';
-
                                     $query = "
                                         SELECT 
                                             DATE(tanggal_waktu_penjualan) AS tanggal,
@@ -89,14 +85,18 @@
                                             k.id=p.id_kasir 
                                     ";
 
-                                    $where = " WHERE k.id LIKE '%$kasir%'";
+                                    $where = " WHERE 1=1";
+
+                                    if (!empty($_POST['kasir'] ?? ''))
+                                        $where .= " AND k.id = '" . $_POST['kasir'] . "'";
+
                                     if (!empty($_POST['dari_tanggal'] ?? ''))
                                         $where .= " AND DATE(tanggal_waktu_penjualan) >= '" . $_POST['dari_tanggal'] . "'";
 
                                     if (!empty($_POST['sampai_tanggal'] ?? ''))
                                         $where .= " AND DATE(tanggal_waktu_penjualan) <= '" . $_POST['sampai_tanggal'] . "'";
 
-                                    $query .= $where . "GROUP BY p.id ORDER BY tanggal_waktu_penjualan DESC";
+                                    $query .= $where . " GROUP BY p.id ORDER BY tanggal_waktu_penjualan DESC";
 
                                     $data = $mysqli->query($query);
                                     $no = 1;

@@ -57,14 +57,18 @@
                         k.id=p.id_kasir 
                 ";
 
-                $where = " WHERE k.id LIKE '%" . $_GET['id_kasir'] . "%'";
+                $where = " WHERE 1=1";
+
+                if (!empty($_GET['id_kasir'] ?? ''))
+                    $where .= " AND k.id = '" . $_GET['id_kasir'] . "'";
+
                 if (!empty($_GET['dari_tanggal'] ?? ''))
                     $where .= " AND DATE(tanggal_waktu_penjualan) >= '" . $_GET['dari_tanggal'] . "'";
 
                 if (!empty($_GET['sampai_tanggal'] ?? ''))
                     $where .= " AND DATE(tanggal_waktu_penjualan) <= '" . $_GET['sampai_tanggal'] . "'";
 
-                $query .= $where . "GROUP BY p.id ORDER BY tanggal_waktu_penjualan DESC";
+                $query .= $where . " GROUP BY p.id ORDER BY tanggal_waktu_penjualan DESC";
 
                 $data = $mysqli->query($query);
                 $no = 1;

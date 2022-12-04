@@ -69,9 +69,6 @@
                                 <tbody>
                                     <?php
 
-                                    $merk = $_POST['merk'] ?? '';
-                                    $jenis_pakaian = $_POST['jenis_pakaian'] ?? '';
-
                                     $query = "
                                         SELECT 
                                             m.nama AS merk,
@@ -87,11 +84,18 @@
                                             jenis_pakaian AS jp 
                                         ON 
                                             jp.id=p.id_jenis_pakaian 
-                                        WHERE 
-                                            m.id LIKE '%$merk%' AND jp.id LIKE '%$jenis_pakaian%' 
-                                        ORDER BY 
-                                            p.nama ASC
                                     ";
+
+                                    $where = "WHERE 1=1";
+
+                                    if (!empty($_POST['merk'] ?? ''))
+                                        $where .= " AND p.id_merk=" . $_POST['merk'];
+
+                                    if (!empty($_POST['jenis_pakaian'] ?? ''))
+                                        $where .= " AND p.id_jenis_pakaian=" . $_POST['jenis_pakaian'];
+
+                                    $query .= $where . " ORDER BY p.nama ASC";
+
                                     $data = $mysqli->query($query);
                                     $no = 1;
                                     ?>
