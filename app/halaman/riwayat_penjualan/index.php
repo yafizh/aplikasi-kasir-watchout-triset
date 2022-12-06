@@ -153,7 +153,7 @@
                 document.getElementById('detail-in-basket').insertAdjacentHTML('beforeend', `
                     <div class="border border-2 rounded p-3 mb-1">
                         <div class="d-flex gap-3 justify-content-between flex-wrap">
-                            <img src="${((location.host == 'localhost') ? (location.origin + '/' + pathparts[1].trim('/') + '/') : location.origin)}/app/halaman/${value.foto}" style="height: 6rem; aspect-ratio: 1; object-fit: cover;">
+                            <img src="${((location.host == 'localhost') ? (location.origin + '/' + (window.location.pathname).split('/')[1]) : location.origin)}/app/halaman/${value.foto}" style="height: 6rem; aspect-ratio: 1; object-fit: cover;">
                             <div class="flex-grow-1">
                                 <h5 class="mb-1">${value.nama}</h5>
                                 <h6 class="mb-1">Warna ${value.warna}</h6>

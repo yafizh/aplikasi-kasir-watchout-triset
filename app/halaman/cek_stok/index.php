@@ -181,7 +181,7 @@
                     const td_gambar = document.createElement('td');
                     const gambar = document.createElement('img');
                     gambar.setAttribute('width', '100px');
-                    gambar.setAttribute('src', `${((location.host == 'localhost') ? (location.origin + '/' + pathparts[1].trim('/') + '/') : location.origin)}/app/halaman/${warna_pakaian.foto}`);
+                    gambar.setAttribute('src', `${((location.host == 'localhost') ? (location.origin + '/' + (window.location.pathname).split('/')[1]) : location.origin)}/app/halaman/${warna_pakaian.foto}`);
                     td_gambar.append(gambar);
 
                     const td_warna = document.createElement('td');

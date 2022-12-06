@@ -46,8 +46,9 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                 </li>
                 <li class="sidebar-title">Pengaturan</li>
 
-                <li class="sidebar-item  ">
-                    <a href="form-layout.html" class='sidebar-link'>
+
+                <li class="sidebar-item <?= $active === 'ganti_password_sendiri' ? 'active' : ''; ?>">
+                    <a href="?halaman=ganti_password" class='sidebar-link'>
                         <i class="fas fa-lock"></i>
                         <span>Ganti Password</span>
                     </a>
