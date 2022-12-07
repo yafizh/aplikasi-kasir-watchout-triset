@@ -8,7 +8,7 @@ $jenis_pakaian = $result->fetch_assoc();
 
 if (isset($_POST['submit'])) {
     $nama = $mysqli->real_escape_string($_POST['nama']);
-    $harga = $mysqli->real_escape_string($_POST['harga']);
+    $harga = implode('', explode('.', $_POST['harga']));
 
     $q = "
     INSERT INTO pakaian (
@@ -97,3 +97,16 @@ if (isset($_POST['submit'])) {
         </section>
     </div>
 </div>
+<script>
+    document.querySelector('input[name=harga]').addEventListener("keypress", function(evt) {
+        if (evt.which < 48 || evt.which > 57) {
+            evt.preventDefault();
+            return;
+        }
+
+        this.addEventListener('input', function() {
+            const harga = Number(((this.value).split('.')).join(''));
+            this.value = formatNumberWithDot.format(harga);
+        });
+    });
+</script>
