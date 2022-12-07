@@ -11,6 +11,8 @@ $query = "
         pt.harga,
         u.nama AS ukuran,
         w.nama AS warna,
+        DATE(tanggal_waktu_penjualan) AS tanggal,
+        TIME_FORMAT(tanggal_waktu_penjualan, '%H:%i') AS waktu,
         p.nama 
     FROM 
         penjualan AS pe 
@@ -70,8 +72,8 @@ $pdf->SetFont('Arial', '', 6);
 $pdf->Cell(0, 2, '-----------------------------------------------------------------------', $border, 2);
 
 $pdf->SetFont('Arial', '', 4);
-$pdf->Cell(26, 2, 'Tanggal: ' . indonesiaDate(Date('Y-m-d')), $border, 0);
-$pdf->Cell(26, 2, 'Waktu: ' . Date("H:i"), $border, 1, 'R');
+$pdf->Cell(26, 2, 'Tanggal: ' . indonesiaDate($data[0]['tanggal']), $border, 0);
+$pdf->Cell(26, 2, 'Waktu: ' . $data[0]['waktu'], $border, 1, 'R');
 
 $pdf->SetFont('Arial', '', 6);
 $pdf->Cell(0, 2, '-----------------------------------------------------------------------', $border, 2);
@@ -84,7 +86,6 @@ foreach ($data as $row) {
     $pdf->Cell(20, 2, 'Rp ' . number_format($row['harga'], 0, ",", "."), $border, 0);
     $pdf->Cell(22, 2, 'Rp ' . number_format($row['harga'] * $row['jumlah'], 0, ",", "."), $border, 1, 'R');
     $total += $row['harga'] * $row['jumlah'];
-    
 }
 
 $pdf->SetFont('Arial', '', 6);
