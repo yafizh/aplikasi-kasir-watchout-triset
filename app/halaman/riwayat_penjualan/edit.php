@@ -293,16 +293,16 @@ if (isset($_POST['submit'])) {
     </div>
 </div>
 
-<div class="modal fade text-left" id="detail-basket" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Keranjang</h5>
-                <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
-                    <i data-feather="x"></i>
-                </button>
-            </div>
-            <form action="" method="POST">
+<form action="" method="POST">
+    <div class="modal fade text-left" id="detail-basket" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Keranjang</h5>
+                    <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
                 <div class="modal-body">
                     <div id="detail-in-basket"></div>
                     <hr>
@@ -330,13 +330,13 @@ if (isset($_POST['submit'])) {
                     </button>
                     <button type="submit" name="submit" class="btn btn-primary ml-1 text-white">
                         <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Lakukan Penjualan</span>
+                        <span class="d-none d-sm-block">Perbaharui Penjualan</span>
                     </button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
+</form>
 
 <script>
     const riwayat_penjualan = JSON.parse('<?= json_encode($riwayat_penjualan); ?>');
@@ -368,6 +368,18 @@ if (isset($_POST['submit'])) {
             foto: value.foto,
         };
     });
+
+    const updateKembalian = (input) => {
+        const tunai = Number(((input.value).split('.')).join(''));
+        document.querySelector('input[name=tunai]').value = formatNumberWithDot.format(tunai);
+        if (tunai - basket.total >= 0) {
+            document.querySelector('button[name=submit]').removeAttribute('disabled');
+            document.querySelector('.kembalian').innerText = formatter.format(tunai - basket.total);
+            return;
+        }
+        document.querySelector('.kembalian').innerText = formatter.format(0);
+        document.querySelector('button[name=submit]').setAttribute('disabled', '');
+    }
 
     // ---
     pakaian.forEach((a, index) => {
@@ -479,6 +491,7 @@ if (isset($_POST['submit'])) {
                                 document.getElementById('basket').classList.add('d-none');
                                 document.getElementById('empty-basket').classList.remove('d-none');
                             }
+                            updateKembalian(document.querySelector('input[name=tunai]'));
                         });
 
                         jumlah.addEventListener("keypress", (evt) => {
@@ -509,6 +522,7 @@ if (isset($_POST['submit'])) {
                                     inputIdUkuranPakaian.remove();
                                     inputJumlah.remove();
                                 }
+                                updateKembalian(document.querySelector('input[name=tunai]'));
                             });
                         });
 
@@ -528,6 +542,7 @@ if (isset($_POST['submit'])) {
                                 inputJumlah.value = basket[ukuran['id']].jumlah;
                                 totalPembelianTotal.innerText = formatter.format(pakaian[index]['harga'] * basket[ukuran['id']].jumlah);
                             }
+                            updateKembalian(document.querySelector('input[name=tunai]'));
                             if (Number(ukuran['jumlah']) - Number(jumlah.innerText) <= 0) {
                                 buttonPlus.children[0].classList.add('text-muted');
                                 return;
@@ -601,16 +616,9 @@ if (isset($_POST['submit'])) {
                 return;
             }
             document.querySelector('input[name=tunai]').addEventListener('input', function() {
-                const tunai = Number(((this.value).split('.')).join(''));
-                document.querySelector('input[name=tunai]').value = formatNumberWithDot.format(tunai);
-                if (tunai - basket.total >= 0) {
-                    document.querySelector('button[name=submit]').removeAttribute('disabled');
-                    document.querySelector('.kembalian').innerText = formatter.format(tunai - basket.total);
-                    return;
-                }
-                document.querySelector('.kembalian').innerText = formatter.format(0);
-                document.querySelector('button[name=submit]').setAttribute('disabled', '');
+                updateKembalian(document.querySelector('input[name=tunai]'));
             });
+
         });
 
         document.querySelector('.total-pembelian').innerText = formatter.format(basket.total);
@@ -623,10 +631,9 @@ if (isset($_POST['submit'])) {
             modalDetailPakaianTbody.innerText = '';
 
             if (pakaian[index]['warna_pakaian'].length) {
-                const tr = document.createElement('tr');
-                tr.classList.add('text-center');
-
                 pakaian[index]['warna_pakaian'].forEach(warna_pakaian => {
+                    const tr = document.createElement('tr');
+                    tr.classList.add('text-center');
                     const tdGambar = document.createElement('td');
                     const tdWarna = document.createElement('td');
                     const gambar = document.createElement('img');
@@ -786,6 +793,7 @@ if (isset($_POST['submit'])) {
                                         document.getElementById('basket').classList.add('d-none');
                                         document.getElementById('empty-basket').classList.remove('d-none');
                                     }
+                                    updateKembalian(document.querySelector('input[name=tunai]'));
                                 });
 
                                 jumlah.addEventListener("keypress", (evt) => {
@@ -816,6 +824,7 @@ if (isset($_POST['submit'])) {
                                             inputIdUkuranPakaian.remove();
                                             inputJumlah.remove();
                                         }
+                                        updateKembalian(document.querySelector('input[name=tunai]'));
                                     });
                                 });
 
@@ -835,6 +844,7 @@ if (isset($_POST['submit'])) {
                                         inputJumlah.value = basket[ukuran['id']].jumlah;
                                         totalPembelianTotal.innerText = formatter.format(pakaian[index]['harga'] * basket[ukuran['id']].jumlah);
                                     }
+                                    updateKembalian(document.querySelector('input[name=tunai]'));
                                     if (Number(ukuran['jumlah']) - Number(jumlah.innerText) <= 0) {
                                         buttonPlus.children[0].classList.add('text-muted');
                                         return;
@@ -868,6 +878,7 @@ if (isset($_POST['submit'])) {
 
                             document.getElementById('empty-basket').classList.add('d-none');
                             document.getElementById('basket').classList.remove('d-none');
+                            updateKembalian(document.querySelector('input[name=tunai]'));
                         });
 
                         tdUkuran.innerText = ukuran['nama'];

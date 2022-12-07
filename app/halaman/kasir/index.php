@@ -273,16 +273,16 @@ if (isset($_POST['submit'])) {
     </div>
 </div>
 
-<div class="modal fade text-left" id="detail-basket" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Keranjang</h5>
-                <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
-                    <i data-feather="x"></i>
-                </button>
-            </div>
-            <form action="" method="POST">
+<form action="" method="POST">
+    <div class="modal fade text-left" id="detail-basket" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Keranjang</h5>
+                    <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
                 <div class="modal-body">
                     <div id="detail-in-basket">
                         <!-- <div class="border border-2 rounded p-3 mb-1">
@@ -333,10 +333,10 @@ if (isset($_POST['submit'])) {
                         <span class="d-none d-sm-block">Lakukan Penjualan</span>
                     </button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
+</form>
 
 <script>
     const pakaian = [];
