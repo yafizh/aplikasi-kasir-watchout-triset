@@ -437,7 +437,7 @@ if (isset($_POST['submit'])) {
                         image.setAttribute('src', `${((location.host == 'localhost') ? (location.origin + '/' + (window.location.pathname).split('/')[1]) : location.origin)}/app/halaman/${warna_pakaian.foto}`);
                         image.style.height = '6rem';
                         image.style.aspectRatio = 1;
-                        image.style.keranjangectFit = 'cover';
+                        image.style.objectFit = 'cover';
 
                         itemNama.classList.add('mb-1');
                         itemWarna.classList.add('mb-1');
