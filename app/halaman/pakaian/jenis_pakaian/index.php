@@ -17,7 +17,7 @@
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 mb-3">
                     <h3>
-                        <a href="?halaman=pakaian&id_merk=<?= $_GET['id_merk']; ?>" class="text-reset"><i class="bi bi-arrow-bar-left"></i></a><?= $jenis_pakaian['nama']; ?> <?= $merk['nama']; ?>
+                        <a href="?halaman=pakaian&id_merk=<?= $_GET['id_merk']; ?>" class="text-reset"><i class="bi bi-arrow-bar-left"></i> <?= $jenis_pakaian['nama']; ?> <?= $merk['nama']; ?></a>
                     </h3>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 d-flex justify-content-end">

@@ -7,6 +7,7 @@ $result = $mysqli->query("
         p.id, 
         p.nama,
         jp.nama AS jenis_pakaian,
+        p.harga,
         m.nama AS merk 
     FROM 
         pakaian AS p 

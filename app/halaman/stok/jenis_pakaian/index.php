@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 mb-3">
                     <h3>
-                        <a href="?halaman=stok" class="text-reset"><i class="bi bi-arrow-bar-left"></i></a>Data Stok <?= $jenis_pakaian['nama'] ?> <?= $merk['nama']; ?>
+                        <a href="?halaman=stok" class="text-reset"><i class="bi bi-arrow-bar-left"></i> Data Stok <?= $jenis_pakaian['nama'] ?> <?= $merk['nama']; ?></a>
                     </h3>
                 </div>
             </div>

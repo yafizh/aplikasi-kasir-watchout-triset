@@ -5,6 +5,7 @@ include_once('../../helper/date.php');
 
 $query = "
     SELECT 
+        k.nama nama_kasir,
         pe.id,
         pe.tunai,
         pt.jumlah,
@@ -16,6 +17,10 @@ $query = "
         p.nama 
     FROM 
         penjualan AS pe 
+    INNER JOIN 
+        kasir AS k 
+    ON 
+        k.id=pe.id_kasir  
     INNER JOIN 
         pakaian_terjual AS pt 
     ON 
@@ -55,60 +60,55 @@ $pdf->SetMargins(4, 4);
 $pdf->SetAutoPageBreak(false);
 $pdf->AddPage();
 
-$pdf->SetFont('Arial', '', 8);
-$pdf->Cell(0, 3, 'WATCHOUT TRISET', $border, 2, 'C');
-
-$pdf->SetFont('Arial', '', 5);
-$pdf->Cell(0, 3, 'PT. Bina Citra Kharisma Lestari', $border, 2, 'C');
-$pdf->SetFont('Arial', '', 4);
-$pdf->Cell(0, 2, 'Jl. Cisirung No.259/99, Cangkuang Wetan, Kec. Dayeuhkolot,', $border, 2, 'C');
-$pdf->Cell(0, 2, 'Kabupaten Bandung, Jawa Barat 40256', $border, 2, 'C');
-$pdf->Cell(0, 2, '(Qmall Banjarbaru)', $border, 2, 'C');
-
-$pdf->Ln();
-$pdf->Cell(0, 4, '- Faktur -', $border, 2, 'C');
-
-$pdf->SetFont('Arial', '', 6);
-$pdf->Cell(0, 2, '-----------------------------------------------------------------------', $border, 2);
 
 $pdf->SetFont('Arial', '', 4);
+$pdf->Cell(0, 2, '============================================================', $border, 2, 'C');
+$pdf->Cell(0, 2, 'PT. BINACITRA KAHRISMA LESTARI', $border, 2, 'C');
+$pdf->Cell(0, 2, 'NPWP 01.280.045.4-44', $border, 2, 'C');
+$pdf->Cell(0, 2, 'OXA QMALL BANJARMASIN', $border, 2, 'C');
+$pdf->Cell(0, 2, 'LT.GF 43-4 JL. A YANI KM 36.8 BANJAR', $border, 2, 'C');
+$pdf->Cell(0, 2, '============================================================', $border, 2, 'C');
+
+
+$pdf->SetFont('Arial', '', 4);
+$pdf->Cell(0, 2, 'Nama Kasir: '. $data[0]['nama_kasir'], $border, 2, );
 $pdf->Cell(26, 2, 'Tanggal: ' . indonesiaDate($data[0]['tanggal']), $border, 0);
 $pdf->Cell(26, 2, 'Waktu: ' . $data[0]['waktu'], $border, 1, 'R');
-
-$pdf->SetFont('Arial', '', 6);
-$pdf->Cell(0, 2, '-----------------------------------------------------------------------', $border, 2);
+$pdf->Cell(0, 2, '============================================================', $border, 2, 'C');
 
 $total = 0;
 $pdf->SetFont('Arial', '', 4);
 foreach ($data as $row) {
     $pdf->Cell(0, 2, $row['nama'] . ' Warna ' . $row['warna'] . ' Ukuran ' . $row['ukuran'], $border, 2);
     $pdf->Cell(10, 2, $row['jumlah'] . ' x', $border, 0, 'R');
-    $pdf->Cell(20, 2, 'Rp ' . number_format($row['harga'], 0, ",", "."), $border, 0);
-    $pdf->Cell(22, 2, 'Rp ' . number_format($row['harga'] * $row['jumlah'], 0, ",", "."), $border, 1, 'R');
+    $pdf->Cell(26, 2, 'Rp ' . number_format($row['harga'], 0, ",", "."), $border, 0);
+    $pdf->Cell(6, 2, 'Rp', $border, 0);
+    $pdf->Cell(10, 2, number_format($row['harga'] * $row['jumlah'], 0, ",", "."), $border, 1, 'R');
     $total += $row['harga'] * $row['jumlah'];
 }
 
-$pdf->SetFont('Arial', '', 6);
-$pdf->Cell(0, 2, '-----------------------------------------------------------------------', $border, 2);
+$pdf->Cell(0, 2, '============================================================', $border, 2, 'C');
 
 $pdf->SetFont('Arial', 'B', 4);
-$pdf->Cell(26, 2, 'Total', $border, 0);
-$pdf->Cell(26, 2, 'Rp ' . number_format($total, 0, ",", "."), $border, 1, 'R');
+$pdf->Cell(36, 2, 'Total', $border, 0);
+$pdf->Cell(6, 2, 'Rp', $border, 0);
+$pdf->Cell(10, 2, number_format($total, 0, ",", "."), $border, 1, 'R');
 
-$pdf->SetFont('Arial', '', 6);
-$pdf->Cell(0, 2, '-----------------------------------------------------------------------', $border, 2);
-
-$pdf->SetFont('Arial', 'B', 4);
-$pdf->Cell(26, 2, 'Tunai', $border, 0);
-$pdf->Cell(26, 2, 'Rp ' . number_format($data[0]['tunai'], 0, ",", "."), $border, 1, 'R');
-$pdf->Cell(26, 2, 'Kembalian', $border, 0);
-$pdf->Cell(26, 2, 'Rp ' . number_format($data[0]['tunai'] - $total, 0, ",", "."), $border, 1, 'R');
-
-$pdf->SetFont('Arial', '', 6);
-$pdf->Cell(0, 2, '-----------------------------------------------------------------------', $border, 2);
-$pdf->Ln();
 $pdf->SetFont('Arial', '', 4);
-$pdf->Cell(0, 2, '0', $border, 2, 'C');
+$pdf->Cell(0, 2, '============================================================', $border, 2, 'C');
+
+$pdf->SetFont('Arial', 'B', 4);
+$pdf->Cell(36, 2, 'Tunai', $border, 0);
+$pdf->Cell(6, 2, 'Rp', $border, 0);
+$pdf->Cell(10, 2, number_format($data[0]['tunai'], 0, ",", "."), $border, 1, 'R');
+$pdf->Cell(36, 2, 'Kembalian', $border, 0);
+$pdf->Cell(6, 2, 'Rp', $border, 0);
+$pdf->Cell(10, 2, number_format($data[0]['tunai'] - $total, 0, ",", "."), $border, 1, 'R');
+
+$pdf->SetFont('Arial', '', 4);
+$pdf->Cell(0, 2, '============================================================', $border, 2, 'C');
+$pdf->Cell(0, 2, 'Kunjungi kami di www.oxa.co.id', $border, 2, 'C');
+$pdf->Cell(0, 2, '============================================================', $border, 2, 'C');
 
 
 $pdf->Output();

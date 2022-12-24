@@ -34,7 +34,7 @@
             <div class="row">
                 <div class="col-12 col-md order-md-1 mb-3">
                     <h3>
-                        <a href="?halaman=stok_per_pakaian&id_jenis_pakaian=<?= $pakaian['id_jenis_pakaian']; ?>&id_merk=<?= $pakaian['id_merk']; ?>&id_pakaian=<?= $pakaian['id']; ?>" class="text-reset"><i class="bi bi-arrow-bar-left"></i></a>Data Stok <?= $pakaian['nama']; ?> Warna <?= $warna['nama']; ?>
+                        <a href="?halaman=stok_per_pakaian&id_jenis_pakaian=<?= $pakaian['id_jenis_pakaian']; ?>&id_merk=<?= $pakaian['id_merk']; ?>&id_pakaian=<?= $pakaian['id']; ?>" class="text-reset"><i class="bi bi-arrow-bar-left"></i> Data Stok <?= $pakaian['nama']; ?> Warna <?= $warna['nama']; ?></a>
                     </h3>
                 </div>
                 <div class="col-12 col-md-auto order-md-2 d-flex justify-content-end">

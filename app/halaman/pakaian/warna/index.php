@@ -16,7 +16,7 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 mb-3">
-                    <h3><a href="?halaman=pakaian_per_jenis&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>" class="text-reset"><i class="bi bi-arrow-bar-left"></i></a>Data Warna <?= $jenis_pakaian['nama']; ?> <?= $pakaian['nama']; ?></h3>
+                    <h3><a href="?halaman=pakaian_per_jenis&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>" class="text-reset"><i class="bi bi-arrow-bar-left"></i> Data Warna <?= $jenis_pakaian['nama']; ?> <?= $pakaian['nama']; ?></a></h3>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 d-flex justify-content-end">
                     <a href="?halaman=tambah_warna_pakaian&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>&id_merk=<?= $_GET['id_merk']; ?>&id_pakaian=<?= $_GET['id_pakaian']; ?>" class="btn btn-primary align-self-start text-white">Tambah Warna</a>
