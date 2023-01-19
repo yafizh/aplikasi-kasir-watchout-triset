@@ -161,7 +161,12 @@ if (isset($_SESSION['user'])) {
         <script src="../assets/js/bootstrap.js"></script>
         <script src="../assets/js/app.js"></script>
 
-        <script src="../assets/extensions/sweetalert2/sweetalert2.min.js"></script>>
+        <script src="../assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+
+        <?php if (!isset($_GET['halaman'])) : ?>
+            <script src="../assets/extensions/apexcharts/apexcharts.min.js"></script>
+            <script src="../assets/js/pages/dashboard.js"></script>
+        <?php endif; ?>
 
         <?php if (in_array($_GET['halaman'] ?? '', ['tambah_stok_pakaian'])) : ?>
             <script src="../assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
