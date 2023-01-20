@@ -111,6 +111,11 @@ if (isset($_SESSION['user'])) {
                 width: 5%;
                 white-space: nowrap;
             }
+
+            header {
+                padding: 8px 32px;
+                background-color: white;
+            }
         </style>
 
         <?php if (in_array($_GET['halaman'] ?? '', ['tambah_warna_pakaian', 'edit_warna_pakaian', 'tambah_kasir', 'edit_kasir'])) : ?>
@@ -141,6 +146,17 @@ if (isset($_SESSION['user'])) {
             <?php elseif ($_SESSION['user']['status'] === 'KASIR') : ?>
                 <?php include_once('partials/sidebar_kasir.php'); ?>
             <?php endif; ?>
+            <header class="mb-3 d-flex justify-content-between align-items-center">
+                <a id="burger" onclick="hideSidebar(this)" href="#" class="burger-btn d-block">
+                    <i class="bi bi-justify fs-3 text-danger"></i>
+                </a>
+                <?php if ($_SESSION['user']['status'] === 'KASIR') : ?>
+                    <div class="d-flex  align-items-center">
+                        <img src="../assets/images/faces/3.jpg" class="rounded-circle me-3" style="width: 50px; width: 50px; object-fit: cover;">
+                        <h5 class="mb-0"><?= $_SESSION['user']['nama']; ?></h5>
+                    </div>
+                <?php endif; ?>
+            </header>
             <?php include_once($halaman); ?>
         </div>
     <?php else : ?>
@@ -253,6 +269,28 @@ if (isset($_SESSION['user'])) {
             }
         </script>
     <?php endif; ?>
+    <script>
+        function myFunction(x) {
+            if (x.matches) { // If media query matches
+                document.querySelector('header').style.marginLeft = '0';
+            } else {
+                document.querySelector('header').style.marginLeft = '300px';
+            }
+        }
+
+        var x = window.matchMedia("(max-width: 1200px)")
+        myFunction(x) // Call listener function at run time
+        x.addListener(myFunction) // Attach listener function on state changes
+        const hideSidebar = (element) => {
+            if (element.parentElement.style.marginLeft == '0px') {
+                console.log('1')
+                element.parentElement.style.marginLeft = '300px';
+            } else {
+                console.log('2')
+                element.parentElement.style.marginLeft = '0';
+            }
+        }
+    </script>
 </body>
 
 </html>
