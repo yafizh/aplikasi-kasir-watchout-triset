@@ -1,4 +1,4 @@
-INSERT INTO pengguna(
+INSERT INTO `kasir`.`pengguna`(
     username,
     password,
     status
@@ -6,7 +6,7 @@ INSERT INTO pengguna(
 ('admin', 'admin', 'ADMIN'),
 ('kasir', 'kasir', 'KASIR');
 
-INSERT INTO kasir(
+INSERT INTO `kasir`.`kasir`(
     id_pengguna,
     nama,
     tempat_lahir,
@@ -15,7 +15,7 @@ INSERT INTO kasir(
 ) VALUES 
 (2, 'Kasir', 'Martapura', CURRENT_DATE(), '');
 
-INSERT INTO warna(
+INSERT INTO `kasir`.`warna`(
     id,
     nama
 ) VALUES 
@@ -28,14 +28,14 @@ INSERT INTO warna(
 (7, 'Merah'),
 (8, 'Abu-Abu');
 
-INSERT INTO merk(
+INSERT INTO `kasir`.`merk`(
     id,
     nama
 ) VALUES 
 (1, 'Triset'),
 (2, 'Watchout');
 
-INSERT INTO jenis_pakaian(
+INSERT INTO `kasir`.`jenis_pakaian`(
     id,
     nama
 ) VALUES 
@@ -45,7 +45,7 @@ INSERT INTO jenis_pakaian(
 (4, 'Sepatu'),
 (5, 'Sendal');
 
-INSERT INTO ukuran(
+INSERT INTO `kasir`.`ukuran`(
     id,
     id_jenis_pakaian,
     nama,
@@ -69,7 +69,7 @@ INSERT INTO ukuran(
 (16, 2, 'XXL', '');
 
 -- Pakaian
-INSERT INTO pakaian(
+INSERT INTO `kasir`.`pakaian`(
     id,
     id_merk,
     id_jenis_pakaian,
@@ -83,7 +83,7 @@ INSERT INTO pakaian(
 (5, 2, 1, 'FRANKLIN REGULER FIT', 700000),
 (6, 2, 2, 'NEWPORT TEE', 400000);
 
-INSERT INTO warna_pakaian(
+INSERT INTO `kasir`.`warna_pakaian`(
     id,
     id_pakaian,
     id_warna,
@@ -103,7 +103,7 @@ INSERT INTO warna_pakaian(
 (12, 5, 2, '../../dummy/FRANKLIN-REGULER-FIT-HITAM.jpg'),
 (13, 2, 4, '../../dummy/KYNA-BLOUSE-HIJAU.jpg');
 
-INSERT INTO ukuran_warna_pakaian(
+INSERT INTO `kasir`.`ukuran_warna_pakaian`(
     id,
     id_ukuran,
     id_warna_pakaian
@@ -148,7 +148,7 @@ INSERT INTO ukuran_warna_pakaian(
 (38, 13, 13),
 (39, 14, 13);
 
-INSERT INTO pakaian_disuplai(
+INSERT INTO `kasir`.`pakaian_disuplai`(
     id_ukuran_warna_pakaian,
     tanggal_masuk,
     harga,

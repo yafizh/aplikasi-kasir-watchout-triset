@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS kasir;
-CREATE DATABASE kasir;
-USE kasir;
+DROP DATABASE IF EXISTS `kasir`;
+CREATE DATABASE `kasir`;
+USE `kasir`;
 
-CREATE TABLE pengguna(
+CREATE TABLE `kasir`.`pengguna`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     username VARCHAR(255) UNIQUE,
     password VARCHAR(255),
@@ -10,7 +10,7 @@ CREATE TABLE pengguna(
     PRIMARY KEY(id)
 );
 
-CREATE TABLE kasir(
+CREATE TABLE `kasir`.`kasir`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     id_pengguna BIGINT UNSIGNED,
     nama VARCHAR(255),
@@ -21,25 +21,25 @@ CREATE TABLE kasir(
     FOREIGN KEY (id_pengguna) REFERENCES pengguna(id) ON DELETE CASCADE
 );
 
-CREATE TABLE warna(
+CREATE TABLE `kasir`.`warna`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     nama VARCHAR(255) UNIQUE,
     PRIMARY KEY(id)
 );
 
-CREATE TABLE merk(
+CREATE TABLE `kasir`.`merk`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     nama VARCHAR(255) UNIQUE,
     PRIMARY KEY(id)
 );
 
-CREATE TABLE jenis_pakaian(
+CREATE TABLE `kasir`.`jenis_pakaian`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     nama VARCHAR(255) UNIQUE,
     PRIMARY KEY(id)
 );
 
-CREATE TABLE ukuran(
+CREATE TABLE `kasir`.`ukuran`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     id_jenis_pakaian BIGINT UNSIGNED,
     nama VARCHAR(255),
@@ -49,7 +49,7 @@ CREATE TABLE ukuran(
     UNIQUE KEY `ukuran` (`id_jenis_pakaian`,`nama`)
 );
 
-CREATE TABLE pakaian(
+CREATE TABLE `kasir`.`pakaian`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     id_merk BIGINT UNSIGNED,
     id_jenis_pakaian BIGINT UNSIGNED,
@@ -60,7 +60,7 @@ CREATE TABLE pakaian(
     FOREIGN KEY (id_jenis_pakaian) REFERENCES jenis_pakaian(id) ON DELETE CASCADE
 );
 
-CREATE TABLE warna_pakaian(
+CREATE TABLE `kasir`.`warna_pakaian`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     id_pakaian BIGINT UNSIGNED,
     id_warna BIGINT UNSIGNED,
@@ -70,7 +70,7 @@ CREATE TABLE warna_pakaian(
     FOREIGN KEY (id_warna) REFERENCES warna(id) ON DELETE CASCADE
 );
 
-CREATE TABLE ukuran_warna_pakaian(
+CREATE TABLE `kasir`.`ukuran_warna_pakaian`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     id_ukuran BIGINT UNSIGNED,
     id_warna_pakaian BIGINT UNSIGNED,
@@ -79,7 +79,7 @@ CREATE TABLE ukuran_warna_pakaian(
     FOREIGN KEY (id_warna_pakaian) REFERENCES warna_pakaian(id) ON DELETE CASCADE
 );
 
-CREATE TABLE pakaian_disuplai(
+CREATE TABLE `kasir`.`pakaian_disuplai`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     id_ukuran_warna_pakaian BIGINT UNSIGNED,
     tanggal_masuk DATE,
@@ -89,7 +89,7 @@ CREATE TABLE pakaian_disuplai(
     FOREIGN KEY (id_ukuran_warna_pakaian) REFERENCES ukuran_warna_pakaian(id) ON DELETE CASCADE
 );
  
-CREATE TABLE penjualan(
+CREATE TABLE `kasir`.`penjualan`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     id_kasir BIGINT UNSIGNED,
     tunai BIGINT UNSIGNED,
@@ -98,7 +98,7 @@ CREATE TABLE penjualan(
     FOREIGN KEY (id_kasir) REFERENCES kasir(id) ON DELETE CASCADE
 );
 
-CREATE TABLE pakaian_terjual(
+CREATE TABLE `kasir`.`pakaian_terjual`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     id_penjualan BIGINT UNSIGNED,
     id_ukuran_warna_pakaian BIGINT UNSIGNED,
