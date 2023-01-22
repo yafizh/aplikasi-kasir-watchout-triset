@@ -152,7 +152,7 @@ if (isset($_SESSION['user'])) {
                 </a>
                 <?php if ($_SESSION['user']['status'] === 'KASIR') : ?>
                     <div class="d-flex  align-items-center">
-                        <img src="../assets/images/faces/3.jpg" class="rounded-circle me-3" style="width: 50px; width: 50px; object-fit: cover;">
+                        <img src="<?= $_SESSION['user']['foto']; ?>" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
                         <h5 class="mb-0"><?= $_SESSION['user']['nama']; ?></h5>
                     </div>
                 <?php endif; ?>
