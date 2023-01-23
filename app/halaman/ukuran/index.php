@@ -13,7 +13,7 @@
         <section class="section">
             <div class="card">
                 <div class="card-body">
-                    <table class="table table-striped" id="table1">
+                    <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th class="no-td">No</th>
@@ -22,23 +22,29 @@
                                 <th class="text-center no-td">Aksi</th>
                             </tr>
                         </thead>
+                        <?php
+                        $data = $mysqli->query('SELECT * FROM ukuran WHERE id_jenis_pakaian=' . $_GET['id_jenis_pakaian'] . " ORDER BY FIELD(nama, 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL'), nama");
+                        $no = 1;
+                        ?>
                         <tbody>
-                            <?php
-                            $data = $mysqli->query('SELECT * FROM ukuran WHERE id_jenis_pakaian=' . $_GET['id_jenis_pakaian'] . " ORDER BY FIELD(nama, 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL'), nama");
-                            $no = 1;
-                            ?>
-                            <?php while ($row = $data->fetch_assoc()) : ?>
+                            <?php if ($data->num_rows) : ?>
+                                <?php while ($row = $data->fetch_assoc()) : ?>
+                                    <tr>
+                                        <td class="text-center"><?= $no++; ?></td>
+                                        <td class="text-center"><?= $row['nama']; ?></td>
+                                        <td><?= $row['keterangan']; ?></td>
+                                        <td class="no-td">
+                                            <a href="?halaman=edit_ukuran&id=<?= $row['id']; ?>&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>" class="btn btn-warning btn-sm text-white"><i class="fas fa-edit"></i></a>
+                                            <a id="tombol-hapus" href="?halaman=hapus_ukuran&id=<?= $row['id']; ?>&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>" class="btn btn-danger btn-sm" data-text="Menghapus ukuran '<?= $row['nama']; ?>' akan membuat data pakaian dengan ukuran '<?= $row['nama']; ?>' dan riwayat stoknya ikut terhapus!" data-button-text="Hapus Ukuran!">
+                                                <i class="fas fa-trash-alt"></i></a>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php else : ?>
                                 <tr>
-                                    <td class="text-center"><?= $no++; ?></td>
-                                    <td class="text-center"><?= $row['nama']; ?></td>
-                                    <td><?= $row['keterangan']; ?></td>
-                                    <td class="no-td">
-                                        <a href="?halaman=edit_ukuran&id=<?= $row['id']; ?>&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>" class="btn btn-warning btn-sm text-white"><i class="fas fa-edit"></i></a>
-                                        <a id="tombol-hapus" href="?halaman=hapus_ukuran&id=<?= $row['id']; ?>&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>" class="btn btn-danger btn-sm" data-text="Menghapus ukuran '<?= $row['nama']; ?>' akan membuat data pakaian dengan ukuran '<?= $row['nama']; ?>' dan riwayat stoknya ikut terhapus!" data-button-text="Hapus Ukuran!">
-                                            <i class="fas fa-trash-alt"></i></a>
-                                    </td>
+                                    <td class="text-center" colspan="4">Data Tidak Ada</td>
                                 </tr>
-                            <?php endwhile; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>

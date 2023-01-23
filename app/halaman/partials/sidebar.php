@@ -110,7 +110,7 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                 <li class="sidebar-item has-sub <?= ($active === 'laporan') ? 'active' : ''; ?>">
                     <a href="#" class='sidebar-link'>
                         <i class="fas fa-file"></i>
-                        <span>laporan</span>
+                        <span>Laporan</span>
                     </a>
                     <ul class="submenu <?= $active === 'laporan' ? 'active' : ''; ?>">
                         <li class="submenu-item <?= (($active === 'laporan') && ($sub_active ?? '') == 'laporan_pakaian') ? 'active' : '' ?>">

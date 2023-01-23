@@ -35,7 +35,7 @@ if (isset($_POST['submit'])) {
 
         <section id="basic-vertical-layouts">
             <div class="row match-height justify-content-center">
-                <div class="col-md-6 col-xxl-4 col-12">
+                <div class="col-md-6 col-12">
                     <div class="card">
                         <div class="card-content">
                             <div class="card-body">

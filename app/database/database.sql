@@ -43,7 +43,6 @@ CREATE TABLE `kasir`.`ukuran`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     id_jenis_pakaian BIGINT UNSIGNED,
     nama VARCHAR(255),
-    keterangan VARCHAR(255),
     PRIMARY KEY(id), 
     FOREIGN KEY (id_jenis_pakaian) REFERENCES jenis_pakaian(id) ON DELETE CASCADE,
     UNIQUE KEY `ukuran` (`id_jenis_pakaian`,`nama`)

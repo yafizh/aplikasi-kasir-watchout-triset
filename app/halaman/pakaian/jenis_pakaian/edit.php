@@ -7,6 +7,7 @@ $result = $mysqli->query(
         m.id AS id_merk,
         p.id,
         p.nama,
+        p.harga,
         jp.nama AS jenis_pakaian,
         m.nama AS merk 
     FROM 
@@ -85,7 +86,7 @@ if (isset($_POST['submit'])) {
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label for="harga">Harga</label>
-                                                    <input type="text" id="harga" class="form-control" name="harga" autocomplete="off" required value="<?= $data['nama']; ?>">
+                                                    <input type="text" id="harga" class="form-control" name="harga" autocomplete="off" required value="<?= $data['harga']; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-12 mt-3 d-flex justify-content-between">

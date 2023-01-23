@@ -5,12 +5,10 @@ $data = $result->fetch_assoc();
 
 if (isset($_POST['submit'])) {
     $nama = $mysqli->real_escape_string($_POST['nama']);
-    $keterangan = $mysqli->real_escape_string($_POST['keterangan']);
 
     $q = "
     UPDATE ukuran SET 
-        nama='$nama', 
-        keterangan='$keterangan' 
+        nama='$nama'
     WHERE 
         id=" . $data['id'] . "
     ";
@@ -41,7 +39,7 @@ if (isset($_POST['submit'])) {
 
         <section id="basic-vertical-layouts">
             <div class="row match-height justify-content-center">
-                <div class="col-md-6 col-xxl-4 col-12">
+                <div class="col-md-6 col-12">
                     <div class="card">
                         <div class="card-content">
                             <div class="card-body">
@@ -52,12 +50,6 @@ if (isset($_POST['submit'])) {
                                                 <div class="form-group">
                                                     <label for="nama">Ukuran</label>
                                                     <input type="text" id="nama" class="form-control" name="nama" autocomplete="off" required value="<?= $data['nama']; ?>">
-                                                </div>
-                                            </div>
-                                            <div class="col-12 mb-3">
-                                                <div class="form-group">
-                                                    <label for="keterangan">Keterangan</label>
-                                                    <input type="text" id="keterangan" class="form-control" name="keterangan" autocomplete="off" required value="<?= $data['keterangan']; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-12 d-flex justify-content-between">

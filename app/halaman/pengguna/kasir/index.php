@@ -13,7 +13,7 @@
         <section class="section">
             <div class="card">
                 <div class="card-body">
-                    <table class="table table-striped" id="table1">
+                    <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th class="no-td">No</th>
@@ -22,39 +22,46 @@
                                 <th class="text-center no-td"></th>
                             </tr>
                         </thead>
+                        <?php
+                        $query = '
+                            SELECT 
+                                p.id,
+                                k.nama,
+                                p.username  
+                            FROM 
+                                pengguna AS p 
+                            INNER JOIN 
+                                kasir AS k 
+                            ON 
+                                k.id_pengguna=p.id 
+                            WHERE 
+                                p.status="KASIR" 
+                            ORDER BY 
+                                k.nama
+                            ';
+                        $data = $mysqli->query($query);
+                        $no = 1;
+                        ?>
                         <tbody>
-                            <?php
-                            $data = $mysqli->query('
-                                SELECT 
-                                    p.id,
-                                    k.nama,
-                                    p.username  
-                                FROM 
-                                    pengguna AS p 
-                                INNER JOIN 
-                                    kasir AS k 
-                                ON 
-                                    k.id_pengguna=p.id 
-                                WHERE 
-                                    p.status="KASIR" 
-                                ORDER BY 
-                                    k.nama
-                                ');
-                            $no = 1;
-                            ?>
-                            <?php while ($row = $data->fetch_assoc()) : ?>
+                            <?php if ($data->num_rows) : ?>
+                                <?php while ($row = $data->fetch_assoc()) : ?>
+                                    <tr>
+                                        <td class="text-center"><?= $no++; ?></td>
+                                        <td class="text-center"><?= $row['nama']; ?></td>
+                                        <td class="text-center"><?= $row['username']; ?></td>
+                                        <td class="no-td">
+                                            <a href="?halaman=ganti_password&id=<?= $row['id']; ?>" class="btn btn-secondary btn-sm text-white" title="Ganti Password"><i class="fas fa-lock"></i></a>
+                                            <a href="?halaman=edit_kasir&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white" title="Edit"><i class="fas fa-edit"></i></a>
+                                            <a id="tombol-hapus" href="?halaman=hapus_kasir&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" title="Hapus" data-text="Akun kasir hanya dapat ditambahkan oleh admin lainnya!" data-button-text="Hapus Admin!">
+                                                <i class="fas fa-trash-alt"></i></a>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php else : ?>
                                 <tr>
-                                    <td class="text-center"><?= $no++; ?></td>
-                                    <td class="text-center"><?= $row['nama']; ?></td>
-                                    <td class="text-center"><?= $row['username']; ?></td>
-                                    <td class="no-td">
-                                        <a href="?halaman=ganti_password&id=<?= $row['id']; ?>" class="btn btn-secondary btn-sm text-white" title="Ganti Password"><i class="fas fa-lock"></i></a>
-                                        <a href="?halaman=edit_kasir&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white" title="Edit"><i class="fas fa-edit"></i></a>
-                                        <a id="tombol-hapus" href="?halaman=hapus_kasir&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" title="Hapus" data-text="Akun kasir hanya dapat ditambahkan oleh admin lainnya!" data-button-text="Hapus Admin!">
-                                            <i class="fas fa-trash-alt"></i></a>
-                                    </td>
+                                    <td class="text-center" colspan="4">Data Tidak Ada</td>
                                 </tr>
-                            <?php endwhile; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
