@@ -4,6 +4,7 @@ INSERT INTO `kasir`.`pengguna`(
     status
 ) VALUES 
 ('admin', 'admin', 'ADMIN'),
+('gudang', 'gudang', 'GUDANG'),
 ('nana', 'nana', 'KASIR');
 
 INSERT INTO `kasir`.`kasir`(

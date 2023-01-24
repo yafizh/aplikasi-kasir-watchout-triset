@@ -26,6 +26,7 @@ if (isset($_SESSION['user'])) {
 
         // Pengguna
         include_once('../route/admin.php');
+        include_once('../route/gudang.php');
         include_once('../route/kasir.php');
 
         // Stok
@@ -46,7 +47,7 @@ if (isset($_SESSION['user'])) {
         // Ukuran
         include_once('../route/ukuran.php');
     } else {
-        if ($_SESSION['user']['status'] === 'ADMIN') {
+        if ($_SESSION['user']['status'] === 'ADMIN' || $_SESSION['user']['status'] === 'GUDANG') {
             $title = 'Dashboard';
             $halaman = 'dashboard/index.php';
             $active = 'dashboard';
@@ -145,6 +146,8 @@ if (isset($_SESSION['user'])) {
                 <?php include_once('partials/sidebar.php'); ?>
             <?php elseif ($_SESSION['user']['status'] === 'KASIR') : ?>
                 <?php include_once('partials/sidebar_kasir.php'); ?>
+            <?php elseif ($_SESSION['user']['status'] === 'GUDANG') : ?>
+                <?php include_once('partials/sidebar_gudang.php'); ?>
             <?php endif; ?>
             <header class="mb-3 d-flex justify-content-between align-items-center">
                 <a id="burger" onclick="hideSidebar(this)" href="#" class="burger-btn d-block">

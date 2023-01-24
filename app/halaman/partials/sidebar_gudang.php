@@ -28,23 +28,6 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="sidebar-item has-sub <?= ($active === 'pengguna' || $active === 'ganti_password') ? 'active' : ''; ?>">
-                    <a href="#" class='sidebar-link'>
-                        <i class="fas fa-users"></i>
-                        <span>Pengguna</span>
-                    </a>
-                    <ul class="submenu <?= $active === 'pengguna' ? 'active' : ''; ?>">
-                        <li class="submenu-item <?= ($active === 'pengguna' && ($sub_active ?? '') == 'admin') ? 'active' : '' ?>">
-                            <a href="?halaman=admin">Admin</a>
-                        </li>
-                        <li class="submenu-item <?= (($active === 'pengguna' || $active === 'ganti_password') && ($sub_active ?? '') == 'gudang') ? 'active' : '' ?>">
-                            <a href="?halaman=gudang">Gudang</a>
-                        </li>
-                        <li class="submenu-item <?= (($active === 'pengguna' || $active === 'ganti_password') && ($sub_active ?? '') == 'kasir') ? 'active' : '' ?>">
-                            <a href="?halaman=kasir">Kasir</a>
-                        </li>
-                    </ul>
-                </li>
                 <li class="sidebar-title">Master Data</li>
                 <li class="sidebar-item <?= $active === 'jenis_pakaian' ? 'active' : ''; ?>">
                     <a href="?halaman=jenis_pakaian" class='sidebar-link'>
@@ -105,31 +88,6 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                         </li>
                         <li class="submenu-item <?= ($active === 'stok' && ($sub_active ?? '') === 'riwayat_barang_keluar') ? 'active' : ''; ?>">
                             <a href="?halaman=riwayat_barang_keluar">Riwayat Barang Keluar</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="sidebar-title">Laporan</li>
-                <li class="sidebar-item has-sub <?= ($active === 'laporan') ? 'active' : ''; ?>">
-                    <a href="#" class='sidebar-link'>
-                        <i class="fas fa-file"></i>
-                        <span>Laporan</span>
-                    </a>
-                    <ul class="submenu <?= $active === 'laporan' ? 'active' : ''; ?>">
-                        <li class="submenu-item <?= (($active === 'laporan') && ($sub_active ?? '') == 'laporan_pakaian') ? 'active' : '' ?>">
-                            <a href="?halaman=laporan_pakaian">Laporan Pakaian</a>
-                        </li>
-                        <li class="submenu-item <?= ($active === 'laporan' && ($sub_active ?? '') == 'laporan_penjualan') ? 'active' : '' ?>">
-                            <a href="?halaman=laporan_penjualan">Laporan Penjualan</a>
-                        </li>
-                        <li class="submenu-item <?= (($active === 'laporan') && ($sub_active ?? '') == 'laporan_barang_masuk') ? 'active' : '' ?>">
-                            <a href="?halaman=laporan_barang_masuk">Laporan Barang Masuk</a>
-                        </li>
-                        <li class="submenu-item <?= (($active === 'laporan') && ($sub_active ?? '') == 'laporan_barang_keluar') ? 'active' : '' ?>">
-                            <a href="?halaman=laporan_barang_keluar">Laporan Barang Keluar</a>
-                        </li>
-                        <li class="submenu-item <?= (($active === 'laporan') && ($sub_active ?? '') == 'laporan_mutasi_pakaian') ? 'active' : '' ?>">
-                            <a href="?halaman=laporan_mutasi_pakaian">Laporan Mutasi Pakaian</a>
                         </li>
                     </ul>
                 </li>
