@@ -1,1 +1,3 @@
-(() => { var e = document.body; "theme-dark" == "theme-light" ? e.classList.add("theme-dark") : e.classList.add("theme-light") })();
+(() => {
+  document.body.classList.add('theme-light');
+})();
