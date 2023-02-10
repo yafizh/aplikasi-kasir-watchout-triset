@@ -18,7 +18,6 @@
                             <tr>
                                 <th class="no-td">No</th>
                                 <th class="text-center">Ukuran</th>
-                                <th class="text-center">Keterangan</th>
                                 <th class="text-center no-td">Aksi</th>
                             </tr>
                         </thead>
@@ -32,7 +31,6 @@
                                     <tr>
                                         <td class="text-center"><?= $no++; ?></td>
                                         <td class="text-center"><?= $row['nama']; ?></td>
-                                        <td><?= $row['keterangan']; ?></td>
                                         <td class="no-td">
                                             <a href="?halaman=edit_ukuran&id=<?= $row['id']; ?>&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>" class="btn btn-warning btn-sm text-white"><i class="fas fa-edit"></i></a>
                                             <a id="tombol-hapus" href="?halaman=hapus_ukuran&id=<?= $row['id']; ?>&id_jenis_pakaian=<?= $_GET['id_jenis_pakaian']; ?>" class="btn btn-danger btn-sm" data-text="Menghapus ukuran '<?= $row['nama']; ?>' akan membuat data pakaian dengan ukuran '<?= $row['nama']; ?>' dan riwayat stoknya ikut terhapus!" data-button-text="Hapus Ukuran!">
