@@ -21,6 +21,18 @@ CREATE TABLE `kasir`.`kasir`(
     FOREIGN KEY (id_pengguna) REFERENCES pengguna(id) ON DELETE CASCADE
 );
 
+CREATE TABLE `kasir`.`pelanggan`(
+    id BIGINT UNSIGNED AUTO_INCREMENT,
+    id_pengguna BIGINT UNSIGNED,
+    nama VARCHAR(255),
+    nomor_telepon VARCHAR(255),
+    email VARCHAR(255),
+    tempat_lahir VARCHAR(255) NULL,
+    tanggal_lahir DATE NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY (id_pengguna) REFERENCES pengguna(id) ON DELETE CASCADE
+);
+
 CREATE TABLE `kasir`.`warna`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     nama VARCHAR(255) UNIQUE,
@@ -53,7 +65,8 @@ CREATE TABLE `kasir`.`pakaian`(
     id_merk BIGINT UNSIGNED,
     id_jenis_pakaian BIGINT UNSIGNED,
     nama VARCHAR(255),
-    harga BIGINT UNSIGNED,
+    harga_modal BIGINT UNSIGNED,
+    harga_toko BIGINT UNSIGNED,
     PRIMARY KEY(id),
     FOREIGN KEY (id_merk) REFERENCES merk(id) ON DELETE CASCADE,
     FOREIGN KEY (id_jenis_pakaian) REFERENCES jenis_pakaian(id) ON DELETE CASCADE
@@ -97,7 +110,7 @@ CREATE TABLE `kasir`.`penjualan`(
     FOREIGN KEY (id_kasir) REFERENCES kasir(id) ON DELETE CASCADE
 );
 
-CREATE TABLE `kasir`.`pakaian_terjual`(
+CREATE TABLE `kasir`.`detail_penjualan`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     id_penjualan BIGINT UNSIGNED,
     id_ukuran_warna_pakaian BIGINT UNSIGNED,
@@ -105,5 +118,67 @@ CREATE TABLE `kasir`.`pakaian_terjual`(
     jumlah INT UNSIGNED,
     PRIMARY KEY(id),
     FOREIGN KEY (id_penjualan) REFERENCES penjualan(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_ukuran_warna_pakaian) REFERENCES ukuran_warna_pakaian(id) ON DELETE CASCADE
+);
+
+CREATE TABLE `kasir`.`penjualan_online`(
+    id BIGINT UNSIGNED AUTO_INCREMENT,
+    id_pelanggan BIGINT UNSIGNED,
+    tunai BIGINT UNSIGNED,
+    bukti_pembayaran VARCHAR(255),
+    tanggal_waktu_pemesanan TIMESTAMP NULL DEFAULT NULL,
+    tanggal_waktu_pembayaran TIMESTAMP NULL DEFAULT NULL,
+    tanggal_waktu_verifikasi TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_pelanggan) REFERENCES pelanggan (id) ON DELETE CASCADE
+);
+
+CREATE TABLE `kasir`.`detail_penjualan_online`(
+    id BIGINT UNSIGNED AUTO_INCREMENT,
+    id_penjualan_online BIGINT UNSIGNED,
+    id_ukuran_warna_pakaian BIGINT UNSIGNED,
+    harga BIGINT UNSIGNED COMMENT 'Harga pakaian saat ia dijual',
+    jumlah INT UNSIGNED,
+    PRIMARY KEY(id),
+    FOREIGN KEY (id_penjualan_online) REFERENCES penjualan_online (id) ON DELETE CASCADE,
+    FOREIGN KEY (id_ukuran_warna_pakaian) REFERENCES ukuran_warna_pakaian(id) ON DELETE CASCADE
+);
+
+CREATE TABLE `kasir`.`diskon`(
+    id BIGINT UNSIGNED AUTO_INCREMENT,
+    nama VARCHAR(255),
+    dari_tanggal DATE,
+    sampai_tanggal DATE,
+    diskon BIGINT UNSIGNED,
+    jenis_diskon ENUM('Nominal', 'Persen'),
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE `kasir`.`diskon_pakaian`(
+    id BIGINT UNSIGNED AUTO_INCREMENT,
+    id_diskon BIGINT UNSIGNED,
+    id_ukuran_warna_pakaian BIGINT UNSIGNED,
+    PRIMARY KEY(id),
+    FOREIGN KEY (id_diskon) REFERENCES diskon (id) ON DELETE CASCADE,
+    FOREIGN KEY (id_ukuran_warna_pakaian) REFERENCES ukuran_warna_pakaian(id) ON DELETE CASCADE
+);
+
+CREATE TABLE `kasir`.`voucher_diskon`(
+    id BIGINT UNSIGNED AUTO_INCREMENT,
+    nama VARCHAR(255),
+    dari_tanggal DATE,
+    sampai_tanggal DATE,
+    diskon BIGINT UNSIGNED,
+    jenis_diskon ENUM('Nominal', 'Persen'),
+    kode_voucher VARCHAR(255),
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE `kasir`.`voucher_diskon_pakaian`(
+    id BIGINT UNSIGNED AUTO_INCREMENT,
+    id_voucher_diskon BIGINT UNSIGNED,
+    id_ukuran_warna_pakaian BIGINT UNSIGNED,
+    PRIMARY KEY(id),
+    FOREIGN KEY (id_voucher_diskon) REFERENCES voucher_diskon (id) ON DELETE CASCADE,
     FOREIGN KEY (id_ukuran_warna_pakaian) REFERENCES ukuran_warna_pakaian(id) ON DELETE CASCADE
 );

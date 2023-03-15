@@ -7,7 +7,7 @@ INSERT INTO `kasir`.`pengguna`(
 ('gudang', 'gudang', 'GUDANG'),
 ('nana', 'nana', 'KASIR');
 
-INSERT INTO `kasir`.`kasir`(
+-- INSERT INTO `kasir`.`kasir`(
     id_pengguna,
     nama,
     tempat_lahir,
