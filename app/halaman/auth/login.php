@@ -12,29 +12,28 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
-<div id="auth-left">
-    <div class="auth-logo">
+<div id="auth-left" class="m-5 p-4 shadow rounded">
+    <div class="auth-logo mb-4">
         <img src="../assets/images/logo.png" alt="Logo">
     </div>
-    <h1 class="auth-title">Log in.</h1>
-    <p class="auth-subtitle mb-5">Log in dengan username dan password yang telah diberikan.</p>
-
-    <form action="" method="POST">
+    <h1>Log in.</h1>
+    <p class="mb-3">Log in dengan username dan password yang telah terdaftar.</p>
+    <form action="" method="POST" class="mb-3">
         <div class="form-group position-relative has-icon-left mb-4">
-            <input type="text" class="form-control form-control-xl" placeholder="Username" name="username" autocomplete="off">
+            <input type="text" class="form-control" placeholder="Username" name="username" autocomplete="off">
             <div class="form-control-icon">
                 <i class="bi bi-person"></i>
             </div>
         </div>
         <div class="form-group position-relative has-icon-left mb-4">
-            <input type="password" class="form-control form-control-xl" placeholder="Password" name="password">
+            <input type="password" class="form-control" placeholder="Password" name="password">
             <div class="form-control-icon">
                 <i class="bi bi-shield-lock"></i>
             </div>
         </div>
-        <button type="submit" name="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-5 text-white">Log in</button>
+        <button type="submit" name="submit" class="btn btn-primary btn-block shadow text-white">Log in</button>
     </form>
-    <div class="text-center mt-5 text-lg fs-4">
+    <div class="text-center text-lg">
         <p><a class="font-bold" href="auth-forgot-password.html">Lupa Password?</a></p>
     </div>
 </div>
