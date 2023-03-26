@@ -29,9 +29,9 @@
                                 k.nama,
                                 p.username  
                             FROM 
-                                pengguna AS p 
+                                pengguna p 
                             INNER JOIN 
-                                kasir AS k 
+                                kasir k 
                             ON 
                                 k.id_pengguna=p.id 
                             WHERE 

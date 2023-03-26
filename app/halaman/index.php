@@ -77,7 +77,7 @@ if (isset($_SESSION['user'])) {
             <link rel="stylesheet" href="../assets/extensions/choices.js/public/assets/styles/choices.css">
         <?php endif; ?>
 
-        <link rel="stylesheet" href="../assets/css/main/app-dark.css">
+        <!-- <link rel="stylesheet" href="../assets/css/main/app-dark.css"> -->
 
         <link rel="stylesheet" href="../assets/css/shared/iconly.css">
         <link rel="stylesheet" href="../assets/extensions/sweetalert2/sweetalert2.min.css">
@@ -96,6 +96,12 @@ if (isset($_SESSION['user'])) {
             .fontawesome-icons .the-icon {
                 font-size: 24px;
                 line-height: 1.2;
+            }
+
+            body {
+                zoom: .8;
+                -moz-transform: scale(.8);
+                -moz-transform-origin: 0 0;
             }
         </style>
 
@@ -164,14 +170,9 @@ if (isset($_SESSION['user'])) {
         </div>
     <?php else : ?>
         <div id="auth">
-            <div class="row h-100">
-                <div class="col-lg-5 col-12">
+            <div class="row h-100 justify-content-center">
+                <div class="col-md-6">
                     <?php include_once('auth/login.php'); ?>
-                </div>
-                <div class="col-lg-7 d-none d-lg-block">
-                    <div id="auth-right">
-
-                    </div>
                 </div>
             </div>
         </div>
@@ -274,24 +275,21 @@ if (isset($_SESSION['user'])) {
     <?php endif; ?>
     <script>
         function myFunction(x) {
-            if (x.matches) { // If media query matches
+            if (x.matches) // If media query matches
                 document.querySelector('header').style.marginLeft = '0';
-            } else {
+            else
                 document.querySelector('header').style.marginLeft = '300px';
-            }
         }
 
         var x = window.matchMedia("(max-width: 1200px)")
         myFunction(x) // Call listener function at run time
         x.addListener(myFunction) // Attach listener function on state changes
         const hideSidebar = (element) => {
-            if (element.parentElement.style.marginLeft == '0px') {
-                console.log('1')
+            if (element.parentElement.style.marginLeft == '0px')
                 element.parentElement.style.marginLeft = '300px';
-            } else {
-                console.log('2')
+            else
                 element.parentElement.style.marginLeft = '0';
-            }
+
         }
     </script>
 </body>

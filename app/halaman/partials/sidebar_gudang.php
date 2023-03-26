@@ -6,7 +6,7 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <div id="sidebar" class="active">
-    <div class="sidebar-wrapper active">
+    <div class="sidebar-wrapper active h-100">
         <div class="sidebar-header position-relative pb-0">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo text-center w-100">
