@@ -1,1 +1,1 @@
-<?php Header('Location: app/halaman/index.php'); ?>
+<?php Header('Location: app/halaman/online_store/index.php'); ?>

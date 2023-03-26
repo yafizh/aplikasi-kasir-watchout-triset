@@ -169,7 +169,7 @@ CREATE TABLE `kasir`.`voucher_diskon`(
     dari_tanggal DATE,
     sampai_tanggal DATE,
     diskon BIGINT UNSIGNED,
-    jenis_diskon ENUM('Nominal', 'Persen'),
+    jenis_diskon ENUM('Nominal', 'Persentase'),
     kode_voucher VARCHAR(255),
     PRIMARY KEY(id)
 );
