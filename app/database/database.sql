@@ -124,11 +124,8 @@ CREATE TABLE `kasir`.`detail_penjualan`(
 CREATE TABLE `kasir`.`penjualan_online`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     id_pelanggan BIGINT UNSIGNED,
-    tunai BIGINT UNSIGNED,
-    bukti_pembayaran VARCHAR(255),
-    tanggal_waktu_pemesanan TIMESTAMP NULL DEFAULT NULL,
-    tanggal_waktu_pembayaran TIMESTAMP NULL DEFAULT NULL,
-    tanggal_waktu_verifikasi TIMESTAMP NULL DEFAULT NULL,
+    order_id VARCHAR(255),
+    status TINYINT UNSIGNED COMMENT '1=Menunggu Pembayaran|2=Selesai',
     PRIMARY KEY (id),
     FOREIGN KEY (id_pelanggan) REFERENCES pelanggan (id) ON DELETE CASCADE
 );
@@ -150,7 +147,7 @@ CREATE TABLE `kasir`.`diskon`(
     dari_tanggal DATE,
     sampai_tanggal DATE,
     diskon BIGINT UNSIGNED,
-    jenis_diskon ENUM('Nominal', 'Persen'),
+    jenis_diskon TINYINT UNSIGNED COMMENT '1=Nominal|2=Persentase',
     PRIMARY KEY(id)
 );
 
@@ -169,7 +166,7 @@ CREATE TABLE `kasir`.`voucher_diskon`(
     dari_tanggal DATE,
     sampai_tanggal DATE,
     diskon BIGINT UNSIGNED,
-    jenis_diskon ENUM('Nominal', 'Persentase'),
+    jenis_diskon TINYINT UNSIGNED COMMENT '1=Nominal|2=Persentase',
     kode_voucher VARCHAR(255),
     PRIMARY KEY(id)
 );
