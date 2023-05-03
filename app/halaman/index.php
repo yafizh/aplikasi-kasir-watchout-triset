@@ -35,8 +35,8 @@ if (isset($_SESSION['user'])) {
         // Pakaian
         include_once('../route/pakaian.php');
 
-        // Jenis Pakaian
-        include_once('../route/jenis_pakaian.php');
+        // Kategori Pakaian
+        include_once('../route/kategori_pakaian.php');
 
         // Warna Pakaian
         include_once('../route/warna.php');
@@ -47,11 +47,11 @@ if (isset($_SESSION['user'])) {
         // Ukuran
         include_once('../route/ukuran.php');
     } else {
-        if ($_SESSION['user']['status'] === 'ADMIN' || $_SESSION['user']['status'] === 'GUDANG') {
+        if ($_SESSION['user']['status'] == 1 || $_SESSION['user']['status'] === 'GUDANG') {
             $title = 'Dashboard';
             $halaman = 'dashboard/index.php';
             $active = 'dashboard';
-        } elseif ($_SESSION['user']['status'] === 'KASIR') {
+        } elseif ($_SESSION['user']['status'] == 2) {
             $title = 'Kasir';
             $halaman = 'kasir/index.php';
             $active = 'kasir';
@@ -98,11 +98,11 @@ if (isset($_SESSION['user'])) {
                 line-height: 1.2;
             }
 
-            body {
+            /* body {
                 zoom: .8;
                 -moz-transform: scale(.8);
                 -moz-transform-origin: 0 0;
-            }
+            } */
         </style>
 
 
@@ -148,9 +148,9 @@ if (isset($_SESSION['user'])) {
     <script src="../assets/js/initTheme.js"></script>
     <?php if (isset($_SESSION['user'])) : ?>
         <div id="app">
-            <?php if ($_SESSION['user']['status'] === 'ADMIN') : ?>
+            <?php if ($_SESSION['user']['status'] == 1) : ?>
                 <?php include_once('partials/sidebar.php'); ?>
-            <?php elseif ($_SESSION['user']['status'] === 'KASIR') : ?>
+            <?php elseif ($_SESSION['user']['status'] == 2) : ?>
                 <?php include_once('partials/sidebar_kasir.php'); ?>
             <?php elseif ($_SESSION['user']['status'] === 'GUDANG') : ?>
                 <?php include_once('partials/sidebar_gudang.php'); ?>
@@ -159,7 +159,7 @@ if (isset($_SESSION['user'])) {
                 <a id="burger" onclick="hideSidebar(this)" href="#" class="burger-btn d-block">
                     <i class="bi bi-justify fs-3 text-danger"></i>
                 </a>
-                <?php if ($_SESSION['user']['status'] === 'KASIR') : ?>
+                <?php if ($_SESSION['user']['status'] == 2) : ?>
                     <div class="d-flex  align-items-center">
                         <img src="<?= $_SESSION['user']['foto']; ?>" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
                         <h5 class="mb-0"><?= $_SESSION['user']['nama']; ?></h5>
