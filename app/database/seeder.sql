@@ -3,9 +3,8 @@ INSERT INTO `kasir`.`pengguna`(
     password,
     status
 ) VALUES 
-('admin', 'admin', 'ADMIN'),
-('gudang', 'gudang', 'GUDANG'),
-('nana', 'nana', 'KASIR');
+('admin', 'admin', 1),
+('nana', 'nana', 2);
 
 INSERT INTO `kasir`.`kasir`(
     id_pengguna,
