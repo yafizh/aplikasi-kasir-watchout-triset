@@ -125,7 +125,7 @@ if (isset($_SESSION['user'])) {
             }
         </style>
 
-        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_warna_pakaian', 'edit_warna_pakaian', 'tambah_kasir', 'edit_kasir'])) : ?>
+        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_pakaian', 'edit_pakaian', 'tambah_kasir', 'edit_kasir'])) : ?>
             <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
             <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" />
             <link href="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css" rel="stylesheet">
@@ -198,7 +198,7 @@ if (isset($_SESSION['user'])) {
         <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
         <script src="../assets/js/pages/datatables.js"></script>
 
-        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_warna_pakaian', 'edit_warna_pakaian', 'tambah_kasir', 'edit_kasir'])) : ?>
+        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_pakaian', 'edit_pakaian', 'tambah_kasir', 'edit_kasir'])) : ?>
             <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
             <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
             <script src="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.js"></script>
@@ -292,6 +292,21 @@ if (isset($_SESSION['user'])) {
 
         }
     </script>
+
+    <?php if (in_array($_GET['halaman'] ?? '', ['tambah_pakaian', 'edit_pakaian'])) : ?>
+        <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+        <script>
+            const tagify = new Tagify(document.getElementById('ukuran'), {
+                texts: {
+                    duplicate: "Duplicates are not allowed"
+                },
+                delimiters: ",| ",
+                trim: false
+            });
+        </script>
+    <?php endif; ?>
 </body>
 
 </html>
