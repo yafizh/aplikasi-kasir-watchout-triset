@@ -71,6 +71,23 @@ if (isset($_POST['submit'])) {
                     '" . strtoupper($value->value) . "' 
                 )";
                 $mysqli->query($q);
+                $id_ukuran_pakaian = $mysqli->insert_id;
+
+                $warna_pakaian = $mysqli->query("SELECT * FROM warna_pakaian WHERE id_pakaian=" . $data['id']);
+                if ($warna_pakaian->num_rows) {
+                    while ($row = $warna_pakaian->fetch_assoc()) {
+                        $query = "
+                        INSERT INTO ukuran_warna_pakaian (
+                            id_ukuran_pakaian,
+                            id_warna_pakaian 
+                        ) VALUES (
+                            " . $id_ukuran_pakaian . ",
+                            " . $row['id'] . " 
+                        )
+                    ";
+                        $mysqli->query($query);
+                    }
+                }
             }
         }
 
