@@ -63,7 +63,7 @@ CREATE TABLE `kasir`.`warna_pakaian`(
     id_pakaian BIGINT UNSIGNED,
     warna VARCHAR(255),
     PRIMARY KEY(id),
-    FOREIGN KEY (id_pakaian) REFERENCES pakaian(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_pakaian) REFERENCES pakaian(id) ON DELETE CASCADE
 );
 
 CREATE TABLE `kasir`.`foto_pakaian` (
@@ -71,15 +71,24 @@ CREATE TABLE `kasir`.`foto_pakaian` (
     id_warna_pakaian BIGINT UNSIGNED,
     foto VARCHAR(255),
     PRIMARY KEY(id),
-    FOREIGN KEY (id_warna_pakaian) REFERENCES warna_pakaian (id) ON DELETE CASCADE,
-)
+    FOREIGN KEY (id_warna_pakaian) REFERENCES warna_pakaian (id) ON DELETE CASCADE
+);
+
+CREATE TABLE `kasir`.`ukuran_pakaian`(
+    id BIGINT UNSIGNED AUTO_INCREMENT,
+    id_pakaian BIGINT UNSIGNED,
+    ukuran VARCHAR(255),
+    PRIMARY KEY(id),
+    FOREIGN KEY (id_pakaian) REFERENCES pakaian (id) ON DELETE CASCADE
+);
 
 CREATE TABLE `kasir`.`ukuran_warna_pakaian`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     id_warna_pakaian BIGINT UNSIGNED,
-    ukuran VARCHAR(255),
+    id_ukuran_pakaian BIGINT UNSIGNED,
     PRIMARY KEY(id),
-    FOREIGN KEY (id_warna_pakaian) REFERENCES warna_pakaian (id) ON DELETE CASCADE
+    FOREIGN KEY (id_warna_pakaian) REFERENCES warna_pakaian (id) ON DELETE CASCADE,
+    FOREIGN KEY (id_ukuran_pakaian) REFERENCES ukuran_pakaian (id) ON DELETE CASCADE
 );
 
 CREATE TABLE `kasir`.`pakaian_disuplai`(

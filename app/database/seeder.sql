@@ -15,57 +15,23 @@ INSERT INTO `kasir`.`kasir`(
 ) VALUES 
 (3, 'Nana', 'Martapura', CURRENT_DATE(), '');
 
--- INSERT INTO `kasir`.`warna`(
---     id,
---     nama
--- ) VALUES 
--- (1, 'Putih'),
--- (2, 'Hitam'),
--- (3, 'Biru'),
--- (4, 'Hijau'),
--- (5, 'Pink'),
--- (6, 'Maroon'),
--- (7, 'Merah'),
--- (8, 'Abu-Abu');
-
--- INSERT INTO `kasir`.`merk`(
---     id,
---     nama
--- ) VALUES 
--- (1, 'Triset'),
--- (2, 'Watchout');
-
-INSERT INTO `kasir`.`jenis_pakaian`(
+INSERT INTO `kasir`.`merk`(
     id,
     nama
 ) VALUES 
-(1, 'Celana'),
-(2, 'Baju'),
-(3, 'Kemeja'),
-(4, 'Sepatu'),
-(5, 'Sendal');
+(1, 'Triset'),
+(2, 'Watchout');
 
--- INSERT INTO `kasir`.`ukuran`(
---     id,
---     id_jenis_pakaian,
---     nama 
--- ) VALUES 
--- (1, 1, '32'),
--- (2, 1, '33'),
--- (3, 1, '34'),
--- (4, 4, '32'),
--- (5, 4, '33'),
--- (6, 4, '34'),
--- (7, 5, '32'),
--- (8, 5, '33'),
--- (9, 5, '34'),
--- (10, 2, 'XXS'),
--- (11, 2, 'XS'),
--- (12, 2, 'S'),
--- (13, 2, 'M'),
--- (14, 2, 'L'),
--- (15, 2, 'XL'),
--- (16, 2, 'XXL');
+INSERT INTO `kasir`.`kategori_pakaian`(
+    id,
+    nama,
+    urutan 
+) VALUES 
+(1, 'Celana', 1),
+(2, 'Baju', 2),
+(3, 'Kemeja', 3),
+(4, 'Sepatu', 4),
+(5, 'Sendal', 5);
 
 -- -- Pakaian
 -- INSERT INTO `kasir`.`pakaian`(
