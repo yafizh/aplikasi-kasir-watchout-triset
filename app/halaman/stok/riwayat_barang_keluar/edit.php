@@ -1,46 +1,42 @@
 <?php
 $query = "
     SELECT 
-        m.nama AS merk,
-        jp.nama AS jenis_pakaian,
-        p.nama AS nama_pakaian,
-        w.nama AS warna,
-        u.nama AS ukuran,
+        m.nama merk,
+        kp.nama kategori_pakaian,
+        p.nama nama_pakaian,
+        wp.warna,
+        up.ukuran,
         pt.jumlah,
-        DATE(pe.tanggal_waktu_penjualan) AS tanggal,
-        pt.id  
+        DATE(pe.tanggal_waktu_penjualan) tanggal,
+        dp.id  
     FROM 
-        pakaian_terjual AS pt 
+        detail_penjualan dp 
     INNER JOIN 
-        penjualan AS pe 
+        penjualan pe 
     ON 
-        pe.id=pt.id_penjualan
+        pe.id=dp.id_penjualan
     INNER JOIN 
-        ukuran_warna_pakaian AS uwp 
+        ukuran_warna_pakaian uwp 
     ON 
-        uwp.id=pt.id_ukuran_warna_pakaian 
+        uwp.id=dp.id_ukuran_warna_pakaian 
     INNER JOIN 
-        ukuran AS u 
+        ukuran_pakaian up 
     ON 
-        u.id=uwp.id_ukuran
+        up.id=uwp.id_ukuran_pakaian
     INNER JOIN 
-        warna_pakaian AS wp 
+        warna_pakaian wp 
     ON 
         wp.id=uwp.id_warna_pakaian  
     INNER JOIN 
-        warna AS w 
-    ON 
-        w.id=wp.id_warna 
-    INNER JOIN 
-        pakaian AS p 
+        pakaian p 
     ON 
         p.id=wp.id_pakaian 
     INNER JOIN
-    jenis_pakaian AS jp 
+        kategori_pakaian kp 
     ON 
-        jp.id=p.id_jenis_pakaian 
+        kp.id=p.id_kategori_pakaian 
     INNER JOIN 
-        merk AS m 
+        merk m 
     ON 
         m.id=p.id_merk 
     WHERE 
@@ -90,8 +86,8 @@ if (isset($_POST['submit'])) {
                                             </div>
                                             <div class="col-12">
                                                 <div class="form-group">
-                                                    <label>Jenis Pakaian</label>
-                                                    <input type="text" class="form-control" value="<?= $data['jenis_pakaian']; ?>" disabled>
+                                                    <label>Kategori Pakaian</label>
+                                                    <input type="text" class="form-control" value="<?= $data['kategori_pakaian']; ?>" disabled>
                                                 </div>
                                             </div>
                                             <div class="col-12">

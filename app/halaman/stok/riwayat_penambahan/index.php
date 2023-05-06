@@ -28,11 +28,11 @@
                             <?php
                             $query = "
                                 SELECT 
-                                    m.nama AS merk,
-                                    jp.nama AS jenis_pakaian,
-                                    p.nama AS nama_pakaian,
-                                    w.nama AS warna,
-                                    u.nama AS ukuran,
+                                    m.nama merk,
+                                    kp.nama kategori_pakaian,
+                                    p.nama nama_pakaian,
+                                    wp.warna,
+                                    up.ukuran,
                                     pd.jumlah,
                                     pd.tanggal_masuk,
                                     pd.id  
@@ -43,25 +43,21 @@
                                 ON 
                                     uwp.id=pd.id_ukuran_warna_pakaian 
                                 LEFT JOIN 
-                                    ukuran AS u 
+                                    ukuran_pakaian AS up 
                                 ON 
-                                    u.id=uwp.id_ukuran
+                                    up.id=uwp.id_ukuran_pakaian
                                 LEFT JOIN 
                                     warna_pakaian AS wp 
                                 ON 
                                     wp.id=uwp.id_warna_pakaian  
                                 LEFT JOIN 
-                                    warna AS w 
-                                ON 
-                                    w.id=wp.id_warna 
-                                LEFT JOIN 
                                     pakaian AS p 
                                 ON 
                                     p.id=wp.id_pakaian 
                                 LEFT JOIN
-                                jenis_pakaian AS jp 
+                                    kategori_pakaian AS kp 
                                 ON 
-                                    jp.id=p.id_jenis_pakaian 
+                                    kp.id=p.id_kategori_pakaian 
                                 LEFT JOIN 
                                     merk AS m 
                                 ON 
@@ -77,7 +73,7 @@
                                     <td class="text-center"><?= $no++; ?></td>
                                     <td class="text-center"><?= indonesiaDate($row['tanggal_masuk']); ?></td>
                                     <td class="text-center"><?= $row['merk']; ?></td>
-                                    <td class="text-center"><?= $row['jenis_pakaian']; ?></td>
+                                    <td class="text-center"><?= $row['kategori_pakaian']; ?></td>
                                     <td class="text-center"><?= $row['nama_pakaian']; ?></td>
                                     <td class="text-center"><?= $row['warna']; ?></td>
                                     <td class="text-center"><?= $row['ukuran']; ?></td>
