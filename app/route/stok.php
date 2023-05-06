@@ -4,42 +4,9 @@ if ($_GET['halaman'] === 'stok') {
     $halaman = 'stok/index.php';
     $active = 'stok';
     $sub_active = 'stok_pakaian';
-}
-
-if ($_GET['halaman'] === 'stok_per_merk') {
-    $title = 'Data Stok';
-    $halaman = 'stok/merk/index.php';
-    $active = 'stok';
-    $sub_active = 'stok_pakaian';
-}
-
-if ($_GET['halaman'] === 'stok_per_jenis') {
-    $title = 'Data Stok';
-    $halaman = 'stok/jenis_pakaian/index.php';
-    $active = 'stok';
-    $sub_active = 'stok_pakaian';
-}
-
-if ($_GET['halaman'] === 'stok_per_pakaian') {
-    $title = 'Data Stok';
-    $halaman = 'stok/pakaian/index.php';
-    $active = 'stok';
-    $sub_active = 'stok_pakaian';
-} elseif ($_GET['halaman'] === 'tambah_stok_pakaian') {
-    $title = 'Tambah Stok';
-    $halaman = 'stok/pakaian/tambah.php';
-    $active = 'stok';
-    $sub_active = 'stok_pakaian';
-}
-
-if ($_GET['halaman'] === 'stok_per_warna') {
-    $title = 'Data Stok';
-    $halaman = 'stok/warna/index.php';
-    $active = 'stok';
-    $sub_active = 'stok_pakaian';
-} elseif ($_GET['halaman'] === 'tambah_stok_pakaian_per_warna') {
-    $title = 'Tambah Stok';
-    $halaman = 'stok/warna/tambah.php';
+} elseif ($_GET['halaman'] === 'tambah_stok') {
+    $title = 'Suplai Pakaian';
+    $halaman = 'stok/tambah.php';
     $active = 'stok';
     $sub_active = 'stok_pakaian';
 }

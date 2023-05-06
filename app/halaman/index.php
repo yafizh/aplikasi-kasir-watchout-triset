@@ -73,7 +73,7 @@ if (isset($_SESSION['user'])) {
     <link rel="stylesheet" href="../assets/css/main/app.css">
     <link rel="shortcut icon" href="../assets/images/logo/favicon.png" type="image/png">
     <?php if (isset($_SESSION['user'])) : ?>
-        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_stok_pakaian'])) : ?>
+        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_stok'])) : ?>
             <link rel="stylesheet" href="../assets/extensions/choices.js/public/assets/styles/choices.css">
         <?php endif; ?>
 
@@ -188,7 +188,7 @@ if (isset($_SESSION['user'])) {
             <script src="../assets/js/pages/dashboard.js"></script>
         <?php endif; ?>
 
-        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_stok_pakaian'])) : ?>
+        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_stok'])) : ?>
             <script src="../assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
             <script src="../assets/js/pages/form-element-select.js"></script>
         <?php endif; ?>
