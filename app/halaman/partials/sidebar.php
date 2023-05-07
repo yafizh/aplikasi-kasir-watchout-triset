@@ -81,6 +81,20 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                     </ul>
                 </li>
 
+                <li class="sidebar-title">Menu Diskon</li>
+                <li class="sidebar-item <?= $active === 'diskon' ? 'active' : ''; ?>">
+                    <a href="?halaman=diskon" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Diskon Pakaian</span>
+                    </a>
+                </li>
+                <li class="sidebar-item <?= $active === 'voucher_diskon' ? 'active' : ''; ?>">
+                    <a href="?halaman=voucher_diskon" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Voucher Diskon</span>
+                    </a>
+                </li>
+
                 <li class="sidebar-title">Laporan</li>
                 <li class="sidebar-item has-sub <?= ($active === 'laporan') ? 'active' : ''; ?>">
                     <a href="#" class='sidebar-link'>
