@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-05-07T06:47:06.973Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.8 Chrome/112.0.5615.165 Electron/24.2.0 Safari/537.36" etag="slVrLhnwKRE5Wl-O9hAL" version="21.2.8" type="device" pages="2">
+<mxfile host="Electron" modified="2023-05-07T11:22:56.112Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.8 Chrome/112.0.5615.165 Electron/24.2.0 Safari/537.36" etag="OQTLWOdJ1ex0CRTFCjsT" version="21.2.8" type="device" pages="2">
   <diagram id="bjyDgdS6y3IjDn8XdLk5" name="Kasir and Online Store">
     <mxGraphModel dx="1784" dy="1701" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -1073,7 +1073,7 @@
             <mxRectangle width="150" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="Axg0hih1ll3ONBClOINO-60" value="Pakaian Diskon" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;" parent="1" vertex="1">
+        <mxCell id="Axg0hih1ll3ONBClOINO-60" value="Diskon Pakaian" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;" parent="1" vertex="1">
           <mxGeometry x="420" y="830" width="230" height="180" as="geometry" />
         </mxCell>
         <mxCell id="Axg0hih1ll3ONBClOINO-61" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" parent="Axg0hih1ll3ONBClOINO-60" vertex="1">

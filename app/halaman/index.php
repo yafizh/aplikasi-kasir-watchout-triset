@@ -12,6 +12,10 @@ require_once('../helper/date.php');
 
 if (isset($_SESSION['user'])) {
     if (isset($_GET['halaman'])) {
+        // Diskon
+        include_once('../route/diskon.php');
+        include_once('../route/diskon_pakaian.php');
+
         // Laporan
         include_once('../route/laporan.php');
 
@@ -73,7 +77,7 @@ if (isset($_SESSION['user'])) {
     <link rel="stylesheet" href="../assets/css/main/app.css">
     <link rel="shortcut icon" href="../assets/images/logo/favicon.png" type="image/png">
     <?php if (isset($_SESSION['user'])) : ?>
-        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_stok'])) : ?>
+        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_stok', 'tambah_diskon_pakaian'])) : ?>
             <link rel="stylesheet" href="../assets/extensions/choices.js/public/assets/styles/choices.css">
         <?php endif; ?>
 
@@ -188,7 +192,7 @@ if (isset($_SESSION['user'])) {
             <script src="../assets/js/pages/dashboard.js"></script>
         <?php endif; ?>
 
-        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_stok'])) : ?>
+        <?php if (in_array($_GET['halaman'] ?? '', ['tambah_stok', 'tambah_diskon_pakaian'])) : ?>
             <script src="../assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
             <script src="../assets/js/pages/form-element-select.js"></script>
         <?php endif; ?>

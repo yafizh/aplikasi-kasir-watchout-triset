@@ -16,10 +16,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="index.php">Home</a>
+                    <a class="nav-link <?= $active == 'home' ? 'text-primary fw-bold' : 'text-dark'; ?>" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="shop.php" style="color: #F58731; font-weight: bold;">Shop</a>
+                    <a class="nav-link <?= $active == 'shop' ? 'text-primary fw-bold' : 'text-dark'; ?>" href="shop.php">Shop</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-dark" href="#">Sale</a>

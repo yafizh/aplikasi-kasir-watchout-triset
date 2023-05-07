@@ -1,3 +1,13 @@
+<?php
+session_start();
+date_default_timezone_set('Asia/Kuala_Lumpur');
+
+// Database
+require_once('../../database/koneksi.php');
+
+// Helper 
+require_once('../../helper/date.php');
+?>
 <!doctype html>
 <html lang="en">
 
@@ -65,47 +75,56 @@
         }
     </style>
     <div class="container">
+        <?php $active = 'shop'; ?>
         <?php include_once('partials/navbar.php'); ?>
 
-        <section class="row mb-5">
+        <section class="row mb-5" style="min-height: 80vh;">
             <div class="col-12 col-md-3 mb-3">
                 <div class="card">
                     <div class="card-body">
                         <div class="accordion" id="accordionPanelsStayOpenExample">
                             <div class="accordion-item">
-                                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-                                        Jenis Pakaian
+                                <?php $merk = $mysqli->query("SELECT * FROM merk"); ?>
+                                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="true" aria-controls="panelsStayOpen-collapseThree">
+                                        Merk Pakaian
                                     </button>
                                 </h2>
-                                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+                                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingThree">
                                     <div class="accordion-body">
                                         <ul>
-                                            <li>
-                                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                                <label class="form-check-label" for="exampleCheck1">Baju</label>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" class="form-check-input" id="exampleCheck2">
-                                                <label class="form-check-label" for="exampleCheck2">Celana</label>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" class="form-check-input" id="exampleCheck3">
-                                                <label class="form-check-label" for="exampleCheck3">Sepatu</label>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" class="form-check-input" id="exampleCheck4">
-                                                <label class="form-check-label" for="exampleCheck4">Sendal</label>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" class="form-check-input" id="exampleCheck5">
-                                                <label class="form-check-label" for="exampleCheck5">Kemeja</label>
-                                            </li>
+                                            <?php while ($row = $merk->fetch_assoc()) : ?>
+                                                <li>
+                                                    <input type="checkbox" class="form-check-input" name="merk" id="merk-<?= $row['id']; ?>" value="<?= $row['id']; ?>">
+                                                    <label class="form-check-label" for="merk-<?= $row['id']; ?>"><?= $row['nama']; ?></label>
+                                                </li>
+                                            <?php endwhile; ?>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                             <div class="accordion-item">
+                                <?php $kategori_pakaian = $mysqli->query("SELECT * FROM kategori_pakaian"); ?>
+                                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                        Kategori Pakaian
+                                    </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                                    <div class="accordion-body">
+                                        <ul>
+                                            <?php while ($row = $kategori_pakaian->fetch_assoc()) : ?>
+                                                <li>
+                                                    <input type="checkbox" class="form-check-input" name="kategori_pakaian" id="kategori-pakaian-<?= $row['id']; ?>" value="<?= $row['id']; ?>">
+                                                    <label class="form-check-label" for="kategori-pakaian-<?= $row['id']; ?>"><?= $row['nama']; ?></label>
+                                                </li>
+                                            <?php endwhile; ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <?php $warna = $mysqli->query("SELECT DISTINCT warna FROM warna_pakaian"); ?>
                                 <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
                                         Warna Pakaian
@@ -114,39 +133,12 @@
                                 <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
                                     <div class="accordion-body">
                                         <ul>
-                                            <li>
-                                                <input type="checkbox" class="form-check-input" id="exampleCheck9">
-                                                <label class="form-check-label" for="exampleCheck9">Merah</label>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" class="form-check-input" id="exampleCheck8">
-                                                <label class="form-check-label" for="exampleCheck8">Biru</label>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" class="form-check-input" id="exampleCheck7">
-                                                <label class="form-check-label" for="exampleCheck7">Hijau</label>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                                        Merk Pakaian
-                                    </button>
-                                </h2>
-                                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
-                                    <div class="accordion-body">
-                                        <ul>
-                                            <li>
-                                                <input type="checkbox" class="form-check-input" id="exampleCheck9">
-                                                <label class="form-check-label" for="exampleCheck91">Watchout</label>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" class="form-check-input" id="exampleCheck8">
-                                                <label class="form-check-label" for="exampleCheck81">Triset</label>
-                                            </li>
+                                            <?php while ($row = $warna->fetch_assoc()) : ?>
+                                                <li>
+                                                    <input type="checkbox" class="form-check-input" name="warna" id="warna-<?= $row['warna']; ?>" value="<?= $row['warna']; ?>">
+                                                    <label class="form-check-label" for="warna-<?= $row['warna']; ?>"><?= $row['warna']; ?></label>
+                                                </li>
+                                            <?php endwhile; ?>
                                         </ul>
                                     </div>
                                 </div>
@@ -172,32 +164,7 @@
                 }
             </style>
             <div class="col-12 col-md-9 mb-3">
-                <div class="row">
-                    <div class="col-6 col-md-4 col-lg-3 item rounded">
-                        <div class="position-relative" style="overflow: hidden;">
-                            <!-- <div class="position-absolute pt-3" style="z-index: 999;">
-                                <h6 class="bg-danger py-2 px-3 mb-0 text-white" style="border-bottom-right-radius: .3rem; border-top-right-radius: .3rem;">Sale</h6>
-                            </div> -->
-                            <img src="../../../dummy/AINE-BLOUSE-HIJAU.jpg" class="rounded">
-                        </div>
-                        <div class="body px-2 pt-3 pb-1">
-                            <h5>AINE BLOUSE</h5>
-                            <p class="text-muted">IDR 300.000</p>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-3 item rounded">
-                        <div class="position-relative" style="overflow: hidden;">
-                            <div class="position-absolute pt-3" style="z-index: 999;">
-                                <h6 class="bg-danger py-2 px-3 mb-0 text-white" style="border-bottom-right-radius: .3rem; border-top-right-radius: .3rem;">Sale</h6>
-                            </div>
-                            <img src="../../../dummy/AINE-BLOUSE-HIJAU.jpg" class="rounded">
-                        </div>
-                        <div class="body px-2 pt-3 pb-1">
-                            <h5>AINE BLOUSE</h5>
-                            <p class="text-muted mb-0"><del>IDR 300.000</del></p>
-                            <h5 class="text-success">IDR 250.000</h5>
-                        </div>
-                    </div>
+                <div class="row" id="shop-container">
                 </div>
             </div>
         </section>
@@ -206,11 +173,69 @@
     <?php include_once('partials/footer.php'); ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <script>
-        document.querySelectorAll('.item').forEach((elm) => {
-            elm.addEventListener('click', () => {
-                location.href = 'detail.php';
+        const id_kategori_pakaian = [];
+        const nama_warna = [];
+        const id_merk = [];
+        document.querySelectorAll('input[name=kategori_pakaian]').forEach((kategori_pakaian) => {
+            kategori_pakaian.addEventListener('click', () => {
+                if (id_kategori_pakaian.includes(kategori_pakaian.value)) {
+                    if (id_kategori_pakaian.indexOf(kategori_pakaian.value) !== -1)
+                        id_kategori_pakaian.splice(id_kategori_pakaian.indexOf(kategori_pakaian.value), 1);
+                } else
+                    id_kategori_pakaian.push(kategori_pakaian.value);
+
+                getData();
             })
         });
+
+        document.querySelectorAll('input[name=warna]').forEach((warna) => {
+            warna.addEventListener('click', () => {
+                if (nama_warna.includes(warna.value)) {
+                    if (nama_warna.indexOf(warna.value) !== -1)
+                        nama_warna.splice(nama_warna.indexOf(warna.value), 1);
+                } else
+                    nama_warna.push(warna.value);
+
+                getData();
+            })
+        });
+
+        document.querySelectorAll('input[name=merk]').forEach((merk) => {
+            merk.addEventListener('click', () => {
+                if (id_merk.includes(merk.value)) {
+                    if (id_merk.indexOf(merk.value) !== -1)
+                        id_merk.splice(id_merk.indexOf(merk.value), 1);
+                } else
+                    id_merk.push(merk.value);
+
+                getData();
+            })
+        });
+
+        const getData = async () => {
+            let url = '../../ajax/shop.php?';
+            if (id_kategori_pakaian.length)
+                url += `&id_kategori_pakaian=${id_kategori_pakaian.toString()}`;
+
+            if (nama_warna.length)
+                url += `&warna=${nama_warna.toString()}`;
+
+            if (id_merk.length)
+                url += `&id_merk=${id_merk.toString()}`;
+            // console.log(url)
+            const html = await fetch(url)
+                .then(response => response.text());
+
+            document.getElementById('shop-container').innerHTML = html;
+
+            document.querySelectorAll('.item').forEach((elm) => {
+                elm.addEventListener('click', () => {
+                    location.href = `detail.php?from=shop&id_pakaian=${elm.getAttribute('data-id_pakaian')}`;
+                })
+            });
+        }
+
+        getData();
     </script>
 </body>
 
