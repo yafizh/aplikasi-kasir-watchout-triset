@@ -144,20 +144,27 @@ CREATE TABLE `kasir`.`detail_penjualan_online`(
 CREATE TABLE `kasir`.`diskon`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
     nama VARCHAR(255),
-    dari_tanggal DATE,
-    sampai_tanggal DATE,
+    tanggal_mulai DATE,
+    tanggal_selesai DATE,
     diskon BIGINT UNSIGNED,
     jenis_diskon TINYINT UNSIGNED COMMENT '1=Nominal|2=Persentase',
     PRIMARY KEY(id)
 );
 
-CREATE TABLE `kasir`.`diskon_pakaian`(
-    id BIGINT UNSIGNED AUTO_INCREMENT,
+CREATE TABLE `kasir`.`pakaian_diskon`(
     id_diskon BIGINT UNSIGNED,
     id_pakaian BIGINT UNSIGNED,
-    PRIMARY KEY(id),
+    PRIMARY KEY(id_diskon, id_pakaian),
     FOREIGN KEY (id_diskon) REFERENCES diskon (id) ON DELETE CASCADE,
     FOREIGN KEY (id_pakaian) REFERENCES pakaian (id) ON DELETE CASCADE
+);
+
+CREATE TABLE `kasir`.`detail_penjualan_online_diskon` (
+    id_detail_penjualan_online BIGINT UNSIGNED,
+    id_diskon BIGINT UNSIGNED,
+    PRIMARY KEY(id_detail_penjualan_online, id_diskon),
+    FOREIGN KEY (id_detail_penjualan_online) REFERENCES detail_penjualan_online (id) ON DELETE CASCADE,
+    FOREIGN KEY (id_diskon) REFERENCES diskon (id) ON DELETE CASCADE
 );
 
 CREATE TABLE `kasir`.`voucher_diskon`(
