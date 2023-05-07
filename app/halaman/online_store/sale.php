@@ -75,12 +75,12 @@ require_once('../../helper/date.php');
         }
     </style>
     <div class="container">
-        <?php $active = 'shop'; ?>
+        <?php $active = 'sale'; ?>
         <?php include_once('partials/navbar.php'); ?>
 
         <section class="row mb-5" style="min-height: 80vh;">
             <div class="col-12">
-                <h1 class="text-center fw-bold text-primary">Semua Pakaian</h1>
+                <h1 class="text-center fw-bold text-primary">Sedang Diskon</h1>
             </div>
             <div class="col-12 col-md-3 mb-3">
                 <div class="card">
@@ -167,7 +167,7 @@ require_once('../../helper/date.php');
                 }
             </style>
             <div class="col-12 col-md-9 mb-3">
-                <div class="row" id="shop-container">
+                <div class="row" id="sale-container">
                 </div>
             </div>
         </section>
@@ -216,7 +216,7 @@ require_once('../../helper/date.php');
         });
 
         const getData = async () => {
-            let url = '../../ajax/shop.php?';
+            let url = '../../ajax/sale.php?';
             if (id_kategori_pakaian.length)
                 url += `&id_kategori_pakaian=${id_kategori_pakaian.toString()}`;
 
@@ -229,11 +229,11 @@ require_once('../../helper/date.php');
             const html = await fetch(url)
                 .then(response => response.text());
 
-            document.getElementById('shop-container').innerHTML = html;
+            document.getElementById('sale-container').innerHTML = html;
 
             document.querySelectorAll('.item').forEach((elm) => {
                 elm.addEventListener('click', () => {
-                    location.href = `detail.php?from=shop&id_pakaian=${elm.getAttribute('data-id_pakaian')}`;
+                    location.href = `detail.php?from=sale&id_pakaian=${elm.getAttribute('data-id_pakaian')}`;
                 })
             });
         }

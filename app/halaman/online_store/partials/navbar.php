@@ -22,7 +22,7 @@
                     <a class="nav-link <?= $active == 'shop' ? 'text-primary fw-bold' : 'text-dark'; ?>" href="shop.php">Shop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="#">Sale</a>
+                    <a class="nav-link <?= $active == 'sale' ? 'text-primary fw-bold' : 'text-dark'; ?>" href="sale.php">Sale</a>
                 </li>
             </ul>
             <!-- <form class="d-flex" role="search">
