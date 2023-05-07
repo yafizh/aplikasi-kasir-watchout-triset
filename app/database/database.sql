@@ -151,7 +151,7 @@ CREATE TABLE `kasir`.`diskon`(
     PRIMARY KEY(id)
 );
 
-CREATE TABLE `kasir`.`pakaian_diskon`(
+CREATE TABLE `kasir`.`diskon_pakaian`(
     id_diskon BIGINT UNSIGNED,
     id_pakaian BIGINT UNSIGNED,
     PRIMARY KEY(id_diskon, id_pakaian),

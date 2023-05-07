@@ -29,7 +29,7 @@
                         $query = "
                             SELECT 
                                 d.*,
-                                (SELECT COUNT(*) FROM pakaian_diskon pd WHERE pd.id_diskon=d.id) pakaian 
+                                (SELECT COUNT(*) FROM diskon_pakaian pd WHERE pd.id_diskon=d.id) pakaian 
                             FROM 
                                 diskon d 
                             ORDER BY 
@@ -50,7 +50,7 @@
                                         <td class="text-center">
                                             <?= $row['pakaian']; ?>
                                             |
-                                            <a href="">Lihat</a>
+                                            <a href="?halaman=diskon_pakaian&id_diskon=<?= $row['id']; ?>">Lihat</a>
                                         </td>
                                         <td class="no-td">
                                             <a href="?halaman=edit_diskon&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white">Edit</i></a>

@@ -112,14 +112,12 @@ $_SESSION['prev_url'] = $_SERVER['HTTP_REFERER'];
                                             <div class="col-12">
                                                 <?php $result = $mysqli->query("SELECT wp.id, wp.warna FROM warna_pakaian wp WHERE id_pakaian=" . $_GET['id_pakaian']); ?>
                                                 <div class="form-group">
-                                                    <div class="form-group">
-                                                        <label for="id_warna_pakaian">Warna</label>
-                                                        <select class="choices form-select multiple-remove" multiple="multiple" name="id_warna_pakaian[]" id="id_warna_pakaian" required>
-                                                            <?php while ($row = $result->fetch_assoc()) : ?>
-                                                                <option value="<?= $row['id']; ?>"><?= $row['warna']; ?></option>
-                                                            <?php endwhile; ?>
-                                                        </select>
-                                                    </div>
+                                                    <label for="id_warna_pakaian">Warna</label>
+                                                    <select class="choices form-select multiple-remove" multiple="multiple" name="id_warna_pakaian[]" id="id_warna_pakaian" required>
+                                                        <?php while ($row = $result->fetch_assoc()) : ?>
+                                                            <option value="<?= $row['id']; ?>"><?= $row['warna']; ?></option>
+                                                        <?php endwhile; ?>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="col-12">
