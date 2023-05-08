@@ -186,3 +186,12 @@ CREATE TABLE `kasir`.`voucher_diskon_pakaian`(
     FOREIGN KEY (id_voucher_diskon) REFERENCES voucher_diskon (id) ON DELETE CASCADE,
     FOREIGN KEY (id_pakaian) REFERENCES pakaian(id) ON DELETE CASCADE
 );
+
+CREATE TABLE `kasir`.`keranjang` (
+    id_ukuran_warna_pakaian BIGINT UNSIGNED,
+    id_pembeli BIGINT UNSIGNED,
+    jumlah INT UNSIGNED,
+    PRIMARY KEY (id_ukuran_warna_pakaian, id_pembeli),
+    FOREIGN KEY (id_ukuran_warna_pakaian) REFERENCES ukuran_warna_pakaian (id) ON DELETE CASCADE,
+    FOREIGN KEY (id_pembeli) REFERENCES pembeli (id) ON DELETE CASCADE
+);

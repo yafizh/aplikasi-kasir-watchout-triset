@@ -4,7 +4,8 @@ INSERT INTO `kasir`.`pengguna`(
     status
 ) VALUES 
 ('admin', 'admin', 1),
-('nana', 'nana', 2);
+('nana', 'nana', 2),
+('aulia', 'aulia', 3);
 
 INSERT INTO `kasir`.`kasir`(
     id_pengguna,
@@ -14,6 +15,22 @@ INSERT INTO `kasir`.`kasir`(
     foto
 ) VALUES 
 (3, 'Nana', 'Martapura', CURRENT_DATE(), '');
+
+INSERT INTO `kasir`.`pembeli` (
+    id_pengguna,
+    nama,
+    nomor_telepon,
+    email,
+    tempat_lahir,
+    tanggal_lahir 
+) VALUES (
+    3,
+    'Nana Aulia',
+    '',
+    '',
+    'Martapura',
+    '2000-01-01'
+);
 
 INSERT INTO `kasir`.`merk`(
     id,
