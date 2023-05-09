@@ -1,3 +1,13 @@
+<?php
+session_start();
+date_default_timezone_set('Asia/Kuala_Lumpur');
+
+// Database
+require_once('../../database/koneksi.php');
+
+// Helper 
+require_once('../../helper/date.php');
+?>
 <!doctype html>
 <html lang="en">
 
@@ -29,6 +39,7 @@
         }
     </style>
     <div class="container">
+        <?php $active = 'home'; ?>
         <?php include_once('partials/navbar.php'); ?>
 
         <div id="carouselExampleCaptions" class="carousel slide mb-5" data-bs-ride="false">
@@ -70,108 +81,80 @@
             </button>
         </div>
 
-        <section class="mb-5">
-            <style>
-                .item {
-                    cursor: pointer;
-                }
+        <?php
+        $today = Date("Y-m-d");
+        $query = "
+                SELECT 
+                    p.*,
+                    d.jenis_diskon,
+                    d.diskon,
+                    (SELECT foto FROM foto_pakaian fp INNER JOIN warna_pakaian wp ON wp.id=fp.id_warna_pakaian WHERE wp.id_pakaian=p.id LIMIT 1) foto 
+                FROM 
+                    diskon d 
+                INNER JOIN 
+                    diskon_pakaian dp 
+                ON 
+                    dp.id_diskon=d.id 
+                INNER JOIN 
+                    pakaian p 
+                ON 
+                    p.id=dp.id_pakaian 
+                WHERE
+                    '$today' >= d.tanggal_mulai 
+                    AND
+                    '$today' <= d.tanggal_selesai 
+                ORDER BY 
+                    d.tanggal_mulai DESC
+            ";
+        $data = $mysqli->query($query);
+        $rows = $data->fetch_all(MYSQLI_ASSOC);
 
-                .item:hover img {
-                    transform: scale(1.5);
-                }
+        ?>
+        <?php if (count($rows)) : ?>
+            <section class="mb-5">
+                <style>
+                    .item {
+                        cursor: pointer;
+                    }
 
-                .item img {
-                    width: 100%;
-                    object-fit: cover;
-                    height: 16rem;
-                    transition: 0.5s all ease-in-out;
-                }
-            </style>
-            <div class="d-flex justify-content-between">
-                <h3 class="text-header mb-3">Sale</h3>
-                <a href="sale.php">Lihat Selengkapnya...</a>
-            </div>
-            <div class="row pb-3">
-                <div class="col-6 col-md-4 col-lg-2 item rounded">
-                    <div class="position-relative" style="overflow: hidden;">
-                        <div class="position-absolute pt-3" style="z-index: 999;">
-                            <h6 class="bg-danger py-2 px-3 mb-0 text-white" style="border-bottom-right-radius: .3rem; border-top-right-radius: .3rem;">Sale</h6>
-                        </div>
-                        <img src="../../../dummy/AINE-BLOUSE-HIJAU.jpg" class="rounded">
-                    </div>
-                    <div class="body px-2 pt-3 pb-1">
-                        <h5>AINE BLOUSE</h5>
-                        <p class="text-muted mb-0"><del>IDR 300.000</del></p>
-                        <h5 class="text-success">IDR 250.000</h5>
-                    </div>
+                    .item:hover img {
+                        transform: scale(1.5);
+                    }
+
+                    .item img {
+                        width: 100%;
+                        object-fit: cover;
+                        height: 16rem;
+                        transition: 0.5s all ease-in-out;
+                    }
+                </style>
+                <div class="d-flex justify-content-between">
+                    <h3 class="text-header mb-3">Sale</h3>
+                    <a href="sale.php">Lihat Selengkapnya...</a>
                 </div>
-                <div class="col-6 col-md-4 col-lg-2 item rounded">
-                    <div class="position-relative" style="overflow: hidden;">
-                        <div class="position-absolute pt-3" style="z-index: 999;">
-                            <h6 class="bg-danger py-2 px-3 mb-0 text-white" style="border-bottom-right-radius: .3rem; border-top-right-radius: .3rem;">Sale</h6>
+                <div class="row pb-3">
+                    <?php foreach ($rows as $row) : ?>
+                        <div class="col-6 col-md-4 col-lg-2 item rounded" data-id_pakaian="<?= $row['id'] ?>">
+                            <div class="position-relative" style="overflow: hidden;">
+                                <div class="position-absolute pt-3" style="z-index: 999;">
+                                    <h6 class="bg-danger py-2 px-3 mb-0 text-white" style="border-bottom-right-radius: .3rem; border-top-right-radius: .3rem;">Sale</h6>
+                                </div>
+                                <img src="<?= '../' . $row['foto']; ?>" class="rounded">
+                            </div>
+                            <div class="body px-2 pt-3 pb-1">
+                                <h5><?= $row['nama']; ?></h5>
+                                <p class="text-muted mb-0"><del>IDR <?= number_format($row['harga_toko'], 0, ',', '.') ?></del></p>
+                                <?php if ($row['jenis_diskon'] == 1) : ?>
+                                    <h5 class="text-success">IDR <?= number_format($row['harga_toko'] - $row['diskon'], 0, ',', '.') ?></h5>
+                                <?php elseif ($row['jenis_diskon'] == 2) : ?>
+                                    <h5 class="text-success">IDR <?= number_format($row['harga_toko'] * ($row['diskon'] / 100), 0, ',', '.') ?></h5>
+                                <?php endif; ?>
+                            </div>
                         </div>
-                        <img src="../../../dummy/AINE-BLOUSE-HIJAU.jpg" class="rounded">
-                    </div>
-                    <div class="body px-2 pt-3 pb-1">
-                        <h5>AINE BLOUSE</h5>
-                        <p class="text-muted mb-0"><del>IDR 300.000</del></p>
-                        <h5 class="text-success">IDR 250.000</h5>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
-                <div class="col-6 col-md-4 col-lg-2 item rounded">
-                    <div class="position-relative" style="overflow: hidden;">
-                        <div class="position-absolute pt-3" style="z-index: 999;">
-                            <h6 class="bg-danger py-2 px-3 mb-0 text-white" style="border-bottom-right-radius: .3rem; border-top-right-radius: .3rem;">Sale</h6>
-                        </div>
-                        <img src="../../../dummy/AINE-BLOUSE-HIJAU.jpg" class="rounded">
-                    </div>
-                    <div class="body px-2 pt-3 pb-1">
-                        <h5>AINE BLOUSE</h5>
-                        <p class="text-muted mb-0"><del>IDR 300.000</del></p>
-                        <h5 class="text-success">IDR 250.000</h5>
-                    </div>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2 item rounded">
-                    <div class="position-relative" style="overflow: hidden;">
-                        <div class="position-absolute pt-3" style="z-index: 999;">
-                            <h6 class="bg-danger py-2 px-3 mb-0 text-white" style="border-bottom-right-radius: .3rem; border-top-right-radius: .3rem;">Sale</h6>
-                        </div>
-                        <img src="../../../dummy/AINE-BLOUSE-HIJAU.jpg" class="rounded">
-                    </div>
-                    <div class="body px-2 pt-3 pb-1">
-                        <h5>AINE BLOUSE</h5>
-                        <p class="text-muted mb-0"><del>IDR 300.000</del></p>
-                        <h5 class="text-success">IDR 250.000</h5>
-                    </div>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2 item rounded">
-                    <div class="position-relative" style="overflow: hidden;">
-                        <div class="position-absolute pt-3" style="z-index: 999;">
-                            <h6 class="bg-danger py-2 px-3 mb-0 text-white" style="border-bottom-right-radius: .3rem; border-top-right-radius: .3rem;">Sale</h6>
-                        </div>
-                        <img src="../../../dummy/AINE-BLOUSE-HIJAU.jpg" class="rounded">
-                    </div>
-                    <div class="body px-2 pt-3 pb-1">
-                        <h5>AINE BLOUSE</h5>
-                        <p class="text-muted mb-0"><del>IDR 300.000</del></p>
-                        <h5 class="text-success">IDR 250.000</h5>
-                    </div>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2 item rounded">
-                    <div class="position-relative" style="overflow: hidden;">
-                        <div class="position-absolute pt-3" style="z-index: 999;">
-                            <h6 class="bg-danger py-2 px-3 mb-0 text-white" style="border-bottom-right-radius: .3rem; border-top-right-radius: .3rem;">Sale</h6>
-                        </div>
-                        <img src="../../../dummy/AINE-BLOUSE-HIJAU.jpg" class="rounded">
-                    </div>
-                    <div class="body px-2 pt-3 pb-1">
-                        <h5>AINE BLOUSE</h5>
-                        <p class="text-muted mb-0"><del>IDR 300.000</del></p>
-                        <h5 class="text-success">IDR 250.000</h5>
-                    </div>
-                </div>
-            </div>
-        </section>
+            </section>
+        <?php endif; ?>
 
         <section class="mb-5">
             <h3 class="text-header mb-3">Our Brands</h3>
@@ -273,6 +256,13 @@
     </div>
     <?php include_once('partials/footer.php'); ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script>
+        document.querySelectorAll('.item').forEach((elm) => {
+            elm.addEventListener('click', () => {
+                location.href = `detail.php?from=home&id_pakaian=${elm.getAttribute('data-id_pakaian')}`;
+            })
+        });
+    </script>
 </body>
 
 </html>
