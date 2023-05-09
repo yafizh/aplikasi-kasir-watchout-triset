@@ -29,6 +29,7 @@ CREATE TABLE `kasir`.`pembeli`(
     email VARCHAR(255),
     tempat_lahir VARCHAR(255) NULL,
     tanggal_lahir DATE NULL,
+    alamat TEXT,
     PRIMARY KEY(id),
     FOREIGN KEY (id_pengguna) REFERENCES pengguna(id) ON DELETE CASCADE
 );

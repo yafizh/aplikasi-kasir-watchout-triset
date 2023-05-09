@@ -22,14 +22,16 @@ INSERT INTO `kasir`.`pembeli` (
     nomor_telepon,
     email,
     tempat_lahir,
-    tanggal_lahir 
+    tanggal_lahir,
+    pembeli 
 ) VALUES (
     3,
     'Nana Aulia',
     '',
     '',
     'Martapura',
-    '2000-01-01'
+    '2000-01-01',
+    ''
 );
 
 INSERT INTO `kasir`.`merk`(
