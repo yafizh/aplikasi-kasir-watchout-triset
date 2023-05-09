@@ -18,7 +18,57 @@ if (isset($_GET['navbar'])) {
             id_pembeli=" . $_GET['id_pembeli'] . "
     ";
     $keranjang = $mysqli->query($query);
-    return $keranjang['jumlah'];
+    if($keranjang->num_rows){
+        echo $keranjang->fetch_assoc()['jumlah'];
+    }
+    exit;
+}
+
+if (isset($_GET['tambah'])) {
+    $query = "
+        SELECT 
+            * 
+        FROM 
+            ukuran_warna_pakaian 
+        WHERE 
+            id_warna_pakaian=" . $_GET['id_warna'] . "
+            AND 
+            id_ukuran_pakaian=" . $_GET['id_ukuran'] . "    
+        ";
+    $result = $mysqli->query($query);
+
+    if ($result->num_rows) {
+        $ukuran_warna_pakaian = $result->fetch_assoc();
+        $result = $mysqli->query("SELECT * FROM keranjang WHERE id_ukuran_warna_pakaian=" . $ukuran_warna_pakaian['id']);
+
+        if ($result->num_rows) {
+            $keranjang = $result->fetch_assoc();
+            $query = "
+                UPDATE keranjang SET 
+                    jumlah=" . $keranjang['jumlah'] + $_GET['jumlah'] . "
+                WHERE 
+                    id_ukuran_warna_pakaian=" . $ukuran_warna_pakaian['id'] . " 
+                    AND 
+                    id_pembeli=" . $_GET['id_pembeli'] . " 
+            ";
+            echo $mysqli->query($query) ? 200 : 500;
+        } else {
+            $query = "
+                INSERT INTO keranjang (
+                    id_ukuran_warna_pakaian,
+                    id_pembeli,
+                    jumlah 
+                ) VALUES (
+                    " . $ukuran_warna_pakaian['id'] . ",
+                    " . $_GET['id_pembeli'] . ",
+                    " . $_GET['jumlah'] . "  
+                )
+            ";
+            echo $mysqli->query($query) ? 200 : 500;
+        }
+    }
+
+    exit;
 }
 
 if (isset($_GET['jumlah'])) {
@@ -34,21 +84,6 @@ if (isset($_GET['jumlah'])) {
         ";
     $mysqli->query($query);
     return true;
-}
-
-if (isset($_GET['tambah'])) {
-    $query = "
-        INSERT INTO keranjang (
-            id_ukuran_warna_pakaian,
-            id_pembeli,
-            jumlah 
-        ) VALUES (
-            " . $_GET['id_ukuran_warna_pakaian'] . ",
-            " . $_GET['id_pembeli'] . ",
-            '$jumlah' 
-        )
-    ";
-    return $mysqli->query($query);
 }
 
 if (isset($_GET['hapus'])) {
