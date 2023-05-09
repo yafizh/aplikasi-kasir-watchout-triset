@@ -3,11 +3,41 @@ if (isset($_POST['submit'])) {
     $username = $mysqli->real_escape_string($_POST['username']);
     $password = $mysqli->real_escape_string($_POST['password']);
 
-    $result = $mysqli->query("SELECT p.*, k.id AS id_kasir, k.nama, k.foto FROM pengguna AS p LEFT JOIN kasir AS k ON p.id=k.id_pengguna WHERE p.username='$username' AND p.password='$password'");
-    if($result->num_rows){
+    $query = "
+        SELECT 
+            p.*, 
+            k.id AS id_kasir, 
+            k.nama, 
+            k.foto 
+        FROM 
+            pengguna AS p 
+        LEFT JOIN 
+            kasir AS k 
+        ON 
+            p.id=k.id_pengguna 
+        WHERE 
+            p.username='$username' 
+            AND 
+            p.password='$password'
+    ";
+    $result = $mysqli->query($query);
+    if ($result->num_rows) {
         $_SESSION['user'] = $result->fetch_assoc();
-        echo "<script>location.href = '?';</script>";
-    }else{
+        if ($_SESSION['user']['status'] == 3) {
+            $query = "
+                SELECT 
+                    * 
+                FROM 
+                    pembeli 
+                WHERE 
+                    id_pengguna=" . $_SESSION['user']['id'] . "
+            ";
+            $result = $mysqli->query($query);
+            $_SESSION['user']['pembeli'] = $result->fetch_assoc();
+            echo "<script>location.href = 'online_store/index.php';</script>";
+        } else
+            echo "<script>location.href = '?';</script>";
+    } else {
         echo "<script>alert('username atau password salah')</script>";
     }
 }
