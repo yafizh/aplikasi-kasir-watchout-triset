@@ -1,3 +1,17 @@
+<?php
+session_start();
+date_default_timezone_set('Asia/Kuala_Lumpur');
+
+// Database
+require_once('../../database/koneksi.php');
+
+// Helper 
+require_once('../../helper/date.php');
+
+if (!isset($_SESSION['user']['pembeli'])) {
+    header('Location: ../index.php');
+}
+?>
 <!doctype html>
 <html lang="en">
 
@@ -18,56 +32,14 @@
 
 <body>
     <div class="container">
+        <?php $active = 'keranjang'; ?>
         <?php include_once('partials/navbar.php'); ?>
 
         <section style="min-height: 50vh;">
+            <h3 class="my-4 text-primary fw-bold">Keranjang</h3>
             <div class="row">
-                <div class="col-12 col-md-8">
-                    <div class="card mb-3" style="width: 100%; height: 10rem;">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <div class="flex-grow-1 d-flex">
-                                    <div style="width: 8rem; height: 8rem;">
-                                        <img src="../../../dummy/ELAINA-PANTS-HITAM.jpg" class="rounded" style="width: 100%; height: 8rem; object-fit: cover;">
-                                    </div>
-                                    <div class="p-3">
-                                        <h5 class="mb-3">Celana Panjang</h5>
-                                        <div class="d-flex">
-                                            <div class="px-2 py-1 border fs-5"><span style="display: block; margin-top: -2px;">-</span></div>
-                                            <div class="px-2 py-1 border fs-5 text-center" style="width: 3rem; white-space: nowrap;">112</div>
-                                            <div class="px-2 py-1 border fs-5"><span style="display: block; margin-top: -2px;">+</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-end flex-column justify-content-center">
-                                    <h5>Rp 50.000</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card mb-3" style="width: 100%; height: 10rem;">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <div class="flex-grow-1 d-flex">
-                                    <div style="width: 8rem; height: 8rem;">
-                                        <img src="../../../dummy/ELAINA-PANTS-HITAM.jpg" class="rounded" style="width: 100%; height: 8rem; object-fit: cover;">
-                                    </div>
-                                    <div class="p-3">
-                                        <h5 class="mb-3">Celana Panjang</h5>
-                                        <div class="d-flex">
-                                            <div class="px-2 py-1 border fs-5"><span style="display: block; margin-top: -2px;">-</span></div>
-                                            <div class="px-2 py-1 border fs-5 text-center" style="width: 3rem; white-space: nowrap;">112</div>
-                                            <div class="px-2 py-1 border fs-5"><span style="display: block; margin-top: -2px;">+</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-end flex-column justify-content-center">
-                                    <p class="mb-0"><del>Rp 50.000</del></p>
-                                    <h5>Rp 50.000</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div id="keranjang-container" class="col-12 col-md-8">
+
                 </div>
                 <div class="col-12 col-md-4">
                     <div class="card">
@@ -85,27 +57,90 @@
                                 <h4>Rp 100.000</h4>
                             </div>
                             <hr>
-                            <div class="mb-3 d-flex align-items-start gap-3">
-                                <div class="flex-grow-1">
-                                    <label for="" class="mb-2">Kode Voucher</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="d-flex flex-column">
-                                    <label for="" class="mb-2" style="visibility: hidden;">Button</label>
-                                    <button class="btn btn-primary text-white">TERAPKAN</button>
+                            <style>
+                                #terapkan:hover {
+                                    color: white;
+                                }
+                            </style>
+                            <div class="mb-3">
+                                <label for="" class="mb-2">Kode Voucher</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="KODE VOUCER" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                    <button class="btn btn-outline-primary" type="button" id="terapkan">TERAPKAN</button>
                                 </div>
                             </div>
                             <hr>
-                            <button class="btn btn-primary w-100 text-white">CHEKOUT</button>
+                            <button id="chekout" class="btn btn-primary w-100 text-white">CHEKOUT</button>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
     </div>
     <?php include_once('partials/footer.php'); ?>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const id_pembeli = document.querySelector('input[name=id_pembeli]').value;
+
+        const updateJumlah = (index) => {
+            fetch(`../../ajax/keranjang.php?id_pembeli=${id_pembeli}&id_ukuran_warna_pakaian=${document.querySelectorAll('.item')[index].getAttribute('data-id_ukuran_warna_pakaian')}&jumlah=${document.querySelectorAll('.jumlah')[index].innerText}`)
+                .then(response => response.text())
+                .then(text => console.log(text))
+        }
+
+        const removeItem = (index) => {
+            fetch(`../../ajax/keranjang.php?id_pembeli=${id_pembeli}&id_ukuran_warna_pakaian=${document.querySelectorAll('.item')[index].getAttribute('data-id_ukuran_warna_pakaian')}&hapus=true`)
+                .then(response => response.text())
+                .then(text => console.log(text))
+        }
+
+        const getData = async () => {
+            let url = `../../ajax/keranjang.php?id_pembeli=${id_pembeli}`;
+
+            const html = await fetch(url)
+                .then(response => response.text());
+
+            document.getElementById('keranjang-container').innerHTML = html;
+
+            document.querySelectorAll('.item').forEach((elm, index) => {
+                document.querySelectorAll('.jumlah')[index].addEventListener("keypress", function(evt) {
+                    if (evt.which < 48 || evt.which > 57) {
+                        evt.preventDefault();
+                        return;
+                    }
+                });
+
+                document.querySelectorAll('.jumlah')[index].addEventListener("focusin", function(evt) {
+                    const jumlah_sekarang = this.innerText;
+
+                    document.querySelectorAll('.jumlah')[index].addEventListener("focusout", function(evt) {
+                        if (jumlah_sekarang != this.innerText) {
+                            updateJumlah(index);
+                        }
+                    });
+                });
+
+
+
+                document.querySelectorAll('.plus')[index].addEventListener('click', function() {
+                    document.querySelectorAll('.jumlah')[index].innerText = parseInt(document.querySelectorAll('.jumlah')[index].innerText) + 1;
+                    updateJumlah(index);
+                });
+
+                document.querySelectorAll('.minus')[index].addEventListener('click', function() {
+                    if (parseInt(document.querySelectorAll('.jumlah')[index].innerText) > 1) {
+                        document.querySelectorAll('.jumlah')[index].innerText = parseInt(document.querySelectorAll('.jumlah')[index].innerText) - 1;
+                        updateJumlah(index);
+                    } else {
+                        removeItem(index);
+                        getData();
+                    }
+                });
+            });
+        }
+
+        getData();
+    </script>
 </body>
 
 </html>
