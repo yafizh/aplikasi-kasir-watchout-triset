@@ -41,3 +41,23 @@
         </div>
     </div>
 </footer>
+<script>
+    const updateKeranjang = () => {
+        if (document.querySelector('input[name=id_pembeli]')) {
+            let url = '../../ajax/keranjang.php?';
+            url += `&id_pembeli=${document.querySelector('input[name=id_pembeli]').value}`;
+            url += `&navbar=true`;
+
+            fetch(url)
+                .then(response => response.text())
+                .then(response => {
+                    document.getElementById('jumlah-keranjang').innerHTML = `
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                        ${response}
+                    </span>
+                `;
+                })
+        }
+    }
+    updateKeranjang();
+</script>
