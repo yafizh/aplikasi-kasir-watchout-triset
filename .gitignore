@@ -6,3 +6,7 @@ app/uploads
 app/database/.$Database Schema.drawio.*
 
 dummy/*
+
+node_modules
+vendor
+.env

@@ -124,11 +124,11 @@ CREATE TABLE `kasir`.`detail_penjualan`(
 
 CREATE TABLE `kasir`.`penjualan_online`(
     id BIGINT UNSIGNED AUTO_INCREMENT,
-    id_pelanggan BIGINT UNSIGNED,
+    id_pembeli BIGINT UNSIGNED,
     order_id VARCHAR(255),
     status TINYINT UNSIGNED COMMENT '1=Menunggu Pembayaran|2=Selesai',
     PRIMARY KEY (id),
-    FOREIGN KEY (id_pelanggan) REFERENCES pelanggan (id) ON DELETE CASCADE
+    FOREIGN KEY (id_pembeli) REFERENCES pembeli (id) ON DELETE CASCADE
 );
 
 CREATE TABLE `kasir`.`detail_penjualan_online`(

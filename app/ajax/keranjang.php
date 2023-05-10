@@ -18,7 +18,7 @@ if (isset($_GET['navbar'])) {
             id_pembeli=" . $_GET['id_pembeli'] . "
     ";
     $keranjang = $mysqli->query($query);
-    if($keranjang->num_rows){
+    if ($keranjang->num_rows) {
         echo $keranjang->fetch_assoc()['jumlah'];
     }
     exit;
@@ -181,7 +181,7 @@ if (count($pakaian)) {
                     <div class=\"d-flex align-items-end flex-column justify-content-center\">";
 
         if ($row['diskon']) {
-            $html .= "<p class=\"mb-0\"><del>Rp " . number_format($row['harga_toko'], 0, ',', '.') . "</del></p>";
+            $html .= "<p class=\"harga\" data-harga=\"" . $row['harga_toko'] . "\" data-id_diskon=\"" . $row['id'] . "\" class=\"mb-0\"><del>Rp " . number_format($row['harga_toko'], 0, ',', '.') . "</del></p>";
             if ($row['diskon']['jenis_diskon'] == 1) {
                 $html .= "<h5>IDR " . number_format($row['harga_toko'] - $row['diskon']['diskon'], 0, ',', '.') . "</h5>";
             }
@@ -189,7 +189,7 @@ if (count($pakaian)) {
                 $html .= "<h5>IDR " . number_format($row['harga_toko'] * ($row['diskon']['diskon'] / 100), 0, ',', '.') . "</h5>";
             }
         } else {
-            $html .= "<h5>IDR " . number_format($row['harga_toko'], 0, ',', '.') . "</h5>";
+            $html .= "<h5 class=\"harga\" data-harga=\"" . $row['harga_toko'] . "\" data-id_diskon=\"0\">IDR " . number_format($row['harga_toko'], 0, ',', '.') . "</h5>";
         }
 
         $html .= "</div>
