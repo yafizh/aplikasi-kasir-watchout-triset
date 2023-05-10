@@ -46,15 +46,15 @@ if (!isset($_SESSION['user']['pembeli'])) {
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-3">
                                 <h5>Sub Total</h5>
-                                <h5>Rp 100.000</h5>
+                                <h5 id="sub-total"></h5>
                             </div>
                             <div class="d-flex justify-content-between mb-3">
                                 <h5>Voucher Diskon</h5>
-                                <h5>Rp 0</h5>
+                                <h5 id="voucher-diskon"></h5>
                             </div>
                             <div class="d-flex justify-content-between mb-3">
                                 <h4>Total</h4>
-                                <h4>Rp 100.000</h4>
+                                <h4 id="total"></h4>
                             </div>
                             <hr>
                             <style>
@@ -70,7 +70,7 @@ if (!isset($_SESSION['user']['pembeli'])) {
                                 </div>
                             </div>
                             <hr>
-                            <button id="chekout" class="btn btn-primary w-100 text-white">CHEKOUT</button>
+                            <button id="checkout" class="btn btn-primary w-100 text-white">CHEKOUT</button>
                         </div>
                     </div>
                 </div>
@@ -78,17 +78,18 @@ if (!isset($_SESSION['user']['pembeli'])) {
         </section>
     </div>
     <?php include_once('partials/footer.php'); ?>
+    <script src="../../helper/currency.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const id_pembeli = document.querySelector('input[name=id_pembeli]').value;
 
-        const updateJumlah = (index) => {
+        const updateJumlah = async (index) => {
             fetch(`../../ajax/keranjang.php?id_pembeli=${id_pembeli}&id_ukuran_warna_pakaian=${document.querySelectorAll('.item')[index].getAttribute('data-id_ukuran_warna_pakaian')}&jumlah=${document.querySelectorAll('.jumlah')[index].innerText}`)
                 .then(response => response.text())
                 .then(text => console.log(text))
         }
 
-        const removeItem = (index) => {
+        const removeItem = async (index) => {
             fetch(`../../ajax/keranjang.php?id_pembeli=${id_pembeli}&id_ukuran_warna_pakaian=${document.querySelectorAll('.item')[index].getAttribute('data-id_ukuran_warna_pakaian')}&hapus=true`)
                 .then(response => response.text())
                 .then(text => console.log(text))
@@ -102,6 +103,8 @@ if (!isset($_SESSION['user']['pembeli'])) {
 
             document.getElementById('keranjang-container').innerHTML = html;
 
+            let sub_total = 0;
+            let voucher_diskon = 0;
             document.querySelectorAll('.item').forEach((elm, index) => {
                 document.querySelectorAll('.jumlah')[index].addEventListener("keypress", function(evt) {
                     if (evt.which < 48 || evt.which > 57) {
@@ -113,33 +116,82 @@ if (!isset($_SESSION['user']['pembeli'])) {
                 document.querySelectorAll('.jumlah')[index].addEventListener("focusin", function(evt) {
                     const jumlah_sekarang = this.innerText;
 
-                    document.querySelectorAll('.jumlah')[index].addEventListener("focusout", function(evt) {
+                    document.querySelectorAll('.jumlah')[index].addEventListener("focusout", async function(evt) {
                         if (jumlah_sekarang != this.innerText) {
-                            updateJumlah(index);
+                            await updateJumlah(index);
+                            getData();
                         }
                     });
                 });
 
 
-
-                document.querySelectorAll('.plus')[index].addEventListener('click', function() {
+                 document.querySelectorAll('.plus')[index].addEventListener('click', async  function() {
                     document.querySelectorAll('.jumlah')[index].innerText = parseInt(document.querySelectorAll('.jumlah')[index].innerText) + 1;
-                    updateJumlah(index);
+                    await updateJumlah(index);
+                    getData();
                 });
 
-                document.querySelectorAll('.minus')[index].addEventListener('click', function() {
+                document.querySelectorAll('.minus')[index].addEventListener('click', async function() {
                     if (parseInt(document.querySelectorAll('.jumlah')[index].innerText) > 1) {
                         document.querySelectorAll('.jumlah')[index].innerText = parseInt(document.querySelectorAll('.jumlah')[index].innerText) - 1;
-                        updateJumlah(index);
+                        await updateJumlah(index);
                     } else {
-                        removeItem(index);
-                        getData();
+                        await removeItem(index);
                     }
+                    getData();
                 });
+
+                sub_total = parseInt(document.querySelectorAll('.jumlah')[index].innerText) * parseInt(document.querySelectorAll('.harga')[index].getAttribute('data-harga'))
             });
+
+            document.getElementById('sub-total').innerText = formatter.format(sub_total);
+            document.getElementById('voucher-diskon').innerText = formatter.format(voucher_diskon);
+            document.getElementById('total').innerText = formatter.format(sub_total - voucher_diskon);
         }
 
         getData();
+    </script>
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-EmTzU8jLumgsYI05"></script>
+    <script>
+        document.getElementById("checkout").addEventListener('click', async () => {
+            document.getElementById("checkout").setAttribute('disabled', '');
+            const data = [];
+
+            document.querySelectorAll('.item').forEach((item, index) => {
+                data.push({
+                    id_ukuran_warna_pakaian: document.querySelectorAll('.item')[index].getAttribute('data-id_ukuran_warna_pakaian'),
+                    diskon: document.querySelectorAll('.harga')[index].getAttribute('data-id_diskon'),
+                    jumlah: document.querySelectorAll('.jumlah')[index].innerText,
+                    harga: document.querySelectorAll('.harga')[index].getAttribute('data-harga'),
+                });
+            });
+
+
+            const snapToken = await fetch(`../../ajax/midtrans.php?id_pembeli=${id_pembeli}`, {
+                method: "POST",
+                body: JSON.stringify(data),
+            }).then(response => response.json());
+
+
+            window.snap.pay(snapToken, {
+                onSuccess: function(result) {
+                    location.href = 'profil.php?halaman=riwayat_pembelian';
+                    console.log(result);
+                },
+                onPending: function(result) {
+                    alert("wating your payment!");
+                    console.log(result);
+                },
+                onError: function(result) {
+                    alert("payment failed!");
+                    console.log(result);
+                },
+                onClose: function() {
+                    location.href = 'profil.php?halaman=riwayat_pembelian'
+                    // alert('you closed the popup without finishing the payment');
+                }
+            })
+        });
     </script>
 </body>
 
