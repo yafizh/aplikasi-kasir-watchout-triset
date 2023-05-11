@@ -56,6 +56,7 @@ if (!isset($_SESSION['user']['pembeli'])) {
                 <div class="tab-content w-100 row justify-content-center pt-3" id="pills-tabContent">
                     <?php if (isset($_GET['halaman'])) : ?>
                         <?php if ($_GET['halaman'] == 'riwayat_pembelian') : ?>
+                            <?php include_once('profil/riwayat_pembelian.php'); ?>
                         <?php elseif ($_GET['halaman'] == 'ganti_password') : ?>
                             <?php include_once('profil/ganti_password.php'); ?>
                         <?php endif; ?>

@@ -106,7 +106,7 @@ $query = "
         wp.warna,
         up.ukuran,
         k.jumlah,
-        (SELECT foto FROM foto_pakaian fp INNER JOIN warna_pakaian wp ON wp.id=fp.id_warna_pakaian WHERE wp.id_pakaian=p.id LIMIT 1) foto  
+        (SELECT foto FROM foto_pakaian WHERE id_warna_pakaian=wp.id LIMIT 1) foto  
     FROM 
         keranjang k 
     INNER JOIN 
@@ -181,15 +181,27 @@ if (count($pakaian)) {
                     <div class=\"d-flex align-items-end flex-column justify-content-center\">";
 
         if ($row['diskon']) {
-            $html .= "<p class=\"harga\" data-harga=\"" . $row['harga_toko'] . "\" data-id_diskon=\"" . $row['id'] . "\" class=\"mb-0\"><del>Rp " . number_format($row['harga_toko'], 0, ',', '.') . "</del></p>";
+            $html .= "<p class=\"mb-0\"><del>Rp " . number_format($row['harga_toko'], 0, ',', '.') . "</del></p>";
             if ($row['diskon']['jenis_diskon'] == 1) {
-                $html .= "<h5>IDR " . number_format($row['harga_toko'] - $row['diskon']['diskon'], 0, ',', '.') . "</h5>";
+                $html .= "<h5 
+                class=\"harga\" 
+                data-harga_toko=\"" . $row['harga_toko'] . "\" 
+                data-harga_penjualan=\"" . $row['harga_toko'] - $row['diskon']['diskon'] . "\" 
+                data-id_diskon=\"" . $row['id'] . "\">
+                    IDR " . number_format($row['harga_toko'] - $row['diskon']['diskon'], 0, ',', '.') . "
+                </h5>";
             }
             if ($row['diskon']['jenis_diskon'] == 2) {
-                $html .= "<h5>IDR " . number_format($row['harga_toko'] * ($row['diskon']['diskon'] / 100), 0, ',', '.') . "</h5>";
+                $html .= "<h5 
+                    class=\"harga\" 
+                    data-harga_toko=\"" . $row['harga_toko'] . "\" 
+                    data-harga_penjualan=\"" . $row['harga_toko'] * ($row['diskon']['diskon'] / 100) . "\" 
+                    data-id_diskon=\"" . $row['id'] . "\">
+                        IDR " . number_format($row['harga_toko'] * ($row['diskon']['diskon'] / 100), 0, ',', '.') . "
+                    </h5>";
             }
         } else {
-            $html .= "<h5 class=\"harga\" data-harga=\"" . $row['harga_toko'] . "\" data-id_diskon=\"0\">IDR " . number_format($row['harga_toko'], 0, ',', '.') . "</h5>";
+            $html .= "<h5 class=\"harga\" data-harga_toko=\"" . $row['harga_toko'] . "\" data-harga_penjualan=\"" . $row['harga_toko'] . "\" data-id_diskon=\"0\">IDR " . number_format($row['harga_toko'], 0, ',', '.') . "</h5>";
         }
 
         $html .= "</div>

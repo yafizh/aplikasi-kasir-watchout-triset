@@ -143,12 +143,12 @@ if (!isset($_SESSION['user']['pembeli'])) {
                     getData();
                 });
 
-                sub_total = parseInt(document.querySelectorAll('.jumlah')[index].innerText) * parseInt(document.querySelectorAll('.harga')[index].getAttribute('data-harga'))
+                sub_total = parseInt(document.querySelectorAll('.jumlah')[index].innerText) * parseInt(document.querySelectorAll('.harga')[index].getAttribute('data-harga_toko'))
             });
 
             if (document.getElementById('voucher-diskon').getAttribute('data-diskon')) {
                 if (document.getElementById('voucher-diskon').getAttribute('data-jenis_diskon') == 1) {
-                    voucher_diskon = parseInt(sub_total) - parseInt(document.getElementById('voucher-diskon').getAttribute('data-diskon'))
+                    voucher_diskon = parseInt(document.getElementById('voucher-diskon').getAttribute('data-diskon'))
                 }
 
                 if (document.getElementById('voucher-diskon').getAttribute('data-jenis_diskon') == 2) {
@@ -158,6 +158,7 @@ if (!isset($_SESSION['user']['pembeli'])) {
             }
 
             document.getElementById('sub-total').innerText = formatter.format(sub_total);
+            document.getElementById('sub-total').setAttribute('data-total', sub_total);
             document.getElementById('total').innerText = formatter.format(sub_total - voucher_diskon);
             document.getElementById('total').setAttribute('data-total', sub_total - voucher_diskon);
         }
@@ -190,7 +191,8 @@ if (!isset($_SESSION['user']['pembeli'])) {
             document.getElementById("checkout").setAttribute('disabled', '');
             const data = {
                 penjualan_online: {
-                    harga: document.getElementById('total').getAttribute('data-total'),
+                    harga_total: document.getElementById('sub-total').getAttribute('data-total'),
+                    harga_penjualan: document.getElementById('total').getAttribute('data-total'),
                     voucher_diskon: document.getElementById('voucher-diskon').getAttribute('data-id'),
                 },
                 pakaian: [],
@@ -201,7 +203,8 @@ if (!isset($_SESSION['user']['pembeli'])) {
                     id_ukuran_warna_pakaian: document.querySelectorAll('.item')[index].getAttribute('data-id_ukuran_warna_pakaian'),
                     diskon: document.querySelectorAll('.harga')[index].getAttribute('data-id_diskon'),
                     jumlah: document.querySelectorAll('.jumlah')[index].innerText,
-                    harga: document.querySelectorAll('.harga')[index].getAttribute('data-harga'),
+                    harga_toko: document.querySelectorAll('.harga')[index].getAttribute('data-harga_toko'),
+                    harga_penjualan: document.querySelectorAll('.harga')[index].getAttribute('data-harga_penjualan'),
                 });
             });
 
@@ -209,7 +212,7 @@ if (!isset($_SESSION['user']['pembeli'])) {
             const snapToken = await fetch(`../../ajax/midtrans.php?id_pembeli=${id_pembeli}`, {
                 method: "POST",
                 body: JSON.stringify(data),
-            }).then(response => response.text());
+            }).then(response => response.json());
 
             window.snap.pay(snapToken, {
                 onSuccess: function(result) {

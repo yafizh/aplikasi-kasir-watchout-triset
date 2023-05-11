@@ -18,19 +18,32 @@ require_once '../../vendor/autoload.php';
 $data = json_decode(file_get_contents('php://input'), true);
 
 $order_id = 'OXA-' . rand();
-$total = 0;
+
+$params = array(
+    'transaction_details' => array(
+        'order_id' => $order_id,
+        'gross_amount' => $data['penjualan_online']['harga_penjualan'],
+    ),
+);
+
+$snapToken = \Midtrans\Snap::getSnapToken($params);
+
 $query = "
     INSERT INTO penjualan_online (
         id_pembeli,
         order_id,
+        snap_token,
         tanggal_waktu,
-        harga,
+        harga_total,
+        harga_penjualan,
         status
     ) VALUES (
         " . $_GET['id_pembeli'] . ",
         '$order_id',
+        '$snapToken',
         '" . Date("Y-m-d H:i:s") . "',
-        '" . $data['penjualan_online']['harga'] . "',
+        '" . $data['penjualan_online']['harga_total'] . "',
+        '" . $data['penjualan_online']['harga_penjualan'] . "',
         1
     )
 ";
@@ -46,17 +59,17 @@ foreach ($data['pakaian'] as $value) {
         INSERT INTO detail_penjualan_online (
             id_penjualan_online,
             id_ukuran_warna_pakaian,
-            harga,
+            harga_toko,
+            harga_penjualan,
             jumlah 
         ) VALUES (
             $id_penjualan_online,
             " . $value['id_ukuran_warna_pakaian'] . ",
-            " . $value['harga'] . ",
+            " . $value['harga_toko'] . ",
+            " . $value['harga_penjualan'] . ",
             " . $value['jumlah'] . "
         )
     ";
-
-    $total += $value['harga'];
 
     $mysqli->query($query);
     if ((int)$value['diskon'] > 0) {
@@ -75,15 +88,5 @@ foreach ($data['pakaian'] as $value) {
     $mysqli->query("DELETE FROM keranjang WHERE id_pembeli=" . $_GET['id_pembeli']);
 }
 
-
-
-$params = array(
-    'transaction_details' => array(
-        'order_id' => $order_id,
-        'gross_amount' => $total,
-    ),
-);
-
-$snapToken = \Midtrans\Snap::getSnapToken($params);
 echo json_encode($snapToken);
 exit;
