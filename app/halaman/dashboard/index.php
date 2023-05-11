@@ -49,10 +49,10 @@
                                             <i class="iconly-boldAdd-User"></i>
                                         </div>
                                     </div>
-                                    <?php $jenis_pakaian = $mysqli->query("SELECT * FROM jenis_pakaian"); ?>
+                                    <?php $kategori_pakaian = $mysqli->query("SELECT * FROM kategori_pakaian"); ?>
                                     <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Jenis Pakaian</h6>
-                                        <h6 class="font-extrabold mb-0"><?= $jenis_pakaian->num_rows; ?></h6>
+                                        <h6 class="text-muted font-semibold">Kategori Pakaian</h6>
+                                        <h6 class="font-extrabold mb-0"><?= $kategori_pakaian->num_rows; ?></h6>
                                     </div>
                                 </div>
                             </div>

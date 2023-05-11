@@ -6,25 +6,28 @@ if (isset($_POST['submit'])) {
     $tanggal_selesai = $mysqli->real_escape_string($_POST['tanggal_selesai']);
     $diskon = $mysqli->real_escape_string($_POST['diskon']);
     $jenis_diskon = $mysqli->real_escape_string($_POST['jenis_diskon']);
+    $kode_voucher = $mysqli->real_escape_string($_POST['kode_voucher']);
 
     $q = "
-    INSERT INTO diskon (
+    INSERT INTO voucher_diskon (
         nama,
         tanggal_mulai,
         tanggal_selesai,
         diskon,
-        jenis_diskon
+        jenis_diskon,
+        kode_voucher 
     ) VALUES (
         '$nama',
         '$tanggal_mulai',
         '$tanggal_selesai',
         '" . implode('', explode('.', $diskon)) . "',
-        '$jenis_diskon'
+        '$jenis_diskon',
+        '$kode_voucher'
     )";
 
     if ($mysqli->query($q)) {
-        echo "<script>sessionStorage.setItem('tambah','Tambah diskon berhasil.')</script>";
-        echo "<script>location.href = '?halaman=diskon';</script>";
+        echo "<script>sessionStorage.setItem('tambah','Tambah voucher diskon berhasil.')</script>";
+        echo "<script>location.href = '?halaman=voucher_diskon';</script>";
     } else {
         echo "<script>alert('Tambah Data Gagal!')</script>";
         die($mysqli->error);
@@ -85,8 +88,14 @@ if (isset($_POST['submit'])) {
                                                     <input type="text" id="diskon" class="form-control" name="diskon" autocomplete="off" required>
                                                 </div>
                                             </div>
+                                            <div class="col-12 mb-3">
+                                                <div class="form-group">
+                                                    <label for="kode_voucher">Kode Voucher</label>
+                                                    <input type="text" id="kode_voucher" class="form-control" name="kode_voucher" autocomplete="off" required>
+                                                </div>
+                                            </div>
                                             <div class="col-12 d-flex justify-content-between">
-                                                <a href="?halaman=diskon" class="btn btn-light-secondary mb-1">Kembali</a>
+                                                <a href="?halaman=voucher_diskon" class="btn btn-light-secondary mb-1">Kembali</a>
                                                 <button type="submit" name="submit" class="btn btn-primary mb-1 text-white">Tambah</button>
                                             </div>
                                         </div>

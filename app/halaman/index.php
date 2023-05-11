@@ -8,13 +8,16 @@ require_once('../database/koneksi.php');
 // Helper 
 require_once('../helper/date.php');
 
-
+if (isset($_SESSION['user']['pembeli'])) {
+    header('Location: online_store/index.php');
+}
 
 if (isset($_SESSION['user'])) {
     if (isset($_GET['halaman'])) {
         // Diskon
         include_once('../route/diskon.php');
         include_once('../route/diskon_pakaian.php');
+        include_once('../route/voucher_diskon.php');
 
         // Laporan
         include_once('../route/laporan.php');

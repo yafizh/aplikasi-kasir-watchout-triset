@@ -1,32 +1,32 @@
 <?php
 
+$result = $mysqli->query('SELECT * FROM voucher_diskon WHERE id=' . $_GET['id']);
+$data = $result->fetch_assoc();
+
 if (isset($_POST['submit'])) {
     $nama = $mysqli->real_escape_string($_POST['nama']);
     $tanggal_mulai = $mysqli->real_escape_string($_POST['tanggal_mulai']);
     $tanggal_selesai = $mysqli->real_escape_string($_POST['tanggal_selesai']);
     $diskon = $mysqli->real_escape_string($_POST['diskon']);
     $jenis_diskon = $mysqli->real_escape_string($_POST['jenis_diskon']);
+    $kode_voucher = $mysqli->real_escape_string($_POST['kode_voucher']);
 
     $q = "
-    INSERT INTO diskon (
-        nama,
-        tanggal_mulai,
-        tanggal_selesai,
-        diskon,
-        jenis_diskon
-    ) VALUES (
-        '$nama',
-        '$tanggal_mulai',
-        '$tanggal_selesai',
-        '" . implode('', explode('.', $diskon)) . "',
-        '$jenis_diskon'
-    )";
+    UPDATE voucher_diskon SET 
+        nama='$nama',
+        tanggal_mulai='$tanggal_mulai',
+        tanggal_selesai='$tanggal_selesai',
+        diskon='" . implode('', explode('.', $diskon)) . "',
+        jenis_diskon='$jenis_diskon',
+        kode_voucher='$kode_voucher' 
+    WHERE 
+        id=" . $data['id'];
 
     if ($mysqli->query($q)) {
-        echo "<script>sessionStorage.setItem('tambah','Tambah diskon berhasil.')</script>";
-        echo "<script>location.href = '?halaman=diskon';</script>";
+        echo "<script>sessionStorage.setItem('edit','Edit voucher diskon berhasil.')</script>";
+        echo "<script>location.href = '?halaman=voucher_diskon';</script>";
     } else {
-        echo "<script>alert('Tambah Data Gagal!')</script>";
+        echo "<script>alert('Edit Data Gagal!')</script>";
         die($mysqli->error);
     }
 }
@@ -54,40 +54,45 @@ if (isset($_POST['submit'])) {
                                             <div class="col-12 mb-3">
                                                 <div class="form-group">
                                                     <label for="nama">Nama</label>
-                                                    <input type="text" id="nama" class="form-control" name="nama" autocomplete="off" required>
+                                                    <input type="text" id="nama" class="form-control" name="nama" autocomplete="off" required value="<?= $data['nama']; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-12 mb-3">
                                                 <div class="form-group">
                                                     <label for="tanggal_mulai">Tanggal Mulai</label>
-                                                    <input type="date" id="tanggal_mulai" class="form-control" name="tanggal_mulai" autocomplete="off" required>
+                                                    <input type="date" id="tanggal_mulai" class="form-control" name="tanggal_mulai" autocomplete="off" required value="<?= $data['tanggal_mulai']; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-12 mb-3">
                                                 <div class="form-group">
                                                     <label for="tanggal_selesai">Tanggal Selesai</label>
-                                                    <input type="date" id="tanggal_selesai" class="form-control" name="tanggal_selesai" autocomplete="off" required>
+                                                    <input type="date" id="tanggal_selesai" class="form-control" name="tanggal_selesai" autocomplete="off" required value="<?= $data['tanggal_selesai']; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-12 mb-3">
                                                 <div class="form-group">
                                                     <label for="tanggal_selesai">Jenis Diskon</label>
                                                     <select name="jenis_diskon" id="jenis_diskon" class="form-control" required>
-                                                        <option value="" selected disabled>Pilih Jenis Diskon</option>
-                                                        <option value="1">Pengurangan Berdasarkan Nominal</option>
-                                                        <option value="2">Pengurangan Berdasarkan Persentase</option>
+                                                        <option value="1" <?= $data['diskon'] == 1 ? 'selected' : '' ?>>Pengurangan Berdasarkan Nominal</option>
+                                                        <option value="2" <?= $data['diskon'] == 2 ? 'selected' : '' ?>>Pengurangan Berdasarkan Persentase</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-12 mb-3">
                                                 <div class="form-group">
                                                     <label for="diskon">Diskon</label>
-                                                    <input type="text" id="diskon" class="form-control" name="diskon" autocomplete="off" required>
+                                                    <input type="text" id="diskon" class="form-control" name="diskon" autocomplete="off" required value="<?= number_format($data['diskon'], 0, ",", "."); ?>">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <div class="form-group">
+                                                    <label for="kode_voucher">Kode Voucher</label>
+                                                    <input type="text" id="kode_voucher" class="form-control" name="kode_voucher" autocomplete="off" required value="<?= $data['kode_voucher']; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-12 d-flex justify-content-between">
-                                                <a href="?halaman=diskon" class="btn btn-light-secondary mb-1">Kembali</a>
-                                                <button type="submit" name="submit" class="btn btn-primary mb-1 text-white">Tambah</button>
+                                                <a href="?halaman=diskon_pakaian" class="btn btn-light-secondary mb-1">Kembali</a>
+                                                <button type="submit" name="submit" class="btn btn-primary mb-1 text-white">Simpan</button>
                                             </div>
                                         </div>
                                     </div>
@@ -100,15 +105,3 @@ if (isset($_POST['submit'])) {
         </section>
     </div>
 </div>
-<script>
-    document.querySelector('input[name=diskon]').addEventListener("keypress", function(evt) {
-        if (evt.which < 48 || evt.which > 57) {
-            evt.preventDefault();
-            return;
-        }
-        this.addEventListener('input', function() {
-            const diskon = Number(((this.value).split('.')).join(''));
-            this.value = formatNumberWithDot.format(diskon);
-        });
-    });
-</script>

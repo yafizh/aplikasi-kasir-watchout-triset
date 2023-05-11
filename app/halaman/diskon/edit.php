@@ -83,7 +83,7 @@ if (isset($_POST['submit'])) {
                                                 </div>
                                             </div>
                                             <div class="col-12 d-flex justify-content-between">
-                                                <a href="?halaman=diskon_pakaian" class="btn btn-light-secondary mb-1">Kembali</a>
+                                                <a href="?halaman=diskon" class="btn btn-light-secondary mb-1">Kembali</a>
                                                 <button type="submit" name="submit" class="btn btn-primary mb-1 text-white">Simpan</button>
                                             </div>
                                         </div>
@@ -97,3 +97,15 @@ if (isset($_POST['submit'])) {
         </section>
     </div>
 </div>
+<script>
+    document.querySelector('input[name=diskon]').addEventListener("keypress", function(evt) {
+        if (evt.which < 48 || evt.which > 57) {
+            evt.preventDefault();
+            return;
+        }
+        this.addEventListener('input', function() {
+            const diskon = Number(((this.value).split('.')).join(''));
+            this.value = formatNumberWithDot.format(diskon);
+        });
+    });
+</script>
