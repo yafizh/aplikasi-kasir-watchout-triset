@@ -181,12 +181,12 @@ CREATE TABLE `kasir`.`voucher_diskon`(
     PRIMARY KEY (id)
 );
 
-CREATE TABLE `kasir`.`voucher_diskon_pakaian`(
+CREATE TABLE `kasir`.`penjualan_online_voucher_diskon`(
     id_penjualan_online BIGINT UNSIGNED,
-    id_pakaian BIGINT UNSIGNED,
-    PRIMARY KEY (id_penjualan_online, id_pakaian),
+    id_voucher_diskon BIGINT UNSIGNED,
+    PRIMARY KEY (id_penjualan_online, id_voucher_diskon),
     FOREIGN KEY (id_penjualan_online) REFERENCES penjualan_online (id) ON DELETE CASCADE,
-    FOREIGN KEY (id_pakaian) REFERENCES pakaian(id) ON DELETE CASCADE
+    FOREIGN KEY (id_voucher_diskon) REFERENCES voucher_diskon(id) ON DELETE CASCADE
 );
 
 CREATE TABLE `kasir`.`keranjang` (

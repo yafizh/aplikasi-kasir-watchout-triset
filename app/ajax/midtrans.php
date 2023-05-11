@@ -23,16 +23,24 @@ $query = "
     INSERT INTO penjualan_online (
         id_pembeli,
         order_id,
+        tanggal_waktu,
+        harga,
         status
     ) VALUES (
         " . $_GET['id_pembeli'] . ",
         '$order_id',
+        '" . Date("Y-m-d H:i:s") . "',
+        '" . $data['penjualan_online']['harga'] . "',
         1
     )
 ";
 $mysqli->query($query);
 $id_penjualan_online = $mysqli->insert_id;
-foreach ($data as $value) {
+
+if ($data['penjualan_online']['voucher_diskon'])
+    $mysqli->query("INSERT INTO penjualan_online_voucher_diskon VALUES ($id_penjualan_online, " . $data['penjualan_online']['voucher_diskon'] . ")");
+
+foreach ($data['pakaian'] as $value) {
 
     $query = "
         INSERT INTO detail_penjualan_online (

@@ -20,6 +20,7 @@ if (!isset($_SESSION['user']['pembeli'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Watchout Triset</title>
     <link href="../../assets/css/main/main.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/extensions/sweetalert2/sweetalert2.min.css">
     <link rel="stylesheet" href="../../assets/css/shared/iconly.css">
     <style>
         @import "../../assets/css/main/fonts.css";
@@ -50,7 +51,7 @@ if (!isset($_SESSION['user']['pembeli'])) {
                             </div>
                             <div class="d-flex justify-content-between mb-3">
                                 <h5>Voucher Diskon</h5>
-                                <h5 id="voucher-diskon"></h5>
+                                <h5 id="voucher-diskon">Rp 0</h5>
                             </div>
                             <div class="d-flex justify-content-between mb-3">
                                 <h4>Total</h4>
@@ -65,7 +66,7 @@ if (!isset($_SESSION['user']['pembeli'])) {
                             <div class="mb-3">
                                 <label for="" class="mb-2">Kode Voucher</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="KODE VOUCER" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                    <input type="text" class="form-control" placeholder="KODE VOUCER" name="kode_voucher">
                                     <button class="btn btn-outline-primary" type="button" id="terapkan">TERAPKAN</button>
                                 </div>
                             </div>
@@ -80,6 +81,7 @@ if (!isset($_SESSION['user']['pembeli'])) {
     <?php include_once('partials/footer.php'); ?>
     <script src="../../helper/currency.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/extensions/sweetalert2/sweetalert2.min.js"></script>
     <script>
         const id_pembeli = document.querySelector('input[name=id_pembeli]').value;
 
@@ -125,7 +127,7 @@ if (!isset($_SESSION['user']['pembeli'])) {
                 });
 
 
-                 document.querySelectorAll('.plus')[index].addEventListener('click', async  function() {
+                document.querySelectorAll('.plus')[index].addEventListener('click', async function() {
                     document.querySelectorAll('.jumlah')[index].innerText = parseInt(document.querySelectorAll('.jumlah')[index].innerText) + 1;
                     await updateJumlah(index);
                     getData();
@@ -144,10 +146,41 @@ if (!isset($_SESSION['user']['pembeli'])) {
                 sub_total = parseInt(document.querySelectorAll('.jumlah')[index].innerText) * parseInt(document.querySelectorAll('.harga')[index].getAttribute('data-harga'))
             });
 
+            if (document.getElementById('voucher-diskon').getAttribute('data-diskon')) {
+                if (document.getElementById('voucher-diskon').getAttribute('data-jenis_diskon') == 1) {
+                    voucher_diskon = parseInt(sub_total) - parseInt(document.getElementById('voucher-diskon').getAttribute('data-diskon'))
+                }
+
+                if (document.getElementById('voucher-diskon').getAttribute('data-jenis_diskon') == 2) {
+                    voucher_diskon = parseInt(sub_total) * (parseInt(document.getElementById('voucher-diskon').getAttribute('data-diskon')) / 100)
+                }
+                document.getElementById('voucher-diskon').innerText = formatter.format(voucher_diskon);
+            }
+
             document.getElementById('sub-total').innerText = formatter.format(sub_total);
-            document.getElementById('voucher-diskon').innerText = formatter.format(voucher_diskon);
             document.getElementById('total').innerText = formatter.format(sub_total - voucher_diskon);
+            document.getElementById('total').setAttribute('data-total', sub_total - voucher_diskon);
         }
+
+        document.getElementById('terapkan').addEventListener('click', async () => {
+            const kode_voucher = document.querySelector('input[name=kode_voucher]').value;
+            const response = await fetch(`../../ajax/voucher_diskon.php?kode_voucher=${kode_voucher}`)
+                .then(response => response.json());
+            if (response) {
+                document.getElementById('voucher-diskon').setAttribute('data-id', response.id);
+                document.getElementById('voucher-diskon').setAttribute('data-diskon', response.diskon);
+                document.getElementById('voucher-diskon').setAttribute('data-jenis_diskon', response.jenis_diskon);
+                getData();
+            } else {
+                Swal.fire({
+                    title: 'Kode Voucher Tidak Valid',
+                    icon: 'danger',
+                    showCancelButton: true,
+                    showConfirmButton: false,
+                    cancelButtonText: 'Tutup'
+                });
+            }
+        });
 
         getData();
     </script>
@@ -155,10 +188,16 @@ if (!isset($_SESSION['user']['pembeli'])) {
     <script>
         document.getElementById("checkout").addEventListener('click', async () => {
             document.getElementById("checkout").setAttribute('disabled', '');
-            const data = [];
+            const data = {
+                penjualan_online: {
+                    harga: document.getElementById('total').getAttribute('data-total'),
+                    voucher_diskon: document.getElementById('voucher-diskon').getAttribute('data-id'),
+                },
+                pakaian: [],
+            };
 
             document.querySelectorAll('.item').forEach((item, index) => {
-                data.push({
+                data.pakaian.push({
                     id_ukuran_warna_pakaian: document.querySelectorAll('.item')[index].getAttribute('data-id_ukuran_warna_pakaian'),
                     diskon: document.querySelectorAll('.harga')[index].getAttribute('data-id_diskon'),
                     jumlah: document.querySelectorAll('.jumlah')[index].innerText,
@@ -170,8 +209,7 @@ if (!isset($_SESSION['user']['pembeli'])) {
             const snapToken = await fetch(`../../ajax/midtrans.php?id_pembeli=${id_pembeli}`, {
                 method: "POST",
                 body: JSON.stringify(data),
-            }).then(response => response.json());
-
+            }).then(response => response.text());
 
             window.snap.pay(snapToken, {
                 onSuccess: function(result) {
