@@ -88,5 +88,8 @@ foreach ($data['pakaian'] as $value) {
     $mysqli->query("DELETE FROM keranjang WHERE id_pembeli=" . $_GET['id_pembeli']);
 }
 
-echo json_encode($snapToken);
+echo json_encode([
+    'id' => $id_penjualan_online,
+    'snap_token' => $snapToken
+]);
 exit;

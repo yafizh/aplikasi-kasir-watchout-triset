@@ -209,14 +209,14 @@ if (!isset($_SESSION['user']['pembeli'])) {
             });
 
 
-            const snapToken = await fetch(`../../ajax/midtrans.php?id_pembeli=${id_pembeli}`, {
+            const midtrans = await fetch(`../../ajax/midtrans.php?id_pembeli=${id_pembeli}`, {
                 method: "POST",
                 body: JSON.stringify(data),
             }).then(response => response.json());
 
-            window.snap.pay(snapToken, {
+            window.snap.pay(midtrans['snap_token'], {
                 onSuccess: function(result) {
-                    location.href = 'profil.php?halaman=riwayat_pembelian';
+                    location.href = 'profil.php?halaman=riwayat_pembelian&status=3&id=' + midtrans['id'];
                     console.log(result);
                 },
                 onPending: function(result) {
