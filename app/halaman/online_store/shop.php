@@ -107,7 +107,7 @@ require_once('../../helper/date.php');
                                 </div>
                             </div>
                             <div class="accordion-item">
-                                <?php $kategori_pakaian = $mysqli->query("SELECT * FROM kategori_pakaian"); ?>
+                                <?php $kategori_pakaian = $mysqli->query("SELECT * FROM kategori_pakaian ORDER BY urutan"); ?>
                                 <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
                                         Kategori Pakaian

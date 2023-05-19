@@ -10,7 +10,7 @@ require_once('../helper/date.php');
 
 $today = Date("Y-m-d");
 $query = "
-    SELECT DISTINCT
+    SELECT DISTINCT 
         p.*,
         (SELECT foto FROM foto_pakaian fp INNER JOIN warna_pakaian wp ON wp.id=fp.id_warna_pakaian WHERE wp.id_pakaian=p.id LIMIT 1) foto 
     FROM 
@@ -71,10 +71,12 @@ foreach ($pakaian as $index => $value) {
                 '$today' <= d.tanggal_selesai  
             ) 
             AND 
-            dp.id_pakaian=" . $value['id'] . "
+            dp.id_pakaian=" . $value['id'] . " 
+        ORDER BY 
+            d.tanggal_mulai DESC 
     ";
     $result = $mysqli->query($query);
-    $pakaian[$index]['diskon'] = $result->fetch_assoc();
+    $pakaian[$index]['diskon'] = $result->fetch_all(MYSQLI_ASSOC);
 }
 
 $html = "";
@@ -96,12 +98,17 @@ foreach ($pakaian as $row) {
 
     if ($row['diskon']) {
         $html .= "<p class=\"text-muted mb-0\"><del>IDR " . number_format($row['harga_toko'], 0, ',', '.') . "</del></p>";
-        if ($row['diskon']['jenis_diskon'] == 1) {
-            $html .= "<h5 class=\"text-success\">IDR " . number_format($row['harga_toko'] - $row['diskon']['diskon'], 0, ',', '.') . "</h5>";
+
+        $harga_setelah_diskon = $row['harga_toko'];
+        foreach ($row['diskon'] as $diskon) {
+            if ($diskon['jenis_diskon'] == 1) {
+                $harga_setelah_diskon -= $diskon['diskon'];
+            }
+            if ($diskon['jenis_diskon'] == 2) {
+                $harga_setelah_diskon *= ($diskon['diskon'] / 100);
+            }
         }
-        if ($row['diskon']['jenis_diskon'] == 2) {
-            $html .= "<h5 class=\"text-success\">IDR " . number_format($row['harga_toko'] * ($row['diskon']['diskon'] / 100), 0, ',', '.') . "</h5>";
-        }
+        $html .= "<h5 class=\"text-success\">IDR " . number_format($harga_setelah_diskon, 0, ',', '.') . "</h5>";
     } else {
         $html .= "<p class=\"text-muted mb-0\">IDR " . number_format($row['harga_toko'], 0, ',', '.') . "</p>";
     }

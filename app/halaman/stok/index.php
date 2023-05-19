@@ -110,8 +110,8 @@
                                         <tbody>
                                             <?php foreach ($warna_pakaian as $warna) : ?>
                                                 <tr>
-                                                    <td rowspan="<?= count($warna) ?>" class="text-center no-td"><?= $no++; ?></td>
-                                                    <td rowspan="<?= count($warna) ?>" class="text-center"><?= $warna['warna']; ?></td>
+                                                    <td rowspan="<?= count($warna) - 2 ?>" class="text-center no-td"><?= $no++; ?></td>
+                                                    <td rowspan="<?= count($warna) - 2 ?>" class="text-center"><?= $warna['warna']; ?></td>
                                                     <td class="text-center"><?= $warna['ukuran_pakaian'][0]['ukuran']; ?></td>
                                                     <td class="text-center"><?= $warna['ukuran_pakaian'][0]['jumlah']; ?></td>
                                                 </tr>
