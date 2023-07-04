@@ -163,6 +163,9 @@
                                                         </a>
                                                     </td>
                                                     <td class="no-td">
+                                                        <button onclick="broadcast('<?= $row['nama']; ?>')" class="btn btn-success btn-sm text-white" title="Broadcast">
+                                                            Broadcast
+                                                        </button>
                                                         <a href="?halaman=edit_pakaian&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white" title="Edit">
                                                             Edit
                                                         </a>
@@ -187,3 +190,38 @@
         </section>
     </div>
 </div>
+<?php
+$result = $mysqli->query("SELECT * FROM pembeli");
+$pembeli = $result->fetch_all(MYSQLI_ASSOC);
+?>
+<script>
+    const pembeli = JSON.parse('<?= json_encode($pembeli); ?>');
+    async function postData(url = "", data = {}) {
+        // Default options are marked with *
+        const response = await fetch(url, {
+            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(Object.entries(data)).toString(), // body data type must match "Content-Type" header
+        });
+        return response.json(); // parses JSON response into native JavaScript objects
+    }
+
+    const broadcast = async (nama) => {
+        pembeli.forEach(async (item) => {
+            let nomor_telepon = item.nomor_telepon;
+            if (nomor_telepon[0] == '0') {
+                nomor_telepon = `62${item.nomor_telepon.substr(1)}`
+            }
+            if (nomor_telepon[0] == '+') {
+                nomor_telepon = `${item.nomor_telepon.substr(1)}`
+            }
+            const response = await postData("http://localhost:8000/send-message", {
+                number: `${nomor_telepon}@c.us`,
+                message: `${nama}`
+            });
+            console.log(response)
+        });
+    }
+</script>

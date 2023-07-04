@@ -67,5 +67,6 @@ if (isset($_POST['submit'])) {
     </form>
     <div class="text-center text-lg">
         <p><a class="font-bold" href="#" onclick="alert('Hubungi Admin!')">Lupa Password?</a></p>
+        <p><a class="font-bold" href="?halaman=register" >Daftar Baru</a></p>
     </div>
 </div>

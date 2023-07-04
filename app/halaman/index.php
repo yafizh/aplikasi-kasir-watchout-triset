@@ -179,7 +179,13 @@ if (isset($_SESSION['user'])) {
         <div id="auth">
             <div class="row h-100 justify-content-center">
                 <div class="col-md-6">
-                    <?php include_once('auth/login.php'); ?>
+                    <?php if (isset($_GET['halaman'])) : ?>
+                        <?php if ($_GET['halaman'] === 'register') : ?>
+                            <?php include_once('auth/register.php'); ?>
+                        <?php endif; ?>
+                    <?php else : ?>
+                        <?php include_once('auth/login.php'); ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
