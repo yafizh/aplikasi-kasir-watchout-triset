@@ -32,7 +32,7 @@
                                 FROM 
                                     penjualan AS p 
                                 INNER JOIN 
-                                    pakaian_terjual AS pt 
+                                    detail_penjualan AS pt 
                                 ON 
                                     p.id=pt.id_penjualan 
                                 GROUP BY 
@@ -47,35 +47,31 @@
                                     SELECT 
                                         pt.jumlah,
                                         pt.harga,
-                                        u.nama AS ukuran,
-                                        w.nama AS warna,
+                                        u.ukuran,
+                                        w.warna,
                                         p.nama, 
-                                        wp.foto  
+                                        (SELECT foto FROM foto_pakaian fp WHERE fp.id_warna_pakaian=w.id LIMIT 1) foto 
                                     FROM 
-                                        pakaian_terjual AS pt 
+                                        detail_penjualan AS pt 
                                     INNER JOIN 
                                         ukuran_warna_pakaian AS uwp 
                                     ON 
                                         uwp.id=pt.id_ukuran_warna_pakaian
                                     INNER JOIN 
-                                        ukuran AS u 
+                                        ukuran_pakaian AS u 
                                     ON 
-                                        u.id=uwp.id_ukuran 
+                                        u.id=uwp.id_ukuran_pakaian
                                     INNER JOIN 
-                                        warna_pakaian AS wp 
+                                        warna_pakaian AS w 
                                     ON 
-                                        wp.id=uwp.id_warna_pakaian
-                                    INNER JOIN 
-                                        warna AS w 
-                                    ON 
-                                        w.id=wp.id_warna 
+                                        w.id=uwp.id_warna_pakaian
                                     INNER JOIN 
                                         pakaian AS p 
                                     ON 
-                                        p.id=wp.id_pakaian
+                                        p.id=w.id_pakaian
                                     WHERE 
                                         pt.id_penjualan=" . $value['id'];
-                                $riwayat_penjualan[$key]['pakaian_terjual'] = $mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
+                                $riwayat_penjualan[$key]['detail_penjualan'] = $mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
                             }
                             $no = 1;
                             ?>
@@ -143,7 +139,7 @@
     document.querySelectorAll(".zzz").forEach((button, index_button) => {
         button.addEventListener('click', () => {
             document.getElementById('detail-in-basket').innerText = '';
-            riwayat_penjualan[index_button]['pakaian_terjual'].forEach((value, index) => {
+            riwayat_penjualan[index_button]['detail_penjualan'].forEach((value, index) => {
                 document.getElementById('detail-in-basket').insertAdjacentHTML('beforeend', `
                     <div class="border border-2 rounded p-3 mb-1">
                         <div class="d-flex gap-3 justify-content-between flex-wrap">

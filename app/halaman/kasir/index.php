@@ -20,7 +20,7 @@
             $id = $mysqli->insert_id;
             for ($i = 0; $i < count($id_ukuran_warna_pakaian); $i++) {
                 $q = "
-                INSERT INTO pakaian_terjual (
+                INSERT INTO detail_penjualan (
                     id_penjualan, 
                     id_ukuran_warna_pakaian, 
                     harga, 
@@ -56,15 +56,17 @@
         <?php
         $merk = $mysqli->query("SELECT * FROM merk")->fetch_all(MYSQLI_ASSOC);
         foreach ($merk as $key_merk => $value_merk) {
-            $jenis_pakaian = $mysqli->query("SELECT * FROM jenis_pakaian")->fetch_all(MYSQLI_ASSOC);
-            foreach ($jenis_pakaian as $key_jenis_pakaian => $value_jenis_pakaian) {
+            $kategori_pakaian = $mysqli->query("SELECT * FROM kategori_pakaian")->fetch_all(MYSQLI_ASSOC);
+            foreach ($kategori_pakaian as $key_kategori_pakaian => $value_kategori_pakaian) {
                 $query = "
                         SELECT 
-                            * 
+                            id,
+                            nama,
+                            harga_toko harga
                         FROM 
                             pakaian 
                         WHERE 
-                            id_jenis_pakaian=" . $value_jenis_pakaian['id'] . " 
+                            id_kategori_pakaian=" . $value_kategori_pakaian['id'] . " 
                             AND 
                             id_merk=" . $value_merk['id'] . " 
                             AND 
@@ -74,45 +76,41 @@
                 foreach ($pakaian as $key_pakaian => $value_pakaian) {
                     $query = "
                             SELECT 
-                                warna_pakaian.*, 
-                                warna.nama 
-                            FROM 
+                                id,
+                                warna as nama,
+                                (SELECT foto FROM foto_pakaian fp WHERE fp.id_warna_pakaian=warna_pakaian.id LIMIT 1) foto 
+                            FROM  
                                 warna_pakaian 
-                            INNER JOIN 
-                                warna 
-                            ON 
-                                warna.id=warna_pakaian.id_warna 
                             WHERE 
-                                warna_pakaian.id_pakaian=" . $value_pakaian['id'];
+                                id_pakaian=" . $value_pakaian['id'];
                     $warna_pakaian = $mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
                     foreach ($warna_pakaian as $key_warna_pakaian => $value_warna_pakaian) {
                         $query = "
                                 SELECT 
-                                    ukuran.nama,
-                                    uwp.*,
+                                    uwp.id,
+                                    up.ukuran nama,
                                     (
-                                        IFNULL((SELECT SUM(pd.jumlah) FROM pakaian_disuplai AS pd WHERE pd.id_ukuran_warna_pakaian=uwp.id), 0)
+                                        IFNULL((SELECT SUM(pd.jumlah) FROM pakaian_disuplai pd WHERE pd.id_ukuran_warna_pakaian=uwp.id), 0)
                                         - 
-                                        IFNULL((SELECT SUM(pt.jumlah) FROM pakaian_terjual AS pt WHERE pt.id_ukuran_warna_pakaian=uwp.id), 0)
+                                        IFNULL((SELECT SUM(dp.jumlah) FROM detail_penjualan dp WHERE dp.id_ukuran_warna_pakaian=uwp.id), 0)
                                     ) AS jumlah 
                                 FROM 
-                                    ukuran_warna_pakaian AS uwp
+                                    ukuran_warna_pakaian uwp
                                 INNER JOIN 
-                                    ukuran 
+                                    ukuran_pakaian up
                                 ON 
-                                    ukuran.id=uwp.id_ukuran  
+                                    up.id=uwp.id_ukuran_pakaian 
                                 WHERE 
-                                    uwp.id_warna_pakaian=" . $value_warna_pakaian['id'] . "
-                                GROUP BY 
-                                    uwp.id
+                                    uwp.id_warna_pakaian=" . $value_warna_pakaian['id'] . " 
+                                ORDER BY FIELD(up.ukuran, 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL'), up.ukuran    
                             ";
                         $warna_pakaian[$key_warna_pakaian]['ukuran'] = $mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
                     }
                     $pakaian[$key_pakaian]['warna_pakaian'] = $warna_pakaian;
                 }
-                $jenis_pakaian[$key_jenis_pakaian]['pakaian'] = $pakaian;
+                $kategori_pakaian[$key_kategori_pakaian]['pakaian'] = $pakaian;
             }
-            $merk[$key_merk]['jenis_pakaian'] = $jenis_pakaian;
+            $merk[$key_merk]['kategori_pakaian'] = $kategori_pakaian;
         }
         ?>
         <div class="page-heading">
@@ -139,15 +137,15 @@
                                             <div class="row py-3">
                                                 <div class="col-3 mb-3">
                                                     <div class="list-group" role="tablist">
-                                                        <?php foreach ($m_value['jenis_pakaian'] as $jp_index => $jp_value) : ?>
-                                                            <a class="list-group-item list-group-item-action <?= !$jp_index ? 'active' : ''; ?>" id="list-merk-<?= $m_index; ?>-jenis_pakaian-<?= $jp_index; ?>-list" data-bs-toggle="list" href="#list-merk-<?= $m_index; ?>-jenis_pakaian-<?= $jp_index; ?>" role="tab"><?= $jp_value['nama']; ?></a>
+                                                        <?php foreach ($m_value['kategori_pakaian'] as $jp_index => $jp_value) : ?>
+                                                            <a class="list-group-item list-group-item-action <?= !$jp_index ? 'active' : ''; ?>" id="list-merk-<?= $m_index; ?>-kategori_pakaian-<?= $jp_index; ?>-list" data-bs-toggle="list" href="#list-merk-<?= $m_index; ?>-kategori_pakaian-<?= $jp_index; ?>" role="tab"><?= $jp_value['nama']; ?></a>
                                                         <?php endforeach; ?>
                                                     </div>
                                                 </div>
                                                 <div class="col-9">
                                                     <div class="tab-content text-justify">
-                                                        <?php foreach ($m_value['jenis_pakaian'] as $jp_index => $jp_value) : ?>
-                                                            <div class="tab-pane <?= !$jp_index ? 'show active' : ''; ?>" id="list-merk-<?= $m_index; ?>-jenis_pakaian-<?= $jp_index; ?>" role="tabpanel" aria-labelledby="list-merk-<?= $m_index; ?>-jenis_pakaian-<?= $jp_index; ?>-list">
+                                                        <?php foreach ($m_value['kategori_pakaian'] as $jp_index => $jp_value) : ?>
+                                                            <div class="tab-pane <?= !$jp_index ? 'show active' : ''; ?>" id="list-merk-<?= $m_index; ?>-kategori_pakaian-<?= $jp_index; ?>" role="tabpanel" aria-labelledby="list-merk-<?= $m_index; ?>-kategori_pakaian-<?= $jp_index; ?>-list">
                                                                 <div class="d-flex flex-wrap gap-3 text-center">
                                                                     <?php foreach ($jp_value['pakaian'] as $p_value) : ?>
                                                                         <div class="card border m-0" style="width: 12rem;">
@@ -335,8 +333,8 @@
     <script>
         const pakaian = [];
         JSON.parse('<?= json_encode($merk); ?>').forEach(merk => {
-            merk['jenis_pakaian'].forEach(jenis_pakaian => {
-                jenis_pakaian['pakaian'].forEach(value => {
+            merk['kategori_pakaian'].forEach(kategori_pakaian => {
+                kategori_pakaian['pakaian'].forEach(value => {
                     pakaian.push(value);
                 });
             });

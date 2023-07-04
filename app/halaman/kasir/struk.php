@@ -10,8 +10,8 @@ $query = "
         pe.tunai,
         pt.jumlah,
         pt.harga,
-        u.nama AS ukuran,
-        w.nama AS warna,
+        u.ukuran,
+        wp.warna,
         DATE(tanggal_waktu_penjualan) AS tanggal,
         TIME_FORMAT(tanggal_waktu_penjualan, '%H:%i') AS waktu,
         p.nama 
@@ -22,7 +22,7 @@ $query = "
     ON 
         k.id=pe.id_kasir  
     INNER JOIN 
-        pakaian_terjual AS pt 
+        detail_penjualan AS pt 
     ON 
         pe.id=pt.id_penjualan 
     INNER JOIN 
@@ -30,17 +30,13 @@ $query = "
     ON 
         uwp.id=pt.id_ukuran_warna_pakaian
     INNER JOIN 
-        ukuran AS u 
+        ukuran_pakaian AS u 
     ON 
-        u.id=uwp.id_ukuran 
+        u.id=uwp.id_ukuran_pakaian
     INNER JOIN 
         warna_pakaian AS wp 
     ON 
-        wp.id=uwp.id_warna_pakaian
-    INNER JOIN 
-        warna AS w 
-    ON 
-        w.id=wp.id_warna 
+        wp.id=uwp.id_warna_pakaian 
     INNER JOIN 
         pakaian AS p 
     ON 

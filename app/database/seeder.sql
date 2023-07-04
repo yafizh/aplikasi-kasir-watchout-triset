@@ -14,7 +14,7 @@
         tanggal_lahir,
         foto
     ) VALUES 
-    (3, 'Nana', 'Martapura', CURRENT_DATE(), '');
+    (2, 'Nana', 'Martapura', CURRENT_DATE(), '');
 
     INSERT INTO `kasir`.`pembeli` (
         id_pengguna,

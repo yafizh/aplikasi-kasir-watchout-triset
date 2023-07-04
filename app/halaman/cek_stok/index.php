@@ -14,15 +14,15 @@
         </section>
         <hr>
         <?php
-        $jenis_pakaian = $mysqli->query("SELECT * FROM jenis_pakaian")->fetch_all(MYSQLI_ASSOC);
-        foreach ($jenis_pakaian as $key_jenis_pakaian => $value_jenis_pakaian) {
+        $kategori_pakaian = $mysqli->query("SELECT * FROM kategori_pakaian")->fetch_all(MYSQLI_ASSOC);
+        foreach ($kategori_pakaian as $key_kategori_pakaian => $value_kategori_pakaian) {
             $query = "
                 SELECT 
                     * 
                 FROM 
                     pakaian 
                 WHERE 
-                    id_jenis_pakaian=" . $value_jenis_pakaian['id'] . " 
+                    id_kategori_pakaian=" . $value_kategori_pakaian['id'] . " 
                     AND 
                     id_merk=" . $_GET['id_merk'] . " 
                     AND 
@@ -32,53 +32,50 @@
             foreach ($pakaian as $key_pakaian => $value_pakaian) {
                 $query = "
                     SELECT 
-                        warna_pakaian.*, 
-                        warna.nama 
+                        id,
+                        warna as nama,
+                        (SELECT foto FROM foto_pakaian fp WHERE fp.id_warna_pakaian=warna_pakaian.id LIMIT 1) foto 
                     FROM 
                         warna_pakaian 
-                    INNER JOIN 
-                        warna 
-                    ON 
-                        warna.id=warna_pakaian.id_warna 
                     WHERE 
                         warna_pakaian.id_pakaian=" . $value_pakaian['id'];
                 $warna_pakaian = $mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
                 foreach ($warna_pakaian as $key_warna_pakaian => $value_warna_pakaian) {
                     $query = "
                         SELECT 
-                            u.nama,
-                            uwp.*,
+                            up.ukuran nama,
                             (
-                                IFNULL((SELECT SUM(pd.jumlah) FROM pakaian_disuplai AS pd WHERE pd.id_ukuran_warna_pakaian=uwp.id), 0)
+                                IFNULL((SELECT SUM(pd.jumlah) FROM pakaian_disuplai pd WHERE pd.id_ukuran_warna_pakaian=uwp.id), 0)
                                 - 
-                                IFNULL((SELECT SUM(pt.jumlah) FROM pakaian_terjual AS pt WHERE pt.id_ukuran_warna_pakaian=uwp.id), 0)
+                                IFNULL((SELECT SUM(dp.jumlah) FROM detail_penjualan dp WHERE dp.id_ukuran_warna_pakaian=uwp.id), 0)
                             ) AS jumlah 
                         FROM 
-                            ukuran_warna_pakaian AS uwp 
+                            ukuran_warna_pakaian uwp
                         INNER JOIN 
-                            ukuran AS u
+                            ukuran_pakaian up
                         ON 
-                            u.id=uwp.id_ukuran  
+                            up.id=uwp.id_ukuran_pakaian 
                         WHERE 
-                            uwp.id_warna_pakaian=" . $value_warna_pakaian['id'] . "
+                            uwp.id_warna_pakaian=" . $value_warna_pakaian['id'] . " 
+                        ORDER BY FIELD(up.ukuran, 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL'), up.ukuran    
                     ";
                     $warna_pakaian[$key_warna_pakaian]['ukuran'] = $mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
                 }
                 $pakaian[$key_pakaian]['warna_pakaian'] = $warna_pakaian;
             }
-            $jenis_pakaian[$key_jenis_pakaian]['pakaian'] = $pakaian;
+            $kategori_pakaian[$key_kategori_pakaian]['pakaian'] = $pakaian;
         }
         ?>
         <?php $data_kosong = true; ?>
-        <?php foreach ($jenis_pakaian as $value_jenis_pakaian) : ?>
-            <?php if (count($value_jenis_pakaian['pakaian'])) : ?>
+        <?php foreach ($kategori_pakaian as $value_kategori_pakaian) : ?>
+            <?php if (count($value_kategori_pakaian['pakaian'])) : ?>
                 <?php $data_kosong = false; ?>
                 <section class="section mb-3">
                     <div class="title-section">
-                        <h4><?= $value_jenis_pakaian['nama']; ?></h4>
+                        <h4><?= $value_kategori_pakaian['nama']; ?></h4>
                     </div>
                     <div class="inner-section d-flex gap-3 text-center">
-                        <?php foreach ($value_jenis_pakaian['pakaian'] as $key_value_pakaian =>  $value_pakaian) : ?>
+                        <?php foreach ($value_kategori_pakaian['pakaian'] as $key_value_pakaian =>  $value_pakaian) : ?>
                             <div class="card" style="width: 12rem;">
                                 <div class="card-image p-2" style="height: 12rem;">
                                     <?php if (count($value_pakaian['warna_pakaian'])) : ?>
@@ -155,9 +152,9 @@
     </div>
 </div>
 <script>
-    const jenis_pakaian = JSON.parse('<?= json_encode($jenis_pakaian); ?>');
+    const kategori_pakaian = JSON.parse('<?= json_encode($kategori_pakaian); ?>');
     let pakaian = [];
-    jenis_pakaian.forEach(element => {
+    kategori_pakaian.forEach(element => {
         element['pakaian'].forEach(element2 => {
             pakaian.push(element2);
         });
