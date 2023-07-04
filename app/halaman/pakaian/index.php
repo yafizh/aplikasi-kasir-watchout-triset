@@ -219,9 +219,10 @@ $pembeli = $result->fetch_all(MYSQLI_ASSOC);
             }
             const response = await postData("http://localhost:8000/send-message", {
                 number: `${nomor_telepon}@c.us`,
-                message: `${nama}`
+                message: `Halo ${item.nama}!\n\nKoleksi baru "${nama}" sudah tiba di toko kami! Segera dapatkan pakaian ini yang elegan dan mempesona sebelum kehabisan. Kunjungi toko kami sekarang atau kunjungi situs web kami untuk melihat koleksi lengkapnya. \n\nTerima kasih`
             });
-            console.log(response)
+
+            alert('Berhasil membagikan notifikasi!')
         });
     }
 </script>
