@@ -44,7 +44,9 @@ if (isset($_POST['submit'])) {
 ?>
 <div id="auth-left" class="m-5 p-4 shadow rounded">
     <div class="auth-logo mb-4">
-        <img src="../assets/images/logo.png" alt="Logo">
+        <a href="online_store/index.php">
+            <img src="../assets/images/logo.png" alt="Logo">
+        </a>
     </div>
     <h1>Log in.</h1>
     <p class="mb-3">Log in dengan username dan password yang telah terdaftar.</p>
@@ -64,6 +66,6 @@ if (isset($_POST['submit'])) {
         <button type="submit" name="submit" class="btn btn-primary btn-block shadow text-white">Log in</button>
     </form>
     <div class="text-center text-lg">
-        <p><a class="font-bold" href="auth-forgot-password.html">Lupa Password?</a></p>
+        <p><a class="font-bold" href="#" onclick="alert('Hubungi Admin!')">Lupa Password?</a></p>
     </div>
 </div>

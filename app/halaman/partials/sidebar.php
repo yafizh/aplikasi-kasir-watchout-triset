@@ -108,6 +108,9 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                         <li class="submenu-item <?= ($active === 'laporan' && ($sub_active ?? '') == 'laporan_penjualan') ? 'active' : '' ?>">
                             <a href="?halaman=laporan_penjualan">Laporan Penjualan</a>
                         </li>
+                        <li class="submenu-item <?= ($active === 'laporan' && ($sub_active ?? '') == 'laporan_penjualan_online') ? 'active' : '' ?>">
+                            <a href="?halaman=laporan_penjualan_online">Laporan Penjualan Online</a>
+                        </li>
                         <li class="submenu-item <?= (($active === 'laporan') && ($sub_active ?? '') == 'laporan_barang_masuk') ? 'active' : '' ?>">
                             <a href="?halaman=laporan_barang_masuk">Laporan Barang Masuk</a>
                         </li>

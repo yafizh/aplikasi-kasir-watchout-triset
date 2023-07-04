@@ -9,6 +9,11 @@ if ($_GET['halaman'] === 'laporan_pakaian') {
     $halaman = 'laporan/laporan_penjualan.php';
     $active = 'laporan';
     $sub_active = 'laporan_penjualan';
+} elseif ($_GET['halaman'] === 'laporan_penjualan_online') {
+    $title = 'Laporan Penjualan';
+    $halaman = 'laporan/laporan_penjualan_online.php';
+    $active = 'laporan';
+    $sub_active = 'laporan_penjualan_online';
 } elseif ($_GET['halaman'] === 'laporan_barang_masuk') {
     $title = 'Laporan Barang Masuk';
     $halaman = 'laporan/laporan_barang_masuk.php';
