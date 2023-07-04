@@ -41,10 +41,10 @@
                 $query = "
                     SELECT 
                         m.nama AS merk,
-                        jp.nama AS jenis_pakaian,
+                        jp.nama AS kategori_pakaian,
                         p.nama AS nama_pakaian,
-                        w.nama AS warna,
-                        u.nama AS ukuran,
+                        wp.warna,
+                        u.ukuran,
                         pd.jumlah,
                         pd.tanggal_masuk,
                         pd.id  
@@ -55,29 +55,25 @@
                     ON 
                         uwp.id=pd.id_ukuran_warna_pakaian 
                     INNER JOIN 
-                        ukuran AS u 
+                        ukuran_pakaian AS u 
                     ON 
-                        u.id=uwp.id_ukuran
+                        u.id=uwp.id_ukuran_pakaian
                     INNER JOIN 
                         warna_pakaian AS wp 
                     ON 
                         wp.id=uwp.id_warna_pakaian  
                     INNER JOIN 
-                        warna AS w 
-                    ON 
-                        w.id=wp.id_warna 
-                    INNER JOIN 
                         pakaian AS p 
                     ON 
                         p.id=wp.id_pakaian 
                     INNER JOIN
-                    jenis_pakaian AS jp 
+                        kategori_pakaian AS jp 
                     ON 
-                        jp.id=p.id_jenis_pakaian 
+                        jp.id=p.id_kategori_pakaian 
                     INNER JOIN 
                         merk AS m 
                     ON 
-                        m.id=p.id_merk 
+                        m.id=p.id_merk
                 ";
 
                 $where = " WHERE 1=1 ";
@@ -98,7 +94,7 @@
                             <td class="text-center align-middle"><?= $no++; ?></td>
                             <td class="text-center align-middle"><?= indonesiaDate($row['tanggal_masuk']); ?></td>
                             <td class="text-center align-middle"><?= $row['merk']; ?></td>
-                            <td class="text-center align-middle"><?= $row['jenis_pakaian']; ?></td>
+                            <td class="text-center align-middle"><?= $row['kategori_pakaian']; ?></td>
                             <td class="text-center align-middle"><?= $row['nama_pakaian']; ?></td>
                             <td class="text-center align-middle"><?= $row['warna']; ?></td>
                             <td class="text-center align-middle"><?= $row['ukuran']; ?></td>

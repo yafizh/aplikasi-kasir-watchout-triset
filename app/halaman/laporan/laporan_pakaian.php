@@ -26,19 +26,19 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="jenis_pakaian">Jenis Pakaian</label>
-                                            <select name="jenis_pakaian" id="jenis_pakaian" class="form-control">
+                                            <label for="kategori_pakaian">Jenis Pakaian</label>
+                                            <select name="kategori_pakaian" id="kategori_pakaian" class="form-control">
                                                 <option value="">Semua Jenis Pakaian</option>
-                                                <?php $result = $mysqli->query("SELECT * FROM jenis_pakaian"); ?>
+                                                <?php $result = $mysqli->query("SELECT * FROM kategori_pakaian"); ?>
                                                 <?php while ($row = $result->fetch_assoc()) : ?>
-                                                    <option <?= (($_POST['jenis_pakaian'] ?? '') == $row['id']) ? 'selected' : ''; ?> value="<?= $row['id']; ?>"><?= $row['nama']; ?></option>
+                                                    <option <?= (($_POST['kategori_pakaian'] ?? '') == $row['id']) ? 'selected' : ''; ?> value="<?= $row['id']; ?>"><?= $row['nama']; ?></option>
                                                 <?php endwhile; ?>
                                             </select>
                                         </div>
                                         <div class="d-flex gap-3 flex-wrap">
                                             <a href="" class="btn btn-secondary flex-grow-1">Reset</a>
                                             <button type="submit" class="btn flex-grow-1 btn-info text-white">Filter</button>
-                                            <a href="laporan/cetak/laporan_pakaian.php?id_merk=<?= $_POST['merk'] ?? ''; ?>&id_jenis_pakaian=<?= $_POST['jenis_pakaian'] ?? ''; ?>" target="_blank" class="btn btn-success flex-grow-1">Cetak</a>
+                                            <a href="laporan/cetak/laporan_pakaian.php?id_merk=<?= $_POST['merk'] ?? ''; ?>&id_kategori_pakaian=<?= $_POST['kategori_pakaian'] ?? ''; ?>" target="_blank" class="btn btn-success flex-grow-1">Cetak</a>
                                         </div>
                                     </div>
                                 </div>
@@ -66,7 +66,7 @@
                                     $query = "
                                         SELECT 
                                             m.nama AS merk,
-                                            jp.nama AS jenis_pakaian,
+                                            jp.nama AS kategori_pakaian,
                                             p.nama 
                                         FROM 
                                             pakaian AS p 
@@ -75,9 +75,9 @@
                                         ON 
                                             m.id=p.id_merk 
                                         INNER JOIN 
-                                            jenis_pakaian AS jp 
+                                            kategori_pakaian AS jp 
                                         ON 
-                                            jp.id=p.id_jenis_pakaian 
+                                            jp.id=p.id_kategori_pakaian 
                                     ";
 
                                     $where = "WHERE 1=1";
@@ -85,11 +85,11 @@
                                     if (!empty($_POST['merk'] ?? ''))
                                         $where .= " AND p.id_merk=" . $_POST['merk'];
 
-                                    if (!empty($_POST['jenis_pakaian'] ?? ''))
-                                        $where .= " AND p.id_jenis_pakaian=" . $_POST['jenis_pakaian'];
+                                    if (!empty($_POST['kategori_pakaian'] ?? ''))
+                                        $where .= " AND p.id_kategori_pakaian=" . $_POST['kategori_pakaian'];
 
                                     $query .= $where . " ORDER BY p.nama ASC";
-
+                                                    
                                     $data = $mysqli->query($query);
                                     $no = 1;
                                     ?>
@@ -98,7 +98,7 @@
                                             <tr>
                                                 <td class="text-center"><?= $no++; ?></td>
                                                 <td class="text-center"><?= $row['merk']; ?></td>
-                                                <td class="text-center"><?= $row['jenis_pakaian']; ?></td>
+                                                <td class="text-center"><?= $row['kategori_pakaian']; ?></td>
                                                 <td class=""><?= $row['nama']; ?></td>
                                             </tr>
                                         <?php endwhile; ?>

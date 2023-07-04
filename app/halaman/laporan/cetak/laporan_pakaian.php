@@ -12,7 +12,7 @@
     <?php include_once('header.php'); ?>
     <?php
     $merk = $mysqli->query("SELECT * FROM merk WHERE id='" . $_GET['id_merk'] . "'")->fetch_assoc();
-    $jenis_pakaian = $mysqli->query("SELECT * FROM jenis_pakaian WHERE id='" . $_GET['id_jenis_pakaian'] . "'")->fetch_assoc();
+    $kategori_pakaian = $mysqli->query("SELECT * FROM kategori_pakaian WHERE id='" . $_GET['id_kategori_pakaian'] . "'")->fetch_assoc();
     ?>
     <h4 class="text-center my-3">Laporan Data Pakaian</h4>
     <section class="p-3">
@@ -24,7 +24,7 @@
         <span>: <?= empty($_GET['id_merk']) ? 'Semua Merk' : $merk['nama']; ?></span>
         <br>
         <span style="width: 150px; display: inline-block;">Jenis Pakaian</span>
-        <span>: <?= empty($_GET['id_jenis_pakaian']) ? 'Semua Jenis Pakaian' : $jenis_pakaian['nama']; ?></span>
+        <span>: <?= empty($_GET['id_kategori_pakaian']) ? 'Semua Jenis Pakaian' : $kategori_pakaian['nama']; ?></span>
     </section>
     <main class="p-3">
         <table class="table table-striped table-bordered">
@@ -41,7 +41,7 @@
                 $query = "
                     SELECT 
                         m.nama AS merk,
-                        jp.nama AS jenis_pakaian,
+                        jp.nama AS kategori_pakaian,
                         p.nama 
                     FROM 
                         pakaian AS p 
@@ -50,9 +50,9 @@
                     ON 
                         m.id=p.id_merk 
                     INNER JOIN 
-                        jenis_pakaian AS jp 
+                        kategori_pakaian AS jp 
                     ON 
-                        jp.id=p.id_jenis_pakaian 
+                        jp.id=p.id_kategori_pakaian 
                 ";
 
                 $where = "WHERE 1=1";
@@ -60,8 +60,8 @@
                 if (!empty($_GET['id_merk'] ?? ''))
                     $where .= " AND p.id_merk=" . $_GET['id_merk'];
 
-                if (!empty($_GET['id_jenis_pakaian'] ?? ''))
-                    $where .= " AND p.id_jenis_pakaian=" . $_GET['id_jenis_pakaian'];
+                if (!empty($_GET['id_kategori_pakaian'] ?? ''))
+                    $where .= " AND p.id_kategori_pakaian=" . $_GET['id_kategori_pakaian'];
 
                 $query .= $where . " ORDER BY p.nama ASC";
 
@@ -73,7 +73,7 @@
                         <tr>
                             <td class="text-center align-middle"><?= $no++; ?></td>
                             <td class="text-center align-middle"><?= $row['merk']; ?></td>
-                            <td class="text-center align-middle"><?= $row['jenis_pakaian']; ?></td>
+                            <td class="text-center align-middle"><?= $row['kategori_pakaian']; ?></td>
                             <td class=""><?= $row['nama']; ?></td>
                         </tr>
                     <?php endwhile; ?>

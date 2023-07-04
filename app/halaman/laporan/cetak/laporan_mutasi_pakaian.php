@@ -12,7 +12,7 @@
     <?php include_once('header.php'); ?>
     <?php
     $merk = $mysqli->query("SELECT * FROM merk WHERE id='" . $_GET['id_merk'] . "'")->fetch_assoc();
-    $jenis_pakaian = $mysqli->query("SELECT * FROM jenis_pakaian WHERE id='" . $_GET['id_jenis_pakaian'] . "'")->fetch_assoc();
+    $kategori_pakaian = $mysqli->query("SELECT * FROM kategori_pakaian WHERE id='" . $_GET['id_kategori_pakaian'] . "'")->fetch_assoc();
     $bulan = explode("-", $_GET['bulan'])[1];
     $tahun = explode("-", $_GET['bulan'])[0];
     ?>
@@ -26,7 +26,7 @@
         <span>: <?= empty($_GET['id_merk']) ? 'Semua Merk' : $merk['nama']; ?></span>
         <br>
         <span style="width: 150px; display: inline-block;">Jenis Pakaian</span>
-        <span>: <?= empty($_GET['id_jenis_pakaian']) ? 'Semua Jenis Pakaian' : $jenis_pakaian['nama']; ?></span>
+        <span>: <?= empty($_GET['id_kategori_pakaian']) ? 'Semua Jenis Pakaian' : $kategori_pakaian['nama']; ?></span>
         <br>
         <span style="width: 150px; display: inline-block;">Bulan</span>
         <span>: <?= MONTH_IN_INDONESIA[$bulan - 1]; ?> <?= $tahun; ?></span>
@@ -51,7 +51,7 @@
                 $query = "
                     SELECT 
                         m.nama AS merk,
-                        jp.nama AS jenis_pakaian,
+                        jp.nama AS kategori_pakaian,
                         p.nama,
                         (
                             SELECT 
@@ -72,41 +72,41 @@
                                 MONTH(pd.tanggal_masuk) = '$bulan' 
                                 AND 
                                 YEAR(pd.tanggal_masuk) = '$tahun'
-                        ) AS pakaian_masuk,
-                        (
-                            SELECT 
-                                IFNULL(SUM(pt.jumlah), 0) 
-                            FROM 
-                                warna_pakaian AS wp 
-                            INNER JOIN 
-                                ukuran_warna_pakaian AS uwp  
-                            ON 
-                                wp.id=uwp.id_warna_pakaian
-                            INNER JOIN 
-                                pakaian_terjual AS pt 
-                            ON 
-                                pt.id_ukuran_warna_pakaian=uwp.id 
-                            INNER JOIN 
-                                penjualan AS pe 
-                            ON 
-                                pt.id_penjualan=pe.id 
-                            WHERE 
-                                wp.id_pakaian=p.id 
-                                AND 
+                            ) AS pakaian_masuk,
+                            (
+                                SELECT 
+                                    IFNULL(SUM(pt.jumlah), 0) 
+                                FROM 
+                                    warna_pakaian AS wp 
+                                INNER JOIN 
+                                    ukuran_warna_pakaian AS uwp  
+                                ON 
+                                    wp.id=uwp.id_warna_pakaian
+                                INNER JOIN 
+                                    detail_penjualan AS pt 
+                                ON 
+                                    pt.id_ukuran_warna_pakaian=uwp.id 
+                                INNER JOIN 
+                                    penjualan AS pe 
+                                ON 
+                                    pt.id_penjualan=pe.id 
+                                WHERE 
+                                    wp.id_pakaian=p.id 
+                                    AND 
                                 MONTH(pe.tanggal_waktu_penjualan) = '$bulan' 
                                 AND 
                                 YEAR(pe.tanggal_waktu_penjualan) = '$tahun'
                         ) AS pakaian_keluar
-                    FROM 
-                        pakaian AS p 
-                    INNER JOIN 
-                        merk AS m 
-                    ON 
-                        m.id=p.id_merk 
-                    INNER JOIN 
-                        jenis_pakaian AS jp 
-                    ON 
-                        jp.id=p.id_jenis_pakaian
+                        FROM 
+                            pakaian AS p 
+                        INNER JOIN 
+                            merk AS m 
+                        ON 
+                            m.id=p.id_merk 
+                        INNER JOIN 
+                            kategori_pakaian AS jp 
+                        ON 
+                            jp.id=p.id_kategori_pakaian
                 ";
 
                 $where = "WHERE 1=1";
@@ -114,8 +114,8 @@
                 if (!empty($_GET['id_merk'] ?? ''))
                     $where .= " AND p.id_merk=" . $_GET['id_merk'];
 
-                if (!empty($_GET['id_jenis_pakaian'] ?? ''))
-                    $where .= " AND p.id_jenis_pakaian=" . $_GET['id_jenis_pakaian'];
+                if (!empty($_GET['id_kategori_pakaian'] ?? ''))
+                    $where .= " AND p.id_kategori_pakaian=" . $_GET['id_kategori_pakaian'];
 
                 $query .= $where;
 
@@ -127,7 +127,7 @@
                         <tr>
                             <td class="text-center"><?= $no++; ?></td>
                             <td class="text-center"><?= $row['merk']; ?></td>
-                            <td class="text-center"><?= $row['jenis_pakaian']; ?></td>
+                            <td class="text-center"><?= $row['kategori_pakaian']; ?></td>
                             <td class=""><?= $row['nama']; ?></td>
                             <td class="text-center"><?= $row['pakaian_masuk']; ?></td>
                             <td class="text-center"><?= $row['pakaian_keluar']; ?></td>

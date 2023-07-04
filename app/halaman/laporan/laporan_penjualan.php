@@ -70,7 +70,7 @@
                                         FROM 
                                             penjualan AS p 
                                         INNER JOIN 
-                                            pakaian_terjual AS pt 
+                                            detail_penjualan AS pt 
                                         ON 
                                             p.id=pt.id_penjualan 
                                         INNER JOIN 
