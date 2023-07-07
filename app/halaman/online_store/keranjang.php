@@ -28,6 +28,21 @@ if (!isset($_SESSION['user']['pembeli'])) {
         body {
             font-family: 'Nunito';
         }
+
+        .custom-loader {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: conic-gradient(#0000 10%, #F58731);
+            -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+            animation: s3 1s infinite linear;
+        }
+
+        @keyframes s3 {
+            to {
+                transform: rotate(1turn)
+            }
+        }
     </style>
 </head>
 
@@ -36,11 +51,16 @@ if (!isset($_SESSION['user']['pembeli'])) {
         <?php $active = 'keranjang'; ?>
         <?php include_once('partials/navbar.php'); ?>
 
-        <section style="min-height: 50vh;">
+        <section class="mb-5" style="min-height: 50vh;">
             <h3 class="my-4 text-primary fw-bold">Keranjang</h3>
-            <div class="row">
+            <div class="row position-relative justify-content-center">
+                <div id="loader"
+                class="col-12 d-none d-flex justify-content-center rounded pt-5"
+                style="position: absolute; z-index: 2; background-color: rgba(0, 0, 0, .3); width: 98%; height: 100%;"
+                >
+                    <div class="custom-loader"></div>
+                </div>
                 <div id="keranjang-container" class="col-12 col-md-8">
-
                 </div>
                 <div class="col-12 col-md-4">
                     <div class="card">
@@ -83,21 +103,19 @@ if (!isset($_SESSION['user']['pembeli'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../../assets/extensions/sweetalert2/sweetalert2.min.js"></script>
     <script>
+        const loader = document.getElementById('loader');
         const id_pembeli = document.querySelector('input[name=id_pembeli]').value;
 
         const updateJumlah = async (index) => {
-            fetch(`../../ajax/keranjang.php?id_pembeli=${id_pembeli}&id_ukuran_warna_pakaian=${document.querySelectorAll('.item')[index].getAttribute('data-id_ukuran_warna_pakaian')}&jumlah=${document.querySelectorAll('.jumlah')[index].innerText}`)
-                .then(response => response.text())
-                .then(text => console.log(text))
+            await fetch(`../../ajax/keranjang.php?id_pembeli=${id_pembeli}&id_ukuran_warna_pakaian=${document.querySelectorAll('.item')[index].getAttribute('data-id_ukuran_warna_pakaian')}&jumlah=${document.querySelectorAll('.jumlah')[index].innerText}`);
         }
 
         const removeItem = async (index) => {
-            fetch(`../../ajax/keranjang.php?id_pembeli=${id_pembeli}&id_ukuran_warna_pakaian=${document.querySelectorAll('.item')[index].getAttribute('data-id_ukuran_warna_pakaian')}&hapus=true`)
-                .then(response => response.text())
-                .then(text => console.log(text))
+            await fetch(`../../ajax/keranjang.php?id_pembeli=${id_pembeli}&id_ukuran_warna_pakaian=${document.querySelectorAll('.item')[index].getAttribute('data-id_ukuran_warna_pakaian')}&hapus=true`);
         }
 
         const getData = async () => {
+            // loader.classList.remove('d-none');
             let url = `../../ajax/keranjang.php?id_pembeli=${id_pembeli}`;
 
             const html = await fetch(url)
@@ -161,6 +179,7 @@ if (!isset($_SESSION['user']['pembeli'])) {
             document.getElementById('sub-total').setAttribute('data-total', sub_total);
             document.getElementById('total').innerText = formatter.format(sub_total - voucher_diskon);
             document.getElementById('total').setAttribute('data-total', sub_total - voucher_diskon);
+            loader.classList.add('d-none');
         }
 
         document.getElementById('terapkan').addEventListener('click', async () => {
