@@ -35,7 +35,7 @@
                             ON 
                                 k.id_pengguna=p.id 
                             WHERE 
-                                p.status="KASIR" 
+                                p.status="2" 
                             ORDER BY 
                                 k.nama
                             ';

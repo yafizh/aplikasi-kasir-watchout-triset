@@ -35,6 +35,10 @@ function indoensiaDateWithDay($date)
 
 function indonesiaDate($date)
 {
+    if (is_null($date)) {
+        return '';
+    }
+    
     $tanggal = explode('-', $date)[2];
     $bulan = explode('-', $date)[1];
     $tahun = explode('-', $date)[0];

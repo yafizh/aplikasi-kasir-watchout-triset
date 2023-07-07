@@ -22,7 +22,7 @@
                             </tr>
                         </thead>
                         <?php
-                        $data = $mysqli->query('SELECT * FROM pengguna WHERE status="ADMIN" ORDER BY username');
+                        $data = $mysqli->query('SELECT * FROM pengguna WHERE status="1" ORDER BY username');
                         $no = 1;
                         ?>
                         <tbody>

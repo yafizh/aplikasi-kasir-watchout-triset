@@ -35,11 +35,14 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                         <li class="submenu-item <?= ($active === 'pengguna' && ($sub_active ?? '') == 'admin') ? 'active' : '' ?>">
                             <a href="?halaman=admin">Admin</a>
                         </li>
-                        <li class="submenu-item <?= (($active === 'pengguna' || $active === 'ganti_password') && ($sub_active ?? '') == 'gudang') ? 'active' : '' ?>">
+                        <!-- <li class="submenu-item <?= (($active === 'pengguna' || $active === 'ganti_password') && ($sub_active ?? '') == 'gudang') ? 'active' : '' ?>">
                             <a href="?halaman=gudang">Gudang</a>
-                        </li>
+                        </li> -->
                         <li class="submenu-item <?= (($active === 'pengguna' || $active === 'ganti_password') && ($sub_active ?? '') == 'kasir') ? 'active' : '' ?>">
                             <a href="?halaman=kasir">Kasir</a>
+                        </li>
+                        <li class="submenu-item <?= (($active === 'pengguna' || $active === 'ganti_password') && ($sub_active ?? '') == 'pembeli') ? 'active' : '' ?>">
+                            <a href="?halaman=pembeli">Pembeli</a>
                         </li>
                     </ul>
                 </li>

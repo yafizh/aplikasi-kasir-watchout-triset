@@ -32,6 +32,7 @@ if (isset($_SESSION['user'])) {
         include_once('../route/cek_stok.php');
 
         // Pengguna
+        include_once('../route/pembeli.php');
         include_once('../route/admin.php');
         include_once('../route/gudang.php');
         include_once('../route/kasir.php');
