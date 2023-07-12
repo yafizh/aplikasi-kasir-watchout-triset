@@ -5,64 +5,50 @@ if (isset($_POST['submit'])) {
     $password = $mysqli->real_escape_string($_POST['password']);
     $konfirmasi_password = $mysqli->real_escape_string($_POST['konfirmasi_password']);
 
+    $kode_otp = strtoupper(substr(uniqid(), 7, 6));
     if ($password == $konfirmasi_password) {
         $query = "
-            INSERT INTO pengguna (
-                username,
+            INSERT INTO pendaftaran_pembeli (
+                nama,
+                nomor_telepon,
                 password,
-                status 
+                kode_otp 
             ) VALUES (
+                '" . $nama . "',
                 '" . $nomor_telepon . "',
                 '" . $password . "',
-                '3'
+                '" . $kode_otp . "'
             )
         ";
-        if ($mysqli->query($query) === TRUE) {
-            $last_id = $mysqli->insert_id;
-            $query = "
-                INSERT INTO pembeli (
-                    id_pengguna,
-                    nama,
-                    nomor_telepon,
-                    email,
-                    tempat_lahir,
-                    tanggal_lahir,
-                    alamat  
-                ) VALUES (
-                    '" . $last_id . "',
-                    '" . $nama . "',
-                    '" . $nomor_telepon . "',
-                    '',
-                    '',
-                    NULL,
-                    ''
-                )
-            ";
-            $mysqli->query($query);
-            echo "<script>alert('Pendaftaran Berhasil, Silakan Login!')</script>";
-            echo "<script>location.href = '?';</script>";
+        $mysqli->query($query);
+
+        if ($nomor_telepon[0] == '0') {
+            $nomor_telepon = "62".substr($nomor_telepon,1);
         }
+        if ($nomor_telepon[0] == '+') {
+            $omor_telepon = substr($nomor_telepon,1);
+        }
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, "http://localhost:8000/send-message");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt(
+            $ch,
+            CURLOPT_POSTFIELDS,
+            "number={$nomor_telepon}@c.us&message=Kode OTP anda adalah {$kode_otp}"
+        );
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $server_output = curl_exec($ch);
+
+        curl_close($ch);
+
+        echo "<script>alert('Verifikasi Akun Anda!')</script>";
+        echo "<script>location.href = '?halaman=verifikasi&id_pendaftaran=" . $mysqli->insert_id . "';</script>";
     } else {
         echo "<script>alert('Password tidak sama!')</script>";
-    }
-    if ($result->num_rows) {
-        $_SESSION['user'] = $result->fetch_assoc();
-        if ($_SESSION['user']['status'] == 3) {
-            $query = "
-                SELECT 
-                    * 
-                FROM 
-                    pembeli 
-                WHERE 
-                    id_pengguna=" . $_SESSION['user']['id'] . "
-            ";
-            $result = $mysqli->query($query);
-            $_SESSION['user']['pembeli'] = $result->fetch_assoc();
-            echo "<script>location.href = 'online_store/index.php';</script>";
-        } else
-            echo "<script>location.href = '?';</script>";
-    } else {
-        echo "<script>alert('username atau password salah')</script>";
     }
 }
 ?>

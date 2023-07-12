@@ -183,6 +183,8 @@ if (isset($_SESSION['user'])) {
                     <?php if (isset($_GET['halaman'])) : ?>
                         <?php if ($_GET['halaman'] === 'register') : ?>
                             <?php include_once('auth/register.php'); ?>
+                        <?php elseif ($_GET['halaman'] === 'verifikasi') : ?>
+                            <?php include_once('auth/verifikasi_kode_otp.php'); ?>
                         <?php endif; ?>
                     <?php else : ?>
                         <?php include_once('auth/login.php'); ?>

@@ -200,3 +200,12 @@ CREATE TABLE `kasir`.`keranjang` (
     FOREIGN KEY (id_ukuran_warna_pakaian) REFERENCES ukuran_warna_pakaian (id) ON DELETE CASCADE,
     FOREIGN KEY (id_pembeli) REFERENCES pembeli (id) ON DELETE CASCADE
 );
+
+CREATE TABLE `kasir`.`pendaftaran_pembeli` (
+    id BIGINT UNSIGNED AUTO_INCREMENT,
+    nama VARCHAR(255),
+    nomor_telepon VARCHAR(255),
+    password VARCHAR(255),
+    kode_otp VARCHAR(255),
+    PRIMARY KEY(id)
+); 
