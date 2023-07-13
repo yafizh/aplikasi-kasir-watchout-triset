@@ -72,6 +72,8 @@ foreach ($pakaian as $index => $value) {
             ) 
             AND 
             dp.id_pakaian=" . $value['id'] . " 
+            AND 
+            d.id NOT IN (SELECT id_diskon FROM pengguna_diskon WHERE id_pengguna=" . ($_SESSION['user']['id'] ?? 0) . ")
         ORDER BY 
             d.tanggal_mulai DESC 
     ";

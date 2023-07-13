@@ -33,6 +33,8 @@ $query = "
                 '$today' >= d.tanggal_mulai 
                 AND 
                 '$today' <= d.tanggal_selesai 
+                AND 
+                d.id NOT IN (SELECT id_diskon FROM pengguna_diskon WHERE id_pengguna=" . ($_SESSION['user']['id'] ?? 0) . ")
         )";
 
 if (isset($_GET['id_kategori_pakaian'])) {

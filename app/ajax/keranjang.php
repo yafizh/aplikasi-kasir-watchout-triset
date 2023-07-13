@@ -149,8 +149,11 @@ foreach ($pakaian as $index => $value) {
                 '$today' <= d.tanggal_selesai  
             ) 
             AND 
-            dp.id_pakaian=" . $value['id'] . "
+            dp.id_pakaian=" . $value['id'] . " 
+            AND 
+            d.id NOT IN (SELECT id_diskon FROM pengguna_diskon WHERE id_pengguna=" . ($_SESSION['user']['id'] ?? 0) . ")
     ";
+
     $result = $mysqli->query($query);
     $pakaian[$index]['diskon'] = $result->fetch_assoc();
 }
@@ -187,7 +190,7 @@ if (count($pakaian)) {
                 class=\"harga\" 
                 data-harga_toko=\"" . $row['harga_toko'] . "\" 
                 data-harga_penjualan=\"" . $row['harga_toko'] - $row['diskon']['diskon'] . "\" 
-                data-id_diskon=\"" . $row['id'] . "\">
+                data-id_diskon=\"" . $row['diskon']['id'] . "\">
                     IDR " . number_format($row['harga_toko'] - $row['diskon']['diskon'], 0, ',', '.') . "
                 </h5>";
             }

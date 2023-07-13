@@ -217,6 +217,45 @@
                 <?php
                 if (isset($_GET['id'])) {
                     $mysqli->query("UPDATE penjualan_online SET status=3 WHERE id=" . $_GET['id']);
+                    $q = "
+                        SELECT 
+                            dpod.id_diskon 
+                        FROM 
+                            penjualan_online po 
+                        INNER JOIN 
+                            detail_penjualan_online dpo 
+                        ON 
+                            dpo.id_penjualan_online=po.id 
+                        LEFT JOIN 
+                            detail_penjualan_online_diskon dpod 
+                        ON 
+                            dpod.id_detail_penjualan_online=dpo.id 
+                        WHERE 
+                            po.id=" . $_GET['id'];
+
+                    $result = $mysqli->query($q);
+                    $detail_penjualan_online = $result->fetch_assoc();
+                    if (!is_null($detail_penjualan_online['id_diskon'])) {
+                        $mysqli->query("INSERT INTO pengguna_diskon VALUES (null, " . $_SESSION['user']['id'] . "," . $detail_penjualan_online['id_diskon'] . ")");
+                    }
+
+                    $q = "
+                        SELECT 
+                            dpod.id_voucher_diskon 
+                        FROM 
+                            penjualan_online po 
+                        LEFT JOIN 
+                            penjualan_online_voucher_diskon dpod 
+                        ON 
+                            dpod.id_penjualan_online=po.id 
+                        WHERE 
+                            po.id=" . $_GET['id'];
+
+                    $result = $mysqli->query($q);
+                    $penjualan_online = $result->fetch_assoc();
+                    if (!is_null($penjualan_online['id_voucher_diskon'])) {
+                        $mysqli->query("INSERT INTO pengguna_voucer_diskon VALUES (null, " . $_SESSION['user']['id'] . "," . $penjualan_online['id_voucher_diskon'] . ")");
+                    }
                 }
                 ?>
                 <?php

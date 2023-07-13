@@ -51,10 +51,9 @@ $mysqli->query($query);
 $id_penjualan_online = $mysqli->insert_id;
 
 if ($data['penjualan_online']['voucher_diskon'])
-    $mysqli->query("INSERT INTO penjualan_online_voucher_diskon VALUES ($id_penjualan_online, " . $data['penjualan_online']['voucher_diskon'] . ")");
+    $mysqli->query("INSERT INTO penjualan_online_voucher_diskon (id_penjualan_online, id_voucher_diskon) VALUES ($id_penjualan_online, " . $data['penjualan_online']['voucher_diskon'] . ")");
 
 foreach ($data['pakaian'] as $value) {
-
     $query = "
         INSERT INTO detail_penjualan_online (
             id_penjualan_online,
