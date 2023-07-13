@@ -158,9 +158,10 @@ CREATE TABLE `kasir`.`diskon`(
 );
 
 CREATE TABLE `kasir`.`diskon_pakaian`(
+    id BIGINT UNSIGNED AUTO_INCREMENT,
     id_diskon BIGINT UNSIGNED,
     id_pakaian BIGINT UNSIGNED,
-    PRIMARY KEY(id_diskon, id_pakaian),
+    PRIMARY KEY(id),
     FOREIGN KEY (id_diskon) REFERENCES diskon (id) ON DELETE CASCADE,
     FOREIGN KEY (id_pakaian) REFERENCES pakaian (id) ON DELETE CASCADE
 );
@@ -181,13 +182,15 @@ CREATE TABLE `kasir`.`voucher_diskon`(
     diskon BIGINT UNSIGNED,
     jenis_diskon TINYINT UNSIGNED COMMENT '1=Nominal|2=Persentase',
     kode_voucher VARCHAR(255),
+    ulang_tahun BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE `kasir`.`penjualan_online_voucher_diskon`(
+    id BIGINT UNSIGNED AUTO_INCREMENT,
     id_penjualan_online BIGINT UNSIGNED,
     id_voucher_diskon BIGINT UNSIGNED,
-    PRIMARY KEY (id_penjualan_online, id_voucher_diskon),
+    PRIMARY KEY (id),
     FOREIGN KEY (id_penjualan_online) REFERENCES penjualan_online (id) ON DELETE CASCADE,
     FOREIGN KEY (id_voucher_diskon) REFERENCES voucher_diskon(id) ON DELETE CASCADE
 );
@@ -209,3 +212,22 @@ CREATE TABLE `kasir`.`pendaftaran_pembeli` (
     kode_otp VARCHAR(255),
     PRIMARY KEY(id)
 ); 
+
+
+CREATE TABLE `kasir`.`pengguna_diskon` (
+    id BIGINT UNSIGNED AUTO_INCREMENT,
+    id_pengguna BIGINT UNSIGNED,
+    id_diskon BIGINT UNSIGNED,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_pengguna) REFERENCES pengguna (id) ON DELETE CASCADE,
+    FOREIGN KEY (id_diskon) REFERENCES diskon (id) ON DELETE CASCADE
+);
+
+CREATE TABLE `kasir`.`pengguna_voucer_diskon` (
+    id BIGINT UNSIGNED AUTO_INCREMENT,
+    id_pengguna BIGINT UNSIGNED,
+    id_voucher_diskon BIGINT UNSIGNED,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_pengguna) REFERENCES pengguna (id) ON DELETE CASCADE,
+    FOREIGN KEY (id_voucher_diskon) REFERENCES voucher_diskon (id) ON DELETE CASCADE
+);

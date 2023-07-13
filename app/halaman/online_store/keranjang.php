@@ -121,8 +121,6 @@ if (!isset($_SESSION['user']['pembeli'])) {
             const html = await fetch(url)
                 .then(response => response.text());
 
-                console.log(html)
-
             document.getElementById('keranjang-container').innerHTML = html;
 
             let sub_total = 0;
@@ -189,7 +187,6 @@ if (!isset($_SESSION['user']['pembeli'])) {
             const response = await fetch(`../../ajax/voucher_diskon.php?kode_voucher=${kode_voucher}`)
                 .then(response => response.json());
             if (response) {
-                console.log(response)
                 document.getElementById('voucher-diskon').setAttribute('data-id', response.id);
                 document.getElementById('voucher-diskon').setAttribute('data-diskon', response.diskon);
                 document.getElementById('voucher-diskon').setAttribute('data-jenis_diskon', response.jenis_diskon);

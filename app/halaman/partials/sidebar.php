@@ -97,6 +97,12 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                         <span>Voucher Diskon</span>
                     </a>
                 </li>
+                <li class="sidebar-item <?= $active === 'voucher_diskon_ulang_tahun' ? 'active' : ''; ?>">
+                    <a href="?halaman=voucher_diskon_ulang_tahun" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Voucher Diskon Ulang Tahun</span>
+                    </a>
+                </li>
 
                 <li class="sidebar-title">Laporan</li>
                 <li class="sidebar-item has-sub <?= ($active === 'laporan') ? 'active' : ''; ?>">

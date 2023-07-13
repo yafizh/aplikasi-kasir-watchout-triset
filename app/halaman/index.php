@@ -18,6 +18,7 @@ if (isset($_SESSION['user'])) {
         include_once('../route/diskon.php');
         include_once('../route/diskon_pakaian.php');
         include_once('../route/voucher_diskon.php');
+        include_once('../route/voucher_diskon_ulang_tahun.php');
 
         // Laporan
         include_once('../route/laporan.php');
