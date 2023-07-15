@@ -161,7 +161,7 @@ if (!isset($_SESSION['user']['pembeli'])) {
                     getData();
                 });
 
-                sub_total = parseInt(document.querySelectorAll('.jumlah')[index].innerText) * parseInt(document.querySelectorAll('.harga')[index].getAttribute('data-harga_toko'))
+                sub_total = parseInt(document.querySelectorAll('.jumlah')[index].innerText) * parseInt(document.querySelectorAll('.harga')[index].getAttribute('data-harga_penjualan'))
             });
 
             if (document.getElementById('voucher-diskon').getAttribute('data-diskon')) {

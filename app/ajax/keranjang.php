@@ -198,9 +198,9 @@ if (count($pakaian)) {
                 $html .= "<h5 
                     class=\"harga\" 
                     data-harga_toko=\"" . $row['harga_toko'] . "\" 
-                    data-harga_penjualan=\"" . $row['harga_toko'] * ($row['diskon']['diskon'] / 100) . "\" 
+                    data-harga_penjualan=\"" . $row['harga_toko'] - ($row['harga_toko'] * ($row['diskon']['diskon'] / 100)) . "\" 
                     data-id_diskon=\"" . $row['id'] . "\">
-                        IDR " . number_format($row['harga_toko'] * ($row['diskon']['diskon'] / 100), 0, ',', '.') . "
+                        IDR " . number_format($row['harga_toko'] - ($row['harga_toko'] * ($row['diskon']['diskon'] / 100)), 0, ',', '.') . "
                     </h5>";
             }
         } else {

@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set('Asia/Kuala_Lumpur');
 
 // Database
 require_once('../database/koneksi.php');

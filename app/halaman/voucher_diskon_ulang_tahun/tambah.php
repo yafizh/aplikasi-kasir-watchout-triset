@@ -1,5 +1,4 @@
 <?php
-
 if (isset($_POST['submit'])) {
     $nama = "Ulang Tahun";
     $tanggal_mulai = Date("Y-m-d");
@@ -74,7 +73,7 @@ if (isset($_POST['submit'])) {
                                         MONTH(tanggal_lahir)='" . Date("m") . "'     
                                     ORDER BY 
                                         nama";
-                                $data = $mysqli->query($q);
+                                $result = $mysqli->query($q);
                                 ?>
                                 <tbody>
                                     <?php if ($result->num_rows) : ?>
