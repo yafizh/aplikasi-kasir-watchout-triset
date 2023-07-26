@@ -40,7 +40,7 @@
                                         <td class="text-center"><?= number_format($row['diskon'], 0, ",", "."); ?><?= $row['jenis_diskon'] == 1 ? '' : '%' ?></td>
                                         <td class="text-center"><?= $row['kode_voucher']; ?></td>
                                         <td class="no-td">
-                                            <button onclick="broadcast('<?= $row['kode_voucher']; ?>','<?= indonesiaDate($row['tanggal_mulai']); ?>','<?= indonesiaDate($row['tanggal_selesai']); ?>')" class="btn btn-success btn-sm text-white" title="Broadcast">
+                                            <button onclick="broadcast('<?= $row['nama']; ?>','<?= $row['kode_voucher']; ?>','<?= indonesiaDate($row['tanggal_mulai']); ?>','<?= indonesiaDate($row['tanggal_selesai']); ?>')" class="btn btn-success btn-sm text-white" title="Broadcast">
                                                 Broadcast
                                             </button>
                                             <a href="?halaman=edit_voucher_diskon&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm text-white">Edit</a>
@@ -76,7 +76,7 @@ $pembeli = $result->fetch_all(MYSQLI_ASSOC);
         return response.json(); // parses JSON response into native JavaScript objects
     }
 
-    const broadcast = async (kode, dari, sampai) => {
+    const broadcast = async (nama, kode, dari, sampai) => {
         pembeli.forEach(async (item) => {
             let nomor_telepon = item.nomor_telepon;
             if (nomor_telepon[0] == '0') {
@@ -87,7 +87,7 @@ $pembeli = $result->fetch_all(MYSQLI_ASSOC);
             }
             const response = await postData("http://localhost:8000/send-message", {
                 number: `${nomor_telepon}@c.us`,
-                message: `Halo ${item.nama}!\n\nKami punya promo spesial dengan kode voucher "${kode}". Dapatkan diskon ekstra untuk semua pembelian Anda dari tanggal ${dari} hingga ${sampai}. Jangan lewatkan kesempatan ini untuk berbelanja hemat di toko kami. Kunjungi kami sekarang dan gunakan kode voucher tersebut saat check-out.\n\nTerima kasih`
+                message: `Halo ${item.nama}!\n\nKami punya promo spesial "${nama}" dengan kode voucher "${kode}". Dapatkan diskon ekstra untuk semua pembelian Anda dari tanggal ${dari} hingga ${sampai}. Jangan lewatkan kesempatan ini untuk berbelanja hemat di toko kami. Kunjungi kami sekarang dan gunakan kode voucher tersebut saat check-out.\n\nTerima kasih`
             });
 
             alert('Berhasil membagikan notifikasi!')
