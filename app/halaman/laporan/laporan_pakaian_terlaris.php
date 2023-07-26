@@ -3,7 +3,7 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 mb-3">
-                    <h3>Laporan Mutasi Pakaian</h3>
+                    <h3>Laporan Pakaian Terlaris</h3>
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
                                         <div class="d-flex gap-3 flex-wrap">
                                             <a href="" class="btn btn-secondary flex-grow-1">Reset</a>
                                             <button type="submit" class="btn flex-grow-1 btn-info text-white">Filter</button>
-                                            <a href="laporan/cetak/laporan_mutasi_pakaian.php?id_merk=<?= $_POST['merk'] ?? ''; ?>&bulan=<?= $_POST['bulan'] ?? Date('Y-m'); ?>&id_kategori_pakaian=<?= $_POST['kategori_pakaian'] ?? ''; ?>" target="_blank" class="btn btn-success flex-grow-1">Cetak</a>
+                                            <a href="laporan/cetak/laporan_pakaian_terlaris.php?id_merk=<?= $_POST['merk'] ?? ''; ?>&bulan=<?= $_POST['bulan'] ?? Date('Y-m'); ?>&id_kategori_pakaian=<?= $_POST['kategori_pakaian'] ?? ''; ?>" target="_blank" class="btn btn-success flex-grow-1">Cetak</a>
                                         </div>
                                     </div>
                                 </div>
@@ -59,15 +59,11 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="no-td text-center align-middle" rowspan="2">No</th>
-                                        <th class="text-center align-middle" rowspan="2">Merk</th>
-                                        <th class="text-center align-middle" rowspan="2">Jenis Pakaian</th>
-                                        <th class="text-center align-middle" rowspan="2">Nama Pakaian</th>
-                                        <th class="text-center align-middle" colspan="2">Mutasi</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center align-middle">Masuk</th>
-                                        <th class="text-center align-middle">Keluar</th>
+                                        <th class="no-td text-center align-middle">No</th>
+                                        <th class="text-center align-middle">Merk</th>
+                                        <th class="text-center align-middle">Jenis Pakaian</th>
+                                        <th class="text-center align-middle">Nama Pakaian</th>
+                                        <th class="text-center align-middle">Jumlah Terjual</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -77,26 +73,6 @@
                                             m.nama AS merk,
                                             jp.nama AS kategori_pakaian,
                                             p.nama,
-                                            (
-                                                SELECT 
-                                                    IFNULL(SUM(pd.jumlah), 0) 
-                                                FROM 
-                                                    warna_pakaian AS wp 
-                                                INNER JOIN 
-                                                    ukuran_warna_pakaian AS uwp  
-                                                ON 
-                                                    wp.id=uwp.id_warna_pakaian
-                                                INNER JOIN 
-                                                    pakaian_disuplai AS pd 
-                                                ON 
-                                                    pd.id_ukuran_warna_pakaian=uwp.id 
-                                                WHERE 
-                                                    wp.id_pakaian=p.id 
-                                                    AND 
-                                                    MONTH(pd.tanggal_masuk) = '" . (isset($_POST['bulan']) ? explode('-', $_POST['bulan'])[1] : Date('m')) . "' 
-                                                    AND 
-                                                    YEAR(pd.tanggal_masuk) = '" . (isset($_POST['bulan']) ? explode('-', $_POST['bulan'])[0] : Date('Y')) . "'
-                                            ) AS pakaian_masuk,
                                             (
                                                 SELECT 
                                                     IFNULL(SUM(pt.jumlah), 0) 
@@ -120,7 +96,31 @@
                                                     MONTH(pe.tanggal_waktu_penjualan) = '" . (isset($_POST['bulan']) ? explode('-', $_POST['bulan'])[1] : Date('m')) . "' 
                                                     AND 
                                                     YEAR(pe.tanggal_waktu_penjualan) = '" . (isset($_POST['bulan']) ? explode('-', $_POST['bulan'])[0] : Date('Y')) . "'
-                                            ) AS pakaian_keluar
+                                            ) AS pakaian_keluar1,
+                                            (
+                                                SELECT 
+                                                    IFNULL(SUM(pt.jumlah), 0) 
+                                                FROM 
+                                                    warna_pakaian AS wp 
+                                                INNER JOIN 
+                                                    ukuran_warna_pakaian AS uwp  
+                                                ON 
+                                                    wp.id=uwp.id_warna_pakaian
+                                                INNER JOIN 
+                                                    detail_penjualan_online AS pt 
+                                                ON 
+                                                    pt.id_ukuran_warna_pakaian=uwp.id 
+                                                INNER JOIN 
+                                                    penjualan_online AS pe 
+                                                ON 
+                                                    pt.id_penjualan_online=pe.id 
+                                                WHERE 
+                                                    wp.id_pakaian=p.id 
+                                                    AND 
+                                                    MONTH(pe.tanggal_waktu) = '" . (isset($_POST['bulan']) ? explode('-', $_POST['bulan'])[1] : Date('m')) . "' 
+                                                    AND 
+                                                    YEAR(pe.tanggal_waktu) = '" . (isset($_POST['bulan']) ? explode('-', $_POST['bulan'])[0] : Date('Y')) . "'
+                                            ) AS pakaian_keluar2 
                                         FROM 
                                             pakaian AS p 
                                         INNER JOIN 
@@ -130,7 +130,7 @@
                                         INNER JOIN 
                                             kategori_pakaian AS jp 
                                         ON 
-                                            jp.id=p.id_kategori_pakaian
+                                            jp.id=p.id_kategori_pakaian 
                                     ";
 
                                     $where = "WHERE 1=1";
@@ -143,6 +143,8 @@
 
                                     $query .= $where;
 
+                                    $query .= " ORDER BY (pakaian_keluar1 + pakaian_keluar2) DESC";
+
                                     $data = $mysqli->query($query);
                                     $no = 1;
                                     ?>
@@ -153,13 +155,12 @@
                                                 <td class="text-center"><?= $row['merk']; ?></td>
                                                 <td class="text-center"><?= $row['kategori_pakaian']; ?></td>
                                                 <td class=""><?= $row['nama']; ?></td>
-                                                <td class="text-center"><?= $row['pakaian_masuk']; ?></td>
-                                                <td class="text-center"><?= $row['pakaian_keluar']; ?></td>
+                                                <td class="text-center"><?= $row['pakaian_keluar1'] + $row['pakaian_keluar2']; ?></td>
                                             </tr>
                                         <?php endwhile; ?>
                                     <?php else : ?>
                                         <tr>
-                                            <td class="text-center" colspan="6">Tidak Ada Data</td>
+                                            <td class="text-center" colspan="5">Tidak Ada Data</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
