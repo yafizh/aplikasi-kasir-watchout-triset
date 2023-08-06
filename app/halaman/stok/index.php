@@ -110,16 +110,16 @@
                                         <tbody>
                                             <?php foreach ($warna_pakaian as $warna) : ?>
                                                 <tr>
-                                                    <td rowspan="<?= count($warna) - 2 ?>" class="text-center no-td"><?= $no++; ?></td>
-                                                    <td rowspan="<?= count($warna) - 2 ?>" class="text-center"><?= $warna['warna']; ?></td>
-                                                    <td class="text-center"><?= $warna['ukuran_pakaian'][0]['ukuran']; ?></td>
-                                                    <td class="text-center"><?= $warna['ukuran_pakaian'][0]['jumlah']; ?></td>
+                                                    <td rowspan="<?= count($warna); ?>" class="text-center no-td"><?= $no++; ?></td>
+                                                    <td rowspan="<?= count($warna); ?>" class="text-center"><?= $warna['warna']; ?></td>
+                                                    <td class="text-center <?= $warna['ukuran_pakaian'][0]['jumlah'] < 10 ? 'bg-danger text-white' : ''; ?>"><?= $warna['ukuran_pakaian'][0]['ukuran']; ?></td>
+                                                    <td class="text-center <?= $warna['ukuran_pakaian'][0]['jumlah'] < 10 ? 'bg-danger text-white' : ''; ?>"><?= $warna['ukuran_pakaian'][0]['jumlah']; ?></td>
                                                 </tr>
                                                 <?php foreach ($warna['ukuran_pakaian'] as $index => $ukuran_pakaian) : ?>
                                                     <?php if ($index) : ?>
                                                         <tr>
-                                                            <td class="text-center"><?= $ukuran_pakaian['ukuran']; ?></td>
-                                                            <td class="text-center"><?= $ukuran_pakaian['jumlah']; ?></td>
+                                                            <td class="text-center <?= $ukuran_pakaian['jumlah'] < 10 ? 'bg-danger text-white' : ''; ?>"><?= $ukuran_pakaian['ukuran']; ?></td>
+                                                            <td class="text-center <?= $ukuran_pakaian['jumlah'] < 10 ? 'bg-danger text-white' : ''; ?>"><?= $ukuran_pakaian['jumlah']; ?></td>
                                                         </tr>
                                                     <?php endif; ?>
                                                 <?php endforeach; ?>
