@@ -14,6 +14,27 @@ if (isset($_SESSION['user']['pembeli'])) {
 
 if (isset($_SESSION['user'])) {
     if (isset($_GET['halaman'])) {
+
+        if ($_GET['halaman'] === 'pegawai') {
+            $title = 'Data Pegawai';
+            $halaman = 'pegawai/index.php';
+            $active = 'pegawai';
+        } elseif ($_GET['halaman'] === 'tambah_pegawai') {
+            $title = 'Tambah Pegawai';
+            $halaman = 'pegawai/tambah.php';
+            $active = 'pegawai';
+        } elseif ($_GET['halaman'] === 'edit_pegawai') {
+            $title = 'Edit Pegawai';
+            $halaman = 'pegawai/edit.php';
+            $active = 'pegawai';
+        } elseif ($_GET['halaman'] === 'hapus_pegawai') {
+            $title = 'Hapus Pegawai';
+            $halaman = 'pegawai/hapus.php';
+            $active = 'pegawai';
+        }
+        
+
+
         // Diskon
         include_once('../route/diskon.php');
         include_once('../route/diskon_pakaian.php');

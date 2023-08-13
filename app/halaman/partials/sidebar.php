@@ -26,6 +26,15 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                         <span>Dashboard</span>
                     </a>
                 </li>
+
+                <!-- <li class="sidebar-item <?= $active === 'pegawai' ? 'active' : ''; ?>">
+                    <a href="?halaman=pegawai" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Pegawai</span>
+                    </a>
+                </li> -->
+
+
                 <li class="sidebar-item has-sub <?= ($active === 'pengguna' || $active === 'ganti_password') ? 'active' : ''; ?>">
                     <a href="#" class='sidebar-link'>
                         <i class="fas fa-users"></i>
