@@ -94,7 +94,8 @@ if (isset($_POST['submit'])) {
         $q = "
         DELETE FROM 
             ukuran_pakaian 
-        WHERE ";
+        WHERE 
+            id_pakaian = " . $_GET['id'];
         foreach ($ukuran as $index => $value) {
             if ($index) $q .= ' AND ';
             $q .= " ukuran != '" . $value->value . "' ";

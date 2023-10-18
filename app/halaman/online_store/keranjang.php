@@ -38,6 +38,16 @@ if (!isset($_SESSION['user']['pembeli'])) {
             animation: s3 1s infinite linear;
         }
 
+        .plus {
+            cursor: pointer;
+        }
+
+        .max {
+            cursor: no-drop !important;
+            background-color: #DEDEDE;
+            color: white;
+        }
+
         @keyframes s3 {
             to {
                 transform: rotate(1turn)
@@ -54,10 +64,7 @@ if (!isset($_SESSION['user']['pembeli'])) {
         <section class="mb-5" style="min-height: 50vh;">
             <h3 class="my-4 text-primary fw-bold">Keranjang</h3>
             <div class="row position-relative justify-content-center">
-                <div id="loader"
-                class="col-12 d-none d-flex justify-content-center rounded pt-5"
-                style="position: absolute; z-index: 2; background-color: rgba(0, 0, 0, .3); width: 98%; height: 100%;"
-                >
+                <div id="loader" class="col-12 d-none d-flex justify-content-center rounded pt-5" style="position: absolute; z-index: 2; background-color: rgba(0, 0, 0, .3); width: 98%; height: 100%;">
                     <div class="custom-loader"></div>
                 </div>
                 <div id="keranjang-container" class="col-12 col-md-8">
@@ -107,7 +114,11 @@ if (!isset($_SESSION['user']['pembeli'])) {
         const id_pembeli = document.querySelector('input[name=id_pembeli]').value;
 
         const updateJumlah = async (index) => {
-            await fetch(`../../ajax/keranjang.php?id_pembeli=${id_pembeli}&id_ukuran_warna_pakaian=${document.querySelectorAll('.item')[index].getAttribute('data-id_ukuran_warna_pakaian')}&jumlah=${document.querySelectorAll('.jumlah')[index].innerText}`);
+            const response = await fetch(`../../ajax/keranjang.php?id_pembeli=${id_pembeli}&id_ukuran_warna_pakaian=${document.querySelectorAll('.item')[index].getAttribute('data-id_ukuran_warna_pakaian')}&jumlah=${document.querySelectorAll('.jumlah')[index].innerText}`, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }).then(response => response.text());
         }
 
         const removeItem = async (index) => {
@@ -146,10 +157,18 @@ if (!isset($_SESSION['user']['pembeli'])) {
 
 
                 document.querySelectorAll('.plus')[index].addEventListener('click', async function() {
-                    document.querySelectorAll('.jumlah')[index].innerText = parseInt(document.querySelectorAll('.jumlah')[index].innerText) + 1;
-                    await updateJumlah(index);
-                    getData();
+                    if (document.querySelectorAll('.jumlah')[index].innerText < document.querySelectorAll('.item')[index].getAttribute('data-jumlah_stok')) {
+                        document.querySelectorAll('.jumlah')[index].innerText = parseInt(document.querySelectorAll('.jumlah')[index].innerText) + 1;
+                        await updateJumlah(index);
+                        getData();
+                    }
                 });
+
+                if (document.querySelectorAll('.jumlah')[index].innerText >= document.querySelectorAll('.item')[index].getAttribute('data-jumlah_stok')) {
+                    document.querySelectorAll('.plus')[index].classList.add('max');
+                } else {
+                    document.querySelectorAll('.plus')[index].classList.remove('max');
+                }
 
                 document.querySelectorAll('.minus')[index].addEventListener('click', async function() {
                     if (parseInt(document.querySelectorAll('.jumlah')[index].innerText) > 1) {

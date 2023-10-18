@@ -73,6 +73,32 @@ if (isset($_GET['tambah'])) {
 
 if (isset($_GET['jumlah'])) {
     $query = "
+        SELECT 
+            (
+                IFNULL((SELECT SUM(pd.jumlah) FROM pakaian_disuplai pd WHERE pd.id_ukuran_warna_pakaian=uwp.id), 0)
+                - 
+                IFNULL((SELECT SUM(dp.jumlah) FROM detail_penjualan_online dp WHERE dp.id_ukuran_warna_pakaian=uwp.id), 0)
+            ) AS jumlah 
+        FROM 
+            ukuran_warna_pakaian uwp
+        WHERE 
+            uwp.id=" . $_GET['id_ukuran_warna_pakaian'] . " 
+        ";
+    $stok = $mysqli->query($query)->fetch_assoc();
+
+    $query = "
+    SELECT  
+        jumlah 
+    FROM 
+        keranjang 
+    WHERE 
+        id_ukuran_warna_pakaian=" . $_GET['id_ukuran_warna_pakaian'] . " 
+        AND 
+        id_pembeli=" . $_GET['id_pembeli'];
+    $keranjang_sekarang = $mysqli->query($query)->fetch_assoc()['jumlah'];
+
+    if (($_GET['jumlah'] < $keranjang_sekarang) || $stok > $_GET['jumlah']) {
+        $query = "
         UPDATE 
             keranjang 
         SET 
@@ -82,7 +108,8 @@ if (isset($_GET['jumlah'])) {
             AND 
             id_pembeli=" . $_GET['id_pembeli'] . " 
         ";
-    $mysqli->query($query);
+        $mysqli->query($query);
+    }
     return true;
 }
 
@@ -106,7 +133,12 @@ $query = "
         wp.warna,
         up.ukuran,
         k.jumlah,
-        (SELECT foto FROM foto_pakaian WHERE id_warna_pakaian=wp.id LIMIT 1) foto  
+        (SELECT foto FROM foto_pakaian WHERE id_warna_pakaian=wp.id LIMIT 1) foto,
+        (
+            IFNULL((SELECT SUM(pd.jumlah) FROM pakaian_disuplai pd WHERE pd.id_ukuran_warna_pakaian=uwp.id), 0)
+            - 
+            IFNULL((SELECT SUM(dp.jumlah) FROM detail_penjualan_online dp WHERE dp.id_ukuran_warna_pakaian=uwp.id), 0)
+        ) AS jumlah_stok 
     FROM 
         keranjang k 
     INNER JOIN 
@@ -163,7 +195,7 @@ $html = "";
 if (count($pakaian)) {
     foreach ($pakaian as $row) {
         $html .= "
-        <div class=\"card mb-3 item\" style=\"height: 10rem;\" data-id_ukuran_warna_pakaian=\"" . $row['id_ukuran_warna_pakaian'] . "\">
+        <div class=\"card mb-3 item\" style=\"height: 10rem;\" data-jumlah_stok=\"" . $row['jumlah_stok'] . "\" data-id_ukuran_warna_pakaian=\"" . $row['id_ukuran_warna_pakaian'] . "\">
             <div class=\"card-body\">
                 <div class=\"d-flex\">
                     <div class=\"flex-grow-1 d-flex\">
@@ -177,7 +209,7 @@ if (count($pakaian)) {
                             <div class=\"d-flex\">
                                 <div class=\"minus px-2 fs-5 border border-2\" style=\"cursor: pointer;\"><span style=\"display: block; margin-top: 1px;\">-</span></div>
                                 <div contenteditable=\"\" class=\"jumlah px-2 border-top border-bottom border-2 fs-5 text-center\" style=\"width: 3rem; white-space: nowrap; overflow: hidden; padding-top: 2px;\">" . $row['jumlah'] . "</div>
-                                <div class=\"plus px-2 fs-5 border border-2\" style=\"cursor: pointer;\"><span style=\"display: block; margin-top: 1px;\">+</span></div>
+                                <div class=\"plus px-2 fs-5 border border-2\"><span style=\"display: block; margin-top: 1px;\">+</span></div>
                             </div>
                         </div>
                     </div>
@@ -216,5 +248,6 @@ if (count($pakaian)) {
 } else {
     echo "<h4 class=\"text-center mt-5\">Keranjang Kosong</h4>";
 }
+
 
 echo $html;
