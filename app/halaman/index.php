@@ -32,7 +32,7 @@ if (isset($_SESSION['user'])) {
             $halaman = 'pegawai/hapus.php';
             $active = 'pegawai';
         }
-        
+
 
 
         // Diskon
@@ -40,6 +40,9 @@ if (isset($_SESSION['user'])) {
         include_once('../route/diskon_pakaian.php');
         include_once('../route/voucher_diskon.php');
         include_once('../route/voucher_diskon_ulang_tahun.php');
+
+        // Laporan
+        include_once('../route/penjualan.php');
 
         // Laporan
         include_once('../route/laporan.php');

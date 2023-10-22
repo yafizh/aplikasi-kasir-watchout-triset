@@ -19,15 +19,6 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 $order_id = 'OXA-' . rand();
 
-$params = array(
-    'transaction_details' => array(
-        'order_id' => $order_id,
-        'gross_amount' => $data['penjualan_online']['harga_penjualan'],
-    ),
-);
-
-$snapToken = \Midtrans\Snap::getSnapToken($params);
-
 $query = "
     INSERT INTO penjualan_online (
         id_pembeli,
@@ -41,11 +32,11 @@ $query = "
     ) VALUES (
         " . $_GET['id_pembeli'] . ",
         '$order_id',
-        '$snapToken',
+        '',
         '" . Date("Y-m-d H:i:s") . "',
         '" . $data['penjualan_online']['harga_total'] . "',
         '" . $data['penjualan_online']['harga_penjualan'] . "',
-        1,
+        2,
         1
     )
 ";
@@ -90,7 +81,6 @@ foreach ($data['pakaian'] as $value) {
 }
 
 echo json_encode([
-    'id' => $id_penjualan_online,
-    'snap_token' => $snapToken
+    'id' => $id_penjualan_online
 ]);
 exit;

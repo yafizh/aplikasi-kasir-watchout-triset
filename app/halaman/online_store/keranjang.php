@@ -98,6 +98,14 @@ if (!isset($_SESSION['user']['pembeli'])) {
                                 </div>
                             </div>
                             <hr>
+                            <div class="mb-3">
+                                <label for="" class="mb-2">Metode Pembayaran</label>
+                                <select id="metode_pembayaran" class="form-control">
+                                    <option value="1">Transfer</option>
+                                    <option value="2">COD</option>
+                                </select>
+                            </div>
+                            <hr>
                             <button id="checkout" class="btn btn-primary w-100 text-white">CHEKOUT</button>
                         </div>
                     </div>
@@ -226,7 +234,7 @@ if (!isset($_SESSION['user']['pembeli'])) {
     <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-EmTzU8jLumgsYI05"></script>
     <script>
         document.getElementById("checkout").addEventListener('click', async () => {
-            document.getElementById("checkout").setAttribute('disabled', '');
+            // document.getElementById("checkout").setAttribute('disabled', '');
             const data = {
                 penjualan_online: {
                     harga_total: document.getElementById('sub-total').getAttribute('data-total'),
@@ -246,30 +254,38 @@ if (!isset($_SESSION['user']['pembeli'])) {
                 });
             });
 
+            const metodePembayaran = document.querySelector("#metode_pembayaran");
+            if (metodePembayaran.value == 1) {
+                const midtrans = await fetch(`../../ajax/midtrans.php?id_pembeli=${id_pembeli}`, {
+                    method: "POST",
+                    body: JSON.stringify(data),
+                }).then(response => response.json());
 
-            const midtrans = await fetch(`../../ajax/midtrans.php?id_pembeli=${id_pembeli}`, {
-                method: "POST",
-                body: JSON.stringify(data),
-            }).then(response => response.json());
-
-            window.snap.pay(midtrans['snap_token'], {
-                onSuccess: function(result) {
-                    location.href = 'profil.php?halaman=riwayat_pembelian&status=3&id=' + midtrans['id'];
-                    console.log(result);
-                },
-                onPending: function(result) {
-                    alert("wating your payment!");
-                    console.log(result);
-                },
-                onError: function(result) {
-                    alert("payment failed!");
-                    console.log(result);
-                },
-                onClose: function() {
-                    location.href = 'profil.php?halaman=riwayat_pembelian'
-                    // alert('you closed the popup without finishing the payment');
-                }
-            })
+                window.snap.pay(midtrans['snap_token'], {
+                    onSuccess: function(result) {
+                        location.href = 'profil.php?halaman=riwayat_pembelian&status=2&id=' + midtrans['id'];
+                        console.log(result);
+                    },
+                    onPending: function(result) {
+                        alert("wating your payment!");
+                        console.log(result);
+                    },
+                    onError: function(result) {
+                        alert("payment failed!");
+                        console.log(result);
+                    },
+                    onClose: function() {
+                        location.href = 'profil.php?halaman=riwayat_pembelian'
+                        // alert('you closed the popup without finishing the payment');
+                    }
+                })
+            } else {
+                const midtrans = await fetch(`../../ajax/cod.php?id_pembeli=${id_pembeli}&`, {
+                    method: "POST",
+                    body: JSON.stringify(data),
+                }).then(response => response.json());
+                location.href = 'profil.php?halaman=riwayat_pembelian&status=2&id=' + midtrans['id'];
+            }
         });
     </script>
 </body>

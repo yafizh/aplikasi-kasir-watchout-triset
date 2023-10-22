@@ -113,6 +113,31 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                     </a>
                 </li>
 
+                <li class="sidebar-title">Menu Penjualan</li>
+                <li class="sidebar-item has-sub <?= ($active === 'penjualan') ? 'active' : ''; ?>">
+                    <a href="#" class='sidebar-link'>
+                        <i class="fas fa-file"></i>
+                        <span>Penjualan</span>
+                    </a>
+                    <ul class="submenu <?= $active === 'penjualan' ? 'active' : ''; ?>">
+                        <li class="submenu-item <?= (($active === 'penjualan') && ($sub_active ?? '') == 'penjualan_menunggu_pembayaran') ? 'active' : '' ?>">
+                            <a href="?halaman=penjualan_menunggu_pembayaran">Menunggu Pemabayaran</a>
+                        </li>
+                        <li class="submenu-item <?= (($active === 'penjualan') && ($sub_active ?? '') == 'penjualan_pesanan_diproses') ? 'active' : '' ?>">
+                            <a href="?halaman=penjualan_pesanan_diproses">Pesanan Diproses</a>
+                        </li>
+                        <li class="submenu-item <?= (($active === 'penjualan') && ($sub_active ?? '') == 'penjualan_pesanan_selesai') ? 'active' : '' ?>">
+                            <a href="?halaman=penjualan_pesanan_selesai">Pesanan Selesai</a>
+                        </li>
+                        <li class="submenu-item <?= (($active === 'penjualan') && ($sub_active ?? '') == 'penjualan_pesanan_dibatalkan') ? 'active' : '' ?>">
+                            <a href="?halaman=penjualan_pesanan_dibatalkan">Pesanan Dibatalkan</a>
+                        </li>
+                        <li class="submenu-item <?= (($active === 'penjualan') && ($sub_active ?? '') == 'penjualan_pesanan_dikembalikan') ? 'active' : '' ?>">
+                            <a href="?halaman=penjualan_pesanan_dikembalikan">Pesanan Dikembalikan</a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="sidebar-title">Laporan</li>
                 <li class="sidebar-item has-sub <?= ($active === 'laporan') ? 'active' : ''; ?>">
                     <a href="#" class='sidebar-link'>
@@ -143,6 +168,9 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                         </li>
                         <li class="submenu-item <?= (($active === 'laporan') && ($sub_active ?? '') == 'laporan_pakaian_terlaris') ? 'active' : '' ?>">
                             <a href="?halaman=laporan_pakaian_terlaris">Laporan Pakain Terlaris</a>
+                        </li>
+                        <li class="submenu-item <?= (($active === 'laporan') && ($sub_active ?? '') == 'laporan_pakaian_terlaris') ? 'active' : '' ?>">
+                            <a href="?halaman=laporan_grafik_penjualan">Laporan Grafik Penjualan</a>
                         </li>
                     </ul>
                 </li>
