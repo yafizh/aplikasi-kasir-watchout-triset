@@ -211,3 +211,34 @@
     (28, CURRENT_DATE(), 150000,5),
     (29, CURRENT_DATE(), 150000,5),
     (30, CURRENT_DATE(), 150000,5);
+
+INSERT INTO `penjualan_online` (
+    `id`, 
+    `id_pembeli`, 
+    `order_id`, 
+    `snap_token`, 
+    `harga_total`, 
+    `harga_penjualan`, 
+    `tanggal_waktu`, 
+    `metode_pembayaran`, 
+    `status`
+) VALUES
+(1, 1, 'OXA-65814777', '', 539900, 539900, '2023-10-22 17:03:28', 2, 1),
+(2, 1, 'OXA-65814777', '', 539900, 539900, '2023-10-22 17:03:28', 2, 2),
+(3, 1, 'OXA-65814777', '', 539900, 539900, '2023-10-22 17:03:28', 2, 3),
+(4, 1, 'OXA-65814777', '', 539900, 539900, '2023-10-22 17:03:28', 2, 4),
+(5, 1, 'OXA-65814777', '', 539900, 539900, '2023-10-22 17:03:28', 2, 5);
+
+INSERT INTO `detail_penjualan_online` (
+    `id`, 
+    `id_penjualan_online`, 
+    `id_ukuran_warna_pakaian`, 
+    `harga_toko`, 
+    `harga_penjualan`, 
+    `jumlah`
+) VALUES
+(1, 1, 18, 539900, 539900, 1),
+(2, 2, 18, 539900, 539900, 1),
+(3, 3, 18, 539900, 539900, 1),
+(4, 4, 18, 539900, 539900, 1),
+(5, 5, 18, 539900, 539900, 1);
