@@ -82,11 +82,11 @@ $pembeli = $result->fetch_all(MYSQLI_ASSOC);
         const response = await fetch(url, {
             method: "POST", // *GET, POST, PUT, DELETE, etc.
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json',
             },
-            body: new URLSearchParams(Object.entries(data)).toString(), // body data type must match "Content-Type" header
+            body: JSON.stringify(data), // body data type must match "Content-Type" header
         });
-        return response.json(); // parses JSON response into native JavaScript objects
+        // return response.json(); // parses JSON response into native JavaScript objects
     }
 
     const broadcast = async (promo, dari, sampai) => {
@@ -98,8 +98,8 @@ $pembeli = $result->fetch_all(MYSQLI_ASSOC);
             if (nomor_telepon[0] == '+') {
                 nomor_telepon = `${item.nomor_telepon.substr(1)}`
             }
-            const response = await postData("http://localhost:8000/send-message", {
-                number: `${nomor_telepon}@c.us`,
+            const response = await postData(url, {
+                chatId: `${nomor_telepon}@c.us`,
                 message: `Halo ${item.nama}!\n\nPromo ${promo} menanti Anda! Dari tanggal ${dari} hingga ${sampai}, nikmati diskon besar-besaran untuk produk-produk tertentu kami! Kunjungi toko kami atau kunjungi situs web kami sekarang juga dan jangan lewatkan kesempatan ini untuk mendapatkan penawaran spesial.\n\nTerima kasih!`
             });
 

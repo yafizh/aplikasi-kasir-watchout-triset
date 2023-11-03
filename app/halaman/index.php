@@ -103,6 +103,12 @@ if (isset($_SESSION['user'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title; ?></title>
 
+    <script>
+        const a = "7103873268";
+        const b = "a517f96a093b48e79b730d97abc92f24a726f25032b14c9ead";
+        const url = `https://api.greenapi.com/waInstance${a}/sendMessage/${b}`;
+    </script>
+
     <link rel="stylesheet" href="../assets/css/main/app.css">
     <link rel="shortcut icon" href="../assets/images/logo/favicon.png" type="image/png">
     <?php if (isset($_SESSION['user'])) : ?>

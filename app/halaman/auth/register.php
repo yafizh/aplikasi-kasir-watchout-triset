@@ -23,27 +23,29 @@ if (isset($_POST['submit'])) {
         $mysqli->query($query);
 
         if ($nomor_telepon[0] == '0') {
-            $nomor_telepon = "62".substr($nomor_telepon,1);
+            $nomor_telepon = '62' . substr($nomor_telepon, 1);
         }
         if ($nomor_telepon[0] == '+') {
-            $omor_telepon = substr($nomor_telepon,1);
+            $nomor_telepon = substr($nomor_telepon, 1);
         }
 
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, "http://localhost:8000/send-message");
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt(
-            $ch,
-            CURLOPT_POSTFIELDS,
-            "number={$nomor_telepon}@c.us&message=Kode OTP anda adalah {$kode_otp}"
+        $data = array(
+            'chatId' => $nomor_telepon . '@c.us',
+            'message' => "Kode OTP anda adalah {$kode_otp}"
         );
 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $options = array(
+            'http' => array(
+                'header' => "Content-Type: application/json\r\n",
+                'method' => 'POST',
+                'content' => json_encode($data)
+            )
+        );
 
-        $server_output = curl_exec($ch);
+        $context = stream_context_create($options);
 
-        curl_close($ch);
+        $url = 'https://api.greenapi.com/waInstance7103873268/sendMessage/a517f96a093b48e79b730d97abc92f24a726f25032b14c9ead';
+        $response = file_get_contents($url, false, $context);
 
         echo "<script>alert('Verifikasi Akun Anda!')</script>";
         echo "<script>location.href = '?halaman=verifikasi&id_pendaftaran=" . $mysqli->insert_id . "';</script>";
