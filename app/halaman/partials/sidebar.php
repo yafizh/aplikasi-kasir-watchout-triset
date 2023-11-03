@@ -183,12 +183,6 @@ $merk = $result->fetch_all(MYSQLI_ASSOC);
                         <span>Ganti Password</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
-                    <a href="auth/logout.php" class='sidebar-link'>
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Keluar</span>
-                    </a>
-                </li>
             </ul>
         </div>
     </div>

@@ -1,0 +1,6 @@
+1. Validasi stok penjualan online
+2. COD
+3. Grafik Penjualan
+4. Logout on top right
+5. Tracking Product (disiapkan, diantar, telah sampai/diterima)
+6. Return Barang

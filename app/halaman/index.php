@@ -192,6 +192,10 @@ if (isset($_SESSION['user'])) {
                 <a id="burger" onclick="hideSidebar(this)" href="#" class="burger-btn d-block">
                     <i class="bi bi-justify fs-3 text-danger"></i>
                 </a>
+                <a href="auth/logout.php" class='sidebar-link'>
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Keluar</span>
+                </a>
                 <?php if ($_SESSION['user']['status'] == 2) : ?>
                     <div class="d-flex  align-items-center">
                         <img src="<?= $_SESSION['user']['foto']; ?>" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
