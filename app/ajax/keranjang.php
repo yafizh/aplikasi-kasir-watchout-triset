@@ -27,13 +27,18 @@ if (isset($_GET['navbar'])) {
 if (isset($_GET['tambah'])) {
     $query = "
         SELECT 
-            * 
+            uwp.*,
+            (
+                IFNULL((SELECT SUM(pd.jumlah) FROM pakaian_disuplai pd WHERE pd.id_ukuran_warna_pakaian=uwp.id), 0)
+                - 
+                IFNULL((SELECT SUM(dp.jumlah) FROM detail_penjualan_online dp WHERE dp.id_ukuran_warna_pakaian=uwp.id), 0)
+            ) AS jumlah 
         FROM 
-            ukuran_warna_pakaian 
+            ukuran_warna_pakaian uwp
         WHERE 
-            id_warna_pakaian=" . $_GET['id_warna'] . "
+            uwp.id_warna_pakaian=" . $_GET['id_warna'] . "
             AND 
-            id_ukuran_pakaian=" . $_GET['id_ukuran'] . "    
+            uwp.id_ukuran_pakaian=" . $_GET['id_ukuran'] . "    
         ";
     $result = $mysqli->query($query);
 
@@ -43,17 +48,24 @@ if (isset($_GET['tambah'])) {
 
         if ($result->num_rows) {
             $keranjang = $result->fetch_assoc();
-            $query = "
-                UPDATE keranjang SET 
-                    jumlah=" . $keranjang['jumlah'] + $_GET['jumlah'] . "
-                WHERE 
-                    id_ukuran_warna_pakaian=" . $ukuran_warna_pakaian['id'] . " 
-                    AND 
-                    id_pembeli=" . $_GET['id_pembeli'] . " 
-            ";
-            echo $mysqli->query($query) ? 200 : 500;
+            if (($keranjang['jumlah'] + $_GET['jumlah']) <= $ukuran_warna_pakaian['jumlah']) {
+                $query = "
+                    UPDATE keranjang SET 
+                        jumlah=" . $keranjang['jumlah'] + $_GET['jumlah'] . "
+                    WHERE 
+                        id_ukuran_warna_pakaian=" . $ukuran_warna_pakaian['id'] . " 
+                        AND 
+                        id_pembeli=" . $_GET['id_pembeli'] . " 
+                ";
+                echo $mysqli->query($query) ? 200 : 500;
+            } else {
+                echo 400;
+            }
         } else {
-            $query = "
+            if ($_GET['jumlah'] > $ukuran_warna_pakaian['jumlah']) {
+                echo 400;
+            } else {
+                $query = "
                 INSERT INTO keranjang (
                     id_ukuran_warna_pakaian,
                     id_pembeli,
@@ -64,7 +76,8 @@ if (isset($_GET['tambah'])) {
                     " . $_GET['jumlah'] . "  
                 )
             ";
-            echo $mysqli->query($query) ? 200 : 500;
+                echo $mysqli->query($query) ? 200 : 500;
+            }
         }
     }
 

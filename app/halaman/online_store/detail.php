@@ -32,7 +32,7 @@ foreach ($pakaian['warna_pakaian'] as $warna_pakaian) {
         (
             IFNULL((SELECT SUM(pd.jumlah) FROM pakaian_disuplai pd WHERE pd.id_ukuran_warna_pakaian=uwp.id), 0)
             - 
-            IFNULL((SELECT SUM(dp.jumlah) FROM detail_penjualan dp WHERE dp.id_ukuran_warna_pakaian=uwp.id), 0)
+            IFNULL((SELECT SUM(dp.jumlah) FROM detail_penjualan_online dp WHERE dp.id_ukuran_warna_pakaian=uwp.id), 0)
         ) AS jumlah 
     FROM 
         ukuran_warna_pakaian uwp
@@ -153,7 +153,7 @@ $pakaian['diskon'] = $result->fetch_assoc();
                     <?php foreach ($pakaian['ukuran'] as $index => $ukuran) : ?>
                         <div class="btn-group-horizontal ukuran <?= !$index ? '' : 'd-none'; ?>" role="group" aria-label="Vertical radio toggle button group" data-id_warna_pakaian="<?= $ukuran['id_warna_pakaian']; ?>">
                             <?php foreach ($ukuran['ukuran'] as $ukuran_pakaian) : ?>
-                                <input type="radio" class="btn-check" name="ukuran" value="<?= $ukuran_pakaian['id']; ?>" id="ukuran-<?= $index; ?>-<?= $ukuran_pakaian['id']; ?>" autocomplete="off" <?= $ukuran_pakaian['jumlah'] ? '' : 'disabled'; ?>>
+                                <input type="radio" class="btn-check" data-jumlah="<?= $ukuran_pakaian['jumlah'] ?>" name="ukuran" value="<?= $ukuran_pakaian['id']; ?>" id="ukuran-<?= $index; ?>-<?= $ukuran_pakaian['id']; ?>" autocomplete="off" <?= $ukuran_pakaian['jumlah'] ? '' : 'disabled'; ?>>
                                 <label class="btn btn-outline-dark rounded-1" for="ukuran-<?= $index; ?>-<?= $ukuran_pakaian['id']; ?>"><?= $ukuran_pakaian['ukuran']; ?></label>
                             <?php endforeach; ?>
                         </div>
@@ -166,6 +166,7 @@ $pakaian['diskon'] = $result->fetch_assoc();
                         <div id="jumlah" contenteditable="" class="px-2 pb-1 pt-2 border-top border-bottom border-dark border-2 fs-5 text-center" style="width: 4rem; white-space: nowrap; overflow: hidden;">1</div>
                         <div id="plus" class="px-3 pb-1 pt-2 fs-5 border border-dark border-2" style="cursor: pointer;"><span style="display: block; margin-top: -2px;">+</span></div>
                     </div>
+                    <h6 class="text-muted py-3" id="stok-tersedia"></h6>
                 </div>
                 <div class="mb-3">
                     <button id="masukan-keranjang" disabled class="btn btn-dark rounded-1">MASUKAN KERANJANG</button>
@@ -177,8 +178,20 @@ $pakaian['diskon'] = $result->fetch_assoc();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const id_pembeli = document.querySelector('input[name="id_pembeli"]');
+        document.querySelectorAll("input[name=ukuran]").forEach((ukuran) => {
+            ukuran.addEventListener('click', () => {
+                document.getElementById("stok-tersedia").innerHTML = "Stok Tersedia: " + ukuran.getAttribute('data-jumlah');
+            })
+        });
         document.querySelectorAll('input[name=warna]').forEach((warna) => {
             warna.addEventListener('click', () => {
+
+                document.querySelectorAll("input[name=ukuran]").forEach((ukuran) => {
+                    ukuran.addEventListener('click', () => {
+                        document.getElementById("stok-tersedia").innerHTML = "Stok Tersedia: " + ukuran.getAttribute('data-jumlah');
+                    })
+                });
+
                 document.querySelectorAll('.carousel').forEach((elm) => {
                     elm.classList.add('d-none');
                 });
@@ -243,7 +256,6 @@ $pakaian['diskon'] = $result->fetch_assoc();
 
             const response = await fetch(url)
                 .then(response => response.text());
-
             if (response == 200) {
                 document.querySelector('.toast-container')
                     .insertAdjacentHTML('beforeend', `
@@ -265,6 +277,28 @@ $pakaian['diskon'] = $result->fetch_assoc();
                     }
                 ).show();
                 updateKeranjang();
+            }
+
+            if (response == 400) {
+                document.querySelector('.toast-container')
+                    .insertAdjacentHTML('beforeend', `
+                        <div class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="d-flex">
+                                <div class="toast-body text-white">
+                                    Tidak dapat melakukan pembelian melebihi stok
+                                </div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    `);
+
+                new bootstrap.Toast(
+                    document.querySelectorAll('.toast')[document.querySelectorAll('.toast').length - 1], {
+                        animation: true,
+                        autohide: true,
+                        delay: 5000
+                    }
+                ).show();
             }
         }
     </script>

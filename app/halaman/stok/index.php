@@ -90,7 +90,7 @@
                                                     (
                                                         IFNULL((SELECT SUM(pd.jumlah) FROM pakaian_disuplai pd WHERE pd.id_ukuran_warna_pakaian=uwp.id), 0)
                                                         - 
-                                                        IFNULL((SELECT SUM(dp.jumlah) FROM detail_penjualan dp WHERE dp.id_ukuran_warna_pakaian=uwp.id), 0)
+                                                        IFNULL((SELECT SUM(dp.jumlah) FROM detail_penjualan_online dp WHERE dp.id_ukuran_warna_pakaian=uwp.id), 0)
                                                     ) AS jumlah 
                                                 FROM 
                                                     ukuran_warna_pakaian uwp
