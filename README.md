@@ -1,8 +1,8 @@
-# Aplikasi Kasir Watchout & Triset
+# Watchout Triset POS & Online Store
 
 ## Overview
 
-**Aplikasi Kasir Watchout & Triset** is a comprehensive web-based Point of Sale (POS) and Inventory Management system integrated with an Online Store. It is designed to streamline retail operations by managing sales, stock, and employees while providing a seamless online shopping experience for customers.
+**Watchout Triset POS & Online Store** is a comprehensive web-based Point of Sale (POS) and Inventory Management system integrated with an Online Store. It is designed to streamline retail operations by managing sales, stock, and employees while providing a seamless online shopping experience for customers.
 
 ## Features
 
